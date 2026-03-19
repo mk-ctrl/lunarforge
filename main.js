@@ -14,6 +14,8 @@
   const navbar = document.getElementById('navbar');
   const siteContent = document.getElementById('site-content');
   const menuToggle = document.getElementById('menu-toggle');
+  const navAction1 = document.getElementById('nav-action-1');
+  const navAction2 = document.getElementById('nav-action-2');
   const overlay = document.getElementById('contact-overlay');
   const closeBtn = document.getElementById('contact-close');
   const introVideo = document.getElementById('intro-video');
@@ -185,6 +187,35 @@
       el.style.animationPlayState = 'running';
     });
   });
+
+  // ══════════════════════════════════════════════
+  // SESSION & NAVIGATION STATE
+  // ══════════════════════════════════════════════
+  function updateNavForSession() {
+    if (!navAction1 || !navAction2) return;
+
+    if (localStorage.getItem('lunarforge_session')) {
+      // Logged in state: LOGOUT & DASHBOARD
+      navAction1.innerHTML = `<a href="#" id="nav-logout" class="nav-cta" style="border-color:rgba(255,59,92,0.3);color:var(--error);background:transparent;">LOGOUT</a>`;
+      navAction2.innerHTML = `<a href="dashboard.html" class="nav-cta" style="border-color:rgba(0,212,255,0.3);color:var(--accent-cyan);">DASHBOARD</a>`;
+
+      const logoutBtn = document.getElementById('nav-logout');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          localStorage.removeItem('lunarforge_session');
+          updateNavForSession(); // Refresh nav instantly
+        });
+      }
+    } else {
+      // Logged out state: LOGIN & REGISTER
+      navAction1.innerHTML = `<a href="login.html" class="nav-cta" style="border-color:rgba(255,255,255,0.2);color:var(--text);background:transparent;">LOGIN</a>`;
+      navAction2.innerHTML = `<a href="register.html" class="nav-cta">REGISTER</a>`;
+    }
+  }
+
+  // Initialize nav state immediately
+  updateNavForSession();
 
   // ══════════════════════════════════════════════
   // FULL-PAGE SPLINE 3D BACKGROUND

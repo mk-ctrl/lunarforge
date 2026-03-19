@@ -6,6 +6,16 @@
     'use strict';
 
     // ══════════════════════════════════════════════
+    // AUTHENTICATION GATE
+    // ══════════════════════════════════════════════
+    const sessionData = localStorage.getItem('lunarforge_session');
+    if (!sessionData) {
+        // Not logged in, redirect to login page
+        window.location.href = 'login.html';
+        return;
+    }
+
+    // ══════════════════════════════════════════════
     // CONFIGURATION
     // ══════════════════════════════════════════════
     const WHATSAPP_LINK = 'https://chat.whatsapp.com/BOVOzMeJVxmFUtDsMeDH2e?mode=hq1tcla';
@@ -238,12 +248,13 @@
     setInterval(updateSubmissionCountdown, 1000);
 
     // ══════════════════════════════════════════════
-    // POPULATE DATA FROM REGISTRATION
+    // ══════════════════════════════════════════════
+    // POPULATE DATA FROM SESSION
     // ══════════════════════════════════════════════
     function populateDashboard() {
-        const raw = localStorage.getItem('lunarforge_registration');
-        if (!raw) return;
-
+        // We already verified sessionData exists at the top
+        const raw = sessionData;
+        
         try {
             const data = JSON.parse(raw);
 
@@ -533,6 +544,17 @@
     }
 
     window.addEventListener('hashchange', handleHash);
+
+    // ══════════════════════════════════════════════
+    // LOGOUT LOGIC
+    // ══════════════════════════════════════════════
+    const dashLogoutBtn = document.getElementById('dash-logout-btn');
+    if (dashLogoutBtn) {
+        dashLogoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('lunarforge_session');
+            window.location.href = 'index.html';
+        });
+    }
 
     // ══════════════════════════════════════════════
     // INIT

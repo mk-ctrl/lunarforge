@@ -71,9 +71,13 @@
   <nav id="navbar">
     <button id="menu-toggle" aria-label="Open contact overlay">CONTACT</button>
     <div style="display:flex;align-items:center;gap:20px;">
-      <a href="dashboard.html" class="nav-cta"
-        style="border-color:rgba(0,212,255,0.3);color:var(--accent-cyan);">DASHBOARD</a>
-      <a href="register.html" id="nav-register" class="nav-cta">REGISTER</a>
+      <!-- Dynamic Nav State: Managed by main.js updateNavForSession() -->
+      <span id="nav-action-1">
+        <a href="login.html" class="nav-cta" style="border-color:rgba(255,255,255,0.2);color:var(--text);background:transparent;">LOGIN</a>
+      </span>
+      <span id="nav-action-2">
+        <a href="register.html" id="nav-register" class="nav-cta">REGISTER</a>
+      </span>
     </div>
   </nav>
 

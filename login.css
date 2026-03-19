@@ -1,0 +1,112 @@
+/* ══════════════════════════════════════════════
+   LUNAR FORGE 1.0 — LOGIN SPECIFIC STYLES
+   ══════════════════════════════════════════════ */
+
+.login-main {
+    align-items: center; /* Center vertically on desktop */
+}
+
+.login-container {
+    max-width: 500px; /* Thinner than registration form */
+    margin: 0 auto;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.login-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent-cyan), var(--accent), transparent);
+}
+
+.login-input {
+    font-size: 1rem;
+    padding: 16px;
+    letter-spacing: 0.05em;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.login-input::placeholder {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    letter-spacing: normal;
+}
+
+.login-btn {
+    margin-top: 12px;
+}
+
+/* ── Alert Component ── */
+.login-alert {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 59, 92, 0.1);
+    border: 1px solid rgba(255, 59, 92, 0.2);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 24px;
+    color: var(--error);
+    font-size: 0.85rem;
+    animation: shake 0.4s var(--ease-out);
+}
+
+.alert-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+/* ── Footer ── */
+.login-footer {
+    margin-top: 24px;
+    text-align: center;
+    font-size: 0.85rem;
+    padding-top: 24px;
+    border-top: 1px solid var(--card-border);
+}
+
+.login-footer-text {
+    color: var(--text-dim);
+}
+
+.login-register-link {
+    color: var(--accent-cyan);
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 8px;
+    transition: color 0.3s;
+}
+
+.login-register-link:hover {
+    color: #fff;
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+}
+
+@media (max-width: 600px) {
+    .login-card {
+        padding: 24px;
+    }
+}
