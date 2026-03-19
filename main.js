@@ -210,10 +210,10 @@
   }
 
   // ══════════════════════════════════════════════
-  // COUNTDOWN TIMER — March 6, 2026, 7:00 PM IST
+  // COUNTDOWN TIMER — March 30, 2026, 7:00 PM IST
   // ══════════════════════════════════════════════
-  // Target: March 6, 2026, 19:00 IST (UTC+5:30) = 13:30 UTC
-  const TARGET_DATE = new Date(Date.UTC(2026, 2, 6, 13, 30, 0));
+  // Target: March 30, 2026, 19:00 IST (UTC+5:30) = 13:30 UTC
+  const TARGET_DATE = new Date(Date.UTC(2026, 2, 30, 13, 30, 0));
 
   const cdDays = document.getElementById('cd-days');
   const cdHours = document.getElementById('cd-hours');

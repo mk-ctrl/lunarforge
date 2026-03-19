@@ -566,6 +566,24 @@ a {
   }
 }
 
+/* ── HIDE SPLINE WATERMARK ─────────────────── */
+#spline-bg>div:not(#spline-bg-canvas):not(.spline-bg-loader),
+.intro-bot-area>div:not(#robot-canvas):not(.robot-loader),
+#spline-container>div:not(canvas),
+[id^="spline"]+div[style],
+div[style*="spline.design"],
+a[href*="spline.design"],
+div[id$="-logo"],
+canvas+div>a {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
 /* ── SPLINE CONTAINER ──────────────────────── */
 #spline-container {
   position: absolute;
