@@ -238,11 +238,78 @@
         <div class="reg-container reg-success" id="reg-success" style="display:none;">
             <div class="success-icon">✓</div>
             <h2 class="success-title">REGISTRATION<br />COMPLETE</h2>
-            <p class="success-subtitle">Welcome to Lunar Forge 1.0!</p>
+            <p class="success-subtitle">Welcome to Lunar Forge 1.0! Here are your credentials.</p>
 
-            <div class="success-card">
-                <span class="success-card-label">YOUR TEAM ID</span>
-                <span class="success-card-value" id="team-id-display">CN-LF01</span>
+            <!-- Registration Details Card -->
+            <div class="success-details-card">
+                <div class="success-details-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        style="width:16px;height:16px;color:#00d4ff;">
+                        <polygon
+                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
+                    <span>YOUR TEAM CREDENTIALS</span>
+                </div>
+
+                <div class="success-detail-row">
+                    <span class="success-detail-label">TEAM NAME</span>
+                    <span class="success-detail-value" id="success-team-name">—</span>
+                </div>
+
+                <div class="success-detail-row">
+                    <span class="success-detail-label">TEAM LEAD</span>
+                    <span class="success-detail-value" id="success-lead-name">—</span>
+                </div>
+
+                <div class="success-detail-row-duo">
+                    <div class="success-detail-row">
+                        <span class="success-detail-label">TEAM SIZE</span>
+                        <span class="success-detail-value" id="success-team-size">—</span>
+                    </div>
+                    <div class="success-detail-row">
+                        <span class="success-detail-label">DOMAIN</span>
+                        <span class="success-detail-value" id="success-domain">—</span>
+                    </div>
+                </div>
+
+                <div class="success-credentials">
+                    <div class="success-credential-block">
+                        <span class="success-credential-label">TEAM ID</span>
+                        <div class="success-credential-value-wrap">
+                            <span class="success-credential-value" id="team-id-display">CN-LF01</span>
+                            <button type="button" class="copy-btn" id="copy-id-btn" title="Copy Team ID">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                    style="width:14px;height:14px;">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                                    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="success-credential-block">
+                        <span class="success-credential-label">PASSWORD</span>
+                        <div class="success-credential-value-wrap">
+                            <span class="success-credential-value password-value" id="password-display">——</span>
+                            <button type="button" class="copy-btn" id="copy-pw-btn" title="Copy Password">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                    style="width:14px;height:14px;">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                                    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="credentials-warning">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        style="width:14px;height:14px;color:#ffab00;">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                        <line x1="12" y1="9" x2="12" y2="13" />
+                        <line x1="12" y1="17" x2="12.01" y2="17" />
+                    </svg>
+                    Save your Team ID & Password — you'll need them to log into the dashboard.
+                </p>
             </div>
 
             <div class="success-card" id="whatsapp-card">
@@ -252,8 +319,10 @@
                 </a>
             </div>
 
-            <p class="success-note">Screenshot your Team ID for reference. See you at the event! 🚀</p>
-            <a href="dashboard.html" class="success-home-btn" style="border-color: var(--accent); color: var(--text); background: var(--accent-soft); margin-right: 12px;">GO TO DASHBOARD →</a>
+            <p class="success-note">Screenshot your credentials for reference. See you at the event! 🚀</p>
+            <a href="dashboard.html" class="success-home-btn"
+                style="border-color: var(--accent); color: var(--text); background: var(--accent-soft); margin-right: 12px;">GO
+                TO DASHBOARD →</a>
             <a href="index.html" class="success-home-btn">← BACK TO HOME</a>
         </div>
     </main>

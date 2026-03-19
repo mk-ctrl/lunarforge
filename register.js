@@ -24,6 +24,7 @@
     const formContainer = document.getElementById('reg-form-container');
     const successScreen = document.getElementById('reg-success');
     const teamIdDisplay = document.getElementById('team-id-display');
+    const passwordDisplay = document.getElementById('password-display');
     const whatsappLink = document.getElementById('whatsapp-link');
     const submitBtn = document.getElementById('submit-btn');
     const submitBtnText = submitBtn.querySelector('.submit-btn-text');
@@ -344,6 +345,30 @@
     }
 
     // ══════════════════════════════════════════════
+    // PASSWORD GENERATION
+    // ══════════════════════════════════════════════
+    function generatePassword() {
+        const alpha = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz';
+        const nums = '23456789';
+        const special = '!@#$%&*';
+        const all = alpha + nums + special;
+
+        // Guarantee at least 1 of each type
+        let pw = '';
+        pw += alpha[Math.floor(Math.random() * alpha.length)];
+        pw += nums[Math.floor(Math.random() * nums.length)];
+        pw += special[Math.floor(Math.random() * special.length)];
+
+        // Fill remaining 3 chars from the full pool
+        for (let i = 0; i < 3; i++) {
+            pw += all[Math.floor(Math.random() * all.length)];
+        }
+
+        // Shuffle the password
+        return pw.split('').sort(() => Math.random() - 0.5).join('');
+    }
+
+    // ══════════════════════════════════════════════
     // FORM DATA COLLECTION
     // ══════════════════════════════════════════════
     function collectFormData() {
@@ -393,14 +418,16 @@
     }
 
     async function submitToSheets(data) {
+        // Generate local team ID and password
+        const localTeamId = generateLocalTeamId();
+        const password = generatePassword();
+        data.teamId = localTeamId;
+        data.password = password;
+
         if (!APPS_SCRIPT_URL) {
             console.log('[Lunar Forge] No Apps Script URL configured, using local ID');
-            return { teamId: generateLocalTeamId() };
+            return { teamId: localTeamId, password: password };
         }
-
-        // Generate local team ID (always used as the displayed ID)
-        const localTeamId = generateLocalTeamId();
-        data.teamId = localTeamId;
 
         // Try sending to Google Sheets (best-effort)
         try {
@@ -416,7 +443,10 @@
                 try {
                     const result = await response.json();
                     console.log('[Lunar Forge] Server response:', result);
-                    if (result && result.teamId) return result;
+                    if (result && result.teamId) {
+                        result.password = result.password || password;
+                        return result;
+                    }
                 } catch (jsonErr) {
                     console.warn('[Lunar Forge] Could not parse response JSON:', jsonErr.message);
                 }
@@ -435,13 +465,59 @@
             }
         }
 
-        return { teamId: localTeamId };
+        return { teamId: localTeamId, password: password };
     }
 
-    function showSuccess(teamId) {
+    function showSuccess(teamId, password, formData) {
         formContainer.style.display = 'none';
         successScreen.style.display = '';
         teamIdDisplay.textContent = teamId;
+        if (passwordDisplay) passwordDisplay.textContent = password || '——';
+
+        // Populate team details
+        const elTeamName = document.getElementById('success-team-name');
+        const elLeadName = document.getElementById('success-lead-name');
+        const elTeamSize = document.getElementById('success-team-size');
+        const elDomain = document.getElementById('success-domain');
+
+        if (elTeamName && formData) elTeamName.textContent = formData.teamName || '—';
+        if (elLeadName && formData) elLeadName.textContent = formData.leadName || '—';
+        if (elTeamSize && formData) {
+            const sizeMap = { 1: 'SOLO', 2: 'DUO', 3: 'TRIO' };
+            elTeamSize.textContent = sizeMap[formData.teamSize] || formData.teamSize;
+        }
+        if (elDomain && formData) elDomain.textContent = formData.domain || '—';
+
+        // Copy buttons
+        const copyIdBtn = document.getElementById('copy-id-btn');
+        const copyPwBtn = document.getElementById('copy-pw-btn');
+
+        function copyToClipboard(text, btn) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '<span style="font-size:12px;">✓</span>';
+                btn.style.color = 'var(--success, #00e676)';
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.style.color = '';
+                }, 1500);
+            }).catch(() => {
+                // Fallback: select text
+                const range = document.createRange();
+                const sel = window.getSelection();
+                const span = btn.previousElementSibling;
+                range.selectNodeContents(span);
+                sel.removeAllRanges();
+                sel.addRange(range);
+            });
+        }
+
+        if (copyIdBtn) {
+            copyIdBtn.addEventListener('click', () => copyToClipboard(teamId, copyIdBtn));
+        }
+        if (copyPwBtn && password) {
+            copyPwBtn.addEventListener('click', () => copyToClipboard(password, copyPwBtn));
+        }
 
         // WhatsApp link
         if (WHATSAPP_LINK && WHATSAPP_LINK !== '#') {
@@ -474,12 +550,12 @@
         try {
             const result = await submitToSheets(data);
             clearFormState();
-            showSuccess(result.teamId);
+            showSuccess(result.teamId, result.password, data);
         } catch (err) {
             console.error('[Lunar Forge] Registration error:', err);
-            // Even if sheets fails, show success with local ID
+            // Even if sheets fails, show success with local ID & password
             clearFormState();
-            showSuccess(data.teamId || generateLocalTeamId());
+            showSuccess(data.teamId || generateLocalTeamId(), data.password || generatePassword(), data);
         } finally {
             setLoading(false);
         }
