@@ -133,16 +133,8 @@
 
       console.log('[Lunar Forge] Robot loaded!');
 
-      // Randomize camera angle on each load
-      try {
-        const cam = spline.findObjectByName('Camera');
-        if (cam) {
-          const randomAngle = (Math.random() - 0.5) * 0.6; // ±17°
-          cam.rotation.y += randomAngle;
-        }
-      } catch (e) {
-        // Camera manipulation is optional
-      }
+      // Optional: Camera manipulation can be added here if needed in the future
+      // Removed random rotation so robot stays fixed in the middle default position
 
       // Hide loading spinner, show robot
       robotLoading.classList.add('hidden');
@@ -184,11 +176,6 @@
     // Show & load full-page Spline 3D background + moon overlay
     loadSplineBg();
     loadSplineMoon();
-
-    // Kick off hero animations
-    document.querySelectorAll('.hero-title .line').forEach(el => {
-      el.style.animationPlayState = 'running';
-    });
   });
 
   // ══════════════════════════════════════════════
@@ -233,8 +220,7 @@
 
       console.log('[Lunar Forge] Spline background loaded!');
 
-      // Hide loading spinner, fade in the background
-      if (splineBgLoading) splineBgLoading.classList.add('hidden');
+      // Fade in the background
       splineBg.classList.add('visible');
 
     } catch (err) {
@@ -256,7 +242,11 @@
       await app.load(SPLINE_MOON_SCENE);
 
       console.log('[Lunar Forge] Spline moon overlay loaded!');
-      splineMoon.classList.add('visible');
+      // Wait 1.5 seconds for Spline to perform its initial sizing glitch
+      // completely out of sight before triggering the CSS opacity fade-in
+      setTimeout(() => {
+        splineMoon.classList.add('visible');
+      }, 300);
 
     } catch (err) {
       console.warn('[Lunar Forge] Spline moon overlay failed to load:', err);

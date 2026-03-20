@@ -14,7 +14,7 @@
 html {
   scroll-behavior: smooth;
   scrollbar-width: thin;
-  scrollbar-color: rgba(0, 68, 255, 0.4) transparent;
+  scrollbar-color: rgba(74, 118, 239, 0.4) transparent;
 }
 
 ::-webkit-scrollbar {
@@ -96,7 +96,7 @@ a {
   inset: 0;
   z-index: 2;
   opacity: 0;
-  transition: opacity 1.2s var(--ease-out);
+  transition: opacity 3s var(--ease-out);
   pointer-events: none;
   overflow: hidden;
 }
@@ -502,11 +502,18 @@ a {
   display: block;
   opacity: 0;
   transform: translateY(80px) scaleY(0.6);
-  animation: heroReveal 1.2s var(--ease-out) forwards;
 }
 
-.hero-title .line[data-delay="1"] {
-  animation-delay: 0.15s;
+#site-content.visible .hero-title .line {
+  animation: heroReveal 3s var(--ease-out) forwards;
+}
+
+#site-content.visible .hero-title .line[data-delay="0"] {
+  animation-delay: 0.2s;
+}
+
+#site-content.visible .hero-title .line[data-delay="1"] {
+  animation-delay: 0.4s;
 }
 
 @keyframes heroReveal {
@@ -522,7 +529,10 @@ a {
   color: var(--text-dim);
   margin-top: 32px;
   opacity: 0;
-  animation: fadeUp 0.8s var(--ease-out) 0.6s forwards;
+}
+
+#site-content.visible .hero-tag {
+  animation: fadeUp 0.8s var(--ease-out) 0.8s forwards;
 }
 
 /* ── COUNTDOWN ──────────────────────────────── */
@@ -533,7 +543,10 @@ a {
   gap: 8px;
   margin-top: 48px;
   opacity: 0;
-  animation: fadeUp 0.8s var(--ease-out) 0.8s forwards;
+}
+
+#site-content.visible .countdown {
+  animation: fadeUp 0.8s var(--ease-out) 1s forwards;
 }
 
 .countdown-unit {
@@ -574,7 +587,10 @@ a {
   color: var(--text-dim);
   margin-top: 20px;
   opacity: 0;
-  animation: fadeUp 0.8s var(--ease-out) 1s forwards;
+}
+
+#site-content.visible .hero-date-sub {
+  animation: fadeUp 0.8s var(--ease-out) 1.2s forwards;
 }
 
 @keyframes fadeUp {
@@ -1136,11 +1152,32 @@ canvas+div>a {
   .social-links {
     gap: 20px;
   }
+
+  #spline-moon-canvas {
+    min-width: 100vh;
+    height: 75vh;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) scale(0.7) translateY(-18%);
+  }
+
+  #vignette {
+    box-shadow:
+      inset 0 0 30px 12px rgba(0, 30, 120, 0.28),
+      inset 0 0 20px 6px rgba(0, 68, 255, 0.12);
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    /* At 20vw height, a 5-letter condensed font (like Bebas Neue) takes roughly 50vw width */
+    font-size: 30vw;
+  }
 }
 
 @media (max-width: 480px) {
   .hero-title {
-    font-size: clamp(4rem, 22vw, 8rem);
+    font-size: 35vw;
   }
 
   .stat-row {
