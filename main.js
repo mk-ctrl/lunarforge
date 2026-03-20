@@ -47,13 +47,13 @@
     reset() {
       this.x = Math.random() * canvas.width;
       this.y = Math.random() * canvas.height;
-      this.size = Math.random() * 2.5 + 0.5;
+      this.size = 2;
       this.speedX = (Math.random() - 0.5) * 0.3;
       this.speedY = (Math.random() - 0.5) * 0.3;
-      this.opacity = Math.random() * 0.4 + 0.05;
+      this.opacity = 0;
       this.baseOpacity = this.opacity;
       // Some particles are rectangles, some are dots
-      this.isRect = Math.random() > 0.6;
+      this.isRect = 0;
       this.rotation = Math.random() * Math.PI * 2;
       this.rotSpeed = (Math.random() - 0.5) * 0.01;
     }
@@ -67,9 +67,9 @@
       const dx = this.x - mouse.x;
       const dy = this.y - mouse.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < 150) {
-        this.opacity = Math.min(this.baseOpacity + 0.3, 0.8);
-        const force = (150 - dist) / 150 * 0.3;
+      if (dist < 50) {
+        this.opacity = 2;
+        const force = (50 - dist) / 50 * 0.3;
         this.x += (dx / dist) * force;
         this.y += (dy / dist) * force;
       } else {
@@ -104,7 +104,7 @@
 
   function initParticles() {
     resizeCanvas();
-    const count = Math.min(Math.floor((canvas.width * canvas.height) / 8000), 200);
+    const count = Math.min(Math.floor((canvas.width * canvas.height) / 4000), 2000);
     particles = [];
     for (let i = 0; i < count; i++) {
       particles.push(new Particle());
@@ -405,8 +405,7 @@
   });
 
   // Boot
-  initParticles();
-  animateParticles();
+  
   setupReveal();
   setupTilt();
 
