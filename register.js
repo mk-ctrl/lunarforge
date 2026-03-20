@@ -9,7 +9,7 @@
     // CONFIGURATION
     // ══════════════════════════════════════════════
     // Paste your deployed Google Apps Script URL here:
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw1o2g_cQkLfIY37cW_P2eUlWsISY7QfZXeYAk6ozvlsQaOU2Z5_4biDdCpryRWyVkR/exec';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymTF_DGFXvQlOYDY9ZjxD6wuOos6mRhlgRP7OBJL3QrCrQMEFT1ZiUp1M_iYs6tClr/exec';
 
     // WhatsApp channel link (for team leaders after registration):
     const WHATSAPP_LINK = 'https://chat.whatsapp.com/BOVOzMeJVxmFUtDsMeDH2e?mode=hq1tcla';
@@ -549,13 +549,22 @@
 
         try {
             const result = await submitToSheets(data);
-            clearFormState();
+            // Save minimal data for offline login fallback
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                teamId: result.teamId, 
+                password: result.password 
+            }));
             showSuccess(result.teamId, result.password, data);
         } catch (err) {
             console.error('[Lunar Forge] Registration error:', err);
             // Even if sheets fails, show success with local ID & password
-            clearFormState();
-            showSuccess(data.teamId || generateLocalTeamId(), data.password || generatePassword(), data);
+            const localTeamId = data.teamId || generateLocalTeamId();
+            const localPassword = data.password || generatePassword();
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                teamId: localTeamId, 
+                password: localPassword 
+            }));
+            showSuccess(localTeamId, localPassword, data);
         } finally {
             setLoading(false);
         }
