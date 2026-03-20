@@ -18,6 +18,9 @@
     // ══════════════════════════════════════════════
     // CONFIGURATION
     // ══════════════════════════════════════════════
+    // ** PASTE YOUR NEW APPS SCRIPT URL HERE **
+    const SUBMISSION_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby7ghxX8IomwUeXAVA7hgKYg3mURyxM_1XmqeFHff5tj-XIiLs_AS9LDy2LsKNkiTD8sQ/exec';
+    
     const WHATSAPP_LINK = 'https://chat.whatsapp.com/BOVOzMeJVxmFUtDsMeDH2e?mode=hq1tcla';
     const TARGET_DATE = new Date(Date.UTC(2026, 2, 30, 13, 30, 0)); // March 30, 2026, 7:00 PM IST
     const SUBMISSION_DEADLINE = new Date(Date.UTC(2026, 2, 31, 7, 30, 0)); // March 31, 2026, 1:00 PM IST
@@ -195,9 +198,119 @@
         cdSecs.textContent = pad(seconds % 60);
     }
 
+    let submissionLocked = false;
+    let initialLockCheckDone = false;
+
+    function checkSubmissionLockState(now) {
+        if (now < TARGET_DATE.getTime() || now > SUBMISSION_DEADLINE.getTime()) {
+            if (!submissionLocked || !initialLockCheckDone) {
+                lockSubmissionUI(now > SUBMISSION_DEADLINE.getTime());
+                initialLockCheckDone = true;
+            }
+        } else {
+            if (submissionLocked || !initialLockCheckDone) {
+                unlockSubmissionUI();
+                initialLockCheckDone = true;
+                if (typeof checkExistingSubmission === 'function') {
+                    checkExistingSubmission();
+                }
+            }
+        }
+    }
+
+    function lockSubmissionUI(isPastDeadline) {
+        submissionLocked = true;
+        const wrapper = document.getElementById('submission-wrapper');
+        const overlay = document.getElementById('submission-locked-overlay');
+        const btn = document.getElementById('submit-project-btn');
+        const ql = document.querySelector('[data-goto="submission"]');
+        const overlayText = overlay ? overlay.querySelector('.locked-overlay-text') : null;
+        
+        if (wrapper) wrapper.classList.add('submission-disabled');
+        if (overlay) {
+            overlay.style.display = 'flex';
+            if (overlayText) {
+                overlayText.textContent = isPastDeadline ? 'SUBMISSIONS HAVE CLOSED' : 'SUBMISSIONS OPEN WHEN THE HACKATHON BEGINS';
+            }
+        }
+        
+        ['sub-github', 'sub-demo'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.disabled = true;
+        });
+
+        if (btn) {
+            btn.disabled = true;
+            const txt = document.getElementById('submit-btn-text');
+            if (txt) txt.textContent = 'SUBMISSIONS LOCKED';
+        }
+
+        if (ql) {
+            ql.classList.add('ql-disabled');
+            const iconWrap = ql.querySelector('.ql-icon-wrap');
+            if (iconWrap) {
+                iconWrap.className = 'ql-icon-wrap ql-icon-locked';
+                iconWrap.style.cssText = '';
+                iconWrap.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="ql-svg">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0110 0v4" />
+                </svg>`;
+            }
+            const txt = ql.querySelector('.ql-text');
+            if (txt) txt.textContent = 'Submissions Locked';
+            const arr = ql.querySelector('.ql-arrow');
+            if (arr) arr.textContent = '🔒';
+        }
+    }
+
+    function unlockSubmissionUI() {
+        submissionLocked = false;
+        const wrapper = document.getElementById('submission-wrapper');
+        const overlay = document.getElementById('submission-locked-overlay');
+        const btn = document.getElementById('submit-project-btn');
+        const ql = document.querySelector('[data-goto="submission"]');
+
+        if (wrapper) wrapper.classList.remove('submission-disabled');
+        if (overlay) overlay.style.display = 'none';
+
+        ['sub-github', 'sub-demo'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.disabled = false;
+        });
+
+        if (btn) {
+            btn.disabled = false;
+            const txt = document.getElementById('submit-btn-text');
+            if (txt && txt.textContent === 'SUBMISSIONS LOCKED') txt.textContent = 'SUBMIT PROJECT';
+        }
+
+        if (ql) {
+            ql.classList.remove('ql-disabled');
+            const iconWrap = ql.querySelector('.ql-icon-wrap');
+            if (iconWrap) {
+                iconWrap.className = 'ql-icon-wrap';
+                iconWrap.style.cssText = 'color:var(--accent-cyan); background:rgba(0, 212, 255, 0.1);';
+                iconWrap.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="ql-svg">
+                  <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                  <polyline points="17 8 12 3 7 8" />
+                  <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>`;
+            }
+            const txt = ql.querySelector('.ql-text');
+            if (txt) txt.textContent = 'Submit Project';
+            const arr = ql.querySelector('.ql-arrow');
+            if (arr) arr.textContent = '→';
+        }
+    }
+
     function updateSubmissionCountdown() {
         const now = Date.now();
         const diff = SUBMISSION_DEADLINE.getTime() - now;
+
+        // Dynamic locking logic based on date
+        checkSubmissionLockState(now);
 
         // Submission tab countdown
         const cdDays = document.getElementById('sub-cd-days');
@@ -378,7 +491,22 @@
             // Team ID
             const teamIdDisplay = document.getElementById('sidebar-team-id');
             const counter = localStorage.getItem('lunarforge_team_counter') || '01';
-            if (teamIdDisplay) teamIdDisplay.textContent = `CN-LF${String(counter).padStart(2, '0')}`;
+            const defaultId = `CN-LF${String(counter).padStart(2, '0')}`;
+            const finalTeamId = data['teamId'] || defaultId;
+            if (teamIdDisplay) teamIdDisplay.textContent = finalTeamId;
+
+            // Pre-fill read-only submission fields
+            const subTeamId = document.getElementById('sub-team-id');
+            if (subTeamId) subTeamId.value = finalTeamId;
+
+            const subTeamName = document.getElementById('sub-team-name');
+            if (subTeamName) subTeamName.value = teamName.toUpperCase();
+
+            const subDomain = document.getElementById('sub-domain');
+            if (subDomain) subDomain.value = domain.toUpperCase();
+
+            const subProblem = document.getElementById('sub-problem');
+            if (subProblem) subProblem.value = ps === 'others' ? (data['custom-ps'] || data['customPS'] || 'Custom Project') : ps;
 
         } catch (e) {
             console.warn('[Dashboard] Error populating data:', e);
@@ -390,36 +518,100 @@
     // ══════════════════════════════════════════════
     const submissionForm = document.getElementById('submission-form');
     if (submissionForm) {
-        submissionForm.addEventListener('submit', (e) => {
+        submissionForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const title = document.getElementById('sub-project-title').value.trim();
-            const desc = document.getElementById('sub-project-desc').value.trim();
             const github = document.getElementById('sub-github').value.trim();
-            const techStack = document.getElementById('sub-tech-stack').value.trim();
+            const demo = document.getElementById('sub-demo').value.trim();
 
-            if (!title || !desc || !github || !techStack) {
-                alert('Please fill in all required fields (Project Title, Description, GitHub URL, Tech Stack).');
+            if (!github || !demo) {
+                alert('Please fill in both GitHub URL and Video URL.');
                 return;
             }
 
-            // Save submission locally
+            const teamId = document.getElementById('sub-team-id').value;
+            const teamName = document.getElementById('sub-team-name').value;
+            const domain = document.getElementById('sub-domain').value;
+            const problemStatement = document.getElementById('sub-problem').value;
+
+            const submitBtn = document.getElementById('submit-project-btn');
+            const submitBtnText = document.getElementById('submit-btn-text');
+            
+            if (submitBtn) submitBtn.disabled = true;
+            if (submitBtnText) submitBtnText.textContent = 'SUBMITTING...';
+
             const submissionData = {
-                title,
-                description: desc,
-                github,
-                demo: document.getElementById('sub-demo').value.trim(),
-                techStack,
-                presentation: document.getElementById('sub-presentation').value.trim(),
-                submittedAt: new Date().toISOString()
+                teamId,
+                teamName,
+                domain,
+                problemStatement,
+                githubUrl: github,
+                videoUrl: demo
             };
 
-            localStorage.setItem('lunarforge_submission', JSON.stringify(submissionData));
+            // Capture initial local timestamp fallback
+            let localTime = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+            submissionData.timestamp = localTime;
 
-            // Update UI
-            const banner = document.getElementById('submission-banner');
-            if (banner) {
-                banner.innerHTML = `
+            try {
+                if (SUBMISSION_APPS_SCRIPT_URL !== 'PASTE_YOUR_NEW_APPS_SCRIPT_URL_HERE') {
+                    const response = await fetch(SUBMISSION_APPS_SCRIPT_URL, {
+                        method: 'POST',
+                        body: JSON.stringify(submissionData),
+                        redirect: 'follow'
+                    });
+                    
+                    if (response.ok && response.type !== 'opaque') {
+                        try {
+                            const resJson = await response.json();
+                            console.log('[Lunar Forge] Submission Response:', resJson);
+                            if (resJson.debug) {
+                                console.log('[Lunar Forge DEBUG] Action:', resJson.message);
+                                console.log('[Lunar Forge DEBUG] Found Col:', resJson.debug.foundColIndex);
+                                console.log('[Lunar Forge DEBUG] Found Row:', resJson.debug.rowIndex);
+                            }
+                            if (resJson.timestamp) {
+                                submissionData.timestamp = resJson.timestamp;
+                            }
+                        } catch (e) {
+                            console.warn('[Lunar Forge] Could not parse Apps Script JSON');
+                        }
+                    } else if (response.type === 'opaque') {
+                        console.log('[Lunar Forge] Opaque response received. Fallback to local time. (Cannot read debug info)');
+                    }
+                } else {
+                    console.warn('[Lunar Forge] Default Apps Script URL used. Simulating submission.');
+                }
+            } catch (err) {
+                console.error('[Lunar Forge] Network error on submission:', err);
+                try {
+                    // Fallback to no-cors mode if the first one fails
+                    await fetch(SUBMISSION_APPS_SCRIPT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        body: JSON.stringify(submissionData),
+                    });
+                } catch (err2) {
+                    console.error('[Lunar Forge] no-cors fallback failed:', err2);
+                }
+            }
+
+            localStorage.setItem('lunarforge_submission', JSON.stringify(submissionData));
+            updateSubmissionBanner(submissionData);
+
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                if (submitBtnText) submitBtnText.textContent = 'UPDATE SUBMISSION';
+            }
+
+            alert('🚀 Project submitted successfully!');
+        });
+    }
+
+    function updateSubmissionBanner(data) {
+        const banner = document.getElementById('submission-banner');
+        if (banner) {
+            banner.innerHTML = `
           <div class="submission-status-icon" style="background: rgba(0, 230, 118, 0.12); color: #00e676;">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:24px;height:24px;">
               <polyline points="20 6 9 17 4 12" />
@@ -427,23 +619,22 @@
           </div>
           <div class="submission-status-text">
             <h3 style="color: #00e676;">SUBMISSION RECEIVED</h3>
-            <p>Your project "${title}" has been submitted successfully!</p>
+            <p>Your project has been submitted successfully! You can continuously update it before the deadline.</p>
+            <p style="font-size: 0.85rem; color: #888; margin-top: 6px;">
+              <strong>Submitted AT:</strong> ${data.timestamp}
+            </p>
           </div>
         `;
-                banner.style.borderColor = 'rgba(0, 230, 118, 0.2)';
-                banner.style.background = 'rgba(0, 230, 118, 0.04)';
-            }
+            banner.style.borderColor = 'rgba(0, 230, 118, 0.2)';
+            banner.style.background = 'rgba(0, 230, 118, 0.04)';
+        }
 
-            // Update overview card
-            const statusVal = document.getElementById('submission-status-value');
-            if (statusVal) {
-                statusVal.textContent = 'SUBMITTED';
-                statusVal.classList.remove('pending');
-                statusVal.style.color = '#00e676';
-            }
-
-            alert('🚀 Project submitted successfully!');
-        });
+        const statusVal = document.getElementById('submission-status-value');
+        if (statusVal) {
+            statusVal.textContent = 'SUBMITTED';
+            statusVal.classList.remove('pending');
+            statusVal.style.color = '#00e676';
+        }
     }
 
     // Check for existing submission
@@ -453,33 +644,11 @@
 
         try {
             const data = JSON.parse(raw);
+            updateSubmissionBanner(data);
 
-            // Update banner
-            const banner = document.getElementById('submission-banner');
-            if (banner) {
-                banner.innerHTML = `
-          <div class="submission-status-icon" style="background: rgba(0, 230, 118, 0.12); color: #00e676;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:24px;height:24px;">
-              <polyline points="20 6 9 17 4 12" />
-            </svg>
-          </div>
-          <div class="submission-status-text">
-            <h3 style="color: #00e676;">SUBMISSION RECEIVED</h3>
-            <p>Your project "${data.title}" was submitted. You can update it before the deadline.</p>
-          </div>
-        `;
-                banner.style.borderColor = 'rgba(0, 230, 118, 0.2)';
-                banner.style.background = 'rgba(0, 230, 118, 0.04)';
-            }
-
-            // Fill form
             const fields = {
-                'sub-project-title': data.title,
-                'sub-project-desc': data.description,
-                'sub-github': data.github,
-                'sub-demo': data.demo,
-                'sub-tech-stack': data.techStack,
-                'sub-presentation': data.presentation
+                'sub-github': data.githubUrl || data.github,
+                'sub-demo': data.videoUrl || data.demo
             };
 
             Object.entries(fields).forEach(([id, value]) => {
@@ -487,24 +656,9 @@
                 if (el && value) el.value = value;
             });
 
-            // Update submit button text
-            const submitBtn = document.getElementById('submit-project-btn');
-            if (submitBtn) submitBtn.innerHTML = `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="btn-icon" style="width:18px;height:18px;">
-          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-          <polyline points="17 8 12 3 7 8" />
-          <line x1="12" y1="3" x2="12" y2="15" />
-        </svg>
-        UPDATE SUBMISSION
-      `;
+            const submitBtnText = document.getElementById('submit-btn-text');
+            if (submitBtnText) submitBtnText.textContent = 'UPDATE SUBMISSION';
 
-            // Update overview card
-            const statusVal = document.getElementById('submission-status-value');
-            if (statusVal) {
-                statusVal.textContent = 'SUBMITTED';
-                statusVal.classList.remove('pending');
-                statusVal.style.color = '#00e676';
-            }
         } catch (e) {
             // ignore
         }

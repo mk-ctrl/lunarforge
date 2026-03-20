@@ -294,15 +294,16 @@
               <span class="ql-text">View Timeline</span>
               <span class="ql-arrow">→</span>
             </button>
-            <button class="quicklink-card ql-disabled" data-goto="submission">
-              <div class="ql-icon-wrap ql-icon-locked">
+            <button class="quicklink-card" data-goto="submission">
+              <div class="ql-icon-wrap">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="ql-svg">
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                  <path d="M7 11V7a5 5 0 0110 0v4" />
+                  <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                  <polyline points="17 8 12 3 7 8" />
+                  <line x1="12" y1="3" x2="12" y2="15" />
                 </svg>
               </div>
-              <span class="ql-text">Submissions Locked</span>
-              <span class="ql-arrow">🔒</span>
+              <span class="ql-text">Submit Project</span>
+              <span class="ql-arrow">→</span>
             </button>
             <button class="quicklink-card" data-goto="teammates">
               <div class="ql-icon-wrap">
@@ -484,18 +485,18 @@
           <p class="tab-subtitle">Submit your project before the deadline</p>
         </div>
 
-        <!-- Submission Locked Banner -->
-        <div class="submission-status-banner submission-locked-banner" id="submission-banner">
-          <div class="submission-status-icon locked-icon">
+        <!-- Submission Status Banner -->
+        <div class="submission-status-banner" id="submission-banner">
+          <div class="submission-status-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
               style="width:24px;height:24px;">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-              <path d="M7 11V7a5 5 0 0110 0v4" />
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
             </svg>
           </div>
           <div class="submission-status-text">
-            <h3>SUBMISSIONS NOT YET OPEN</h3>
-            <p>Submissions will open once the hackathon begins. You can prepare your project details in advance.</p>
+            <h3>SUBMISSION PENDING</h3>
+            <p>Fill out your GitHub URL and Video URL below to submit your project to the judges. You can update your submission later.</p>
           </div>
         </div>
 
@@ -526,9 +527,9 @@
           <p class="cd-date" style="margin-top: 12px;">MARCH 31, 2026 — 1:00 PM IST</p>
         </div>
 
-        <!-- Submission Form (Disabled) -->
-        <div class="submission-form-wrapper submission-disabled">
-          <div class="submission-locked-overlay">
+        <!-- Submission Form -->
+        <div class="submission-form-wrapper" id="submission-wrapper">
+          <div class="submission-locked-overlay" id="submission-locked-overlay" style="display: none;">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
               style="width:40px;height:40px;color:var(--text-muted);">
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
@@ -537,49 +538,44 @@
             <span class="locked-overlay-text">SUBMISSIONS OPEN WHEN THE HACKATHON BEGINS</span>
           </div>
           <form class="submission-form" id="submission-form">
-            <div class="sub-form-section">
-              <label class="sub-form-label">PROJECT TITLE <span class="required-star">*</span></label>
-              <input type="text" class="sub-form-input" id="sub-project-title" placeholder="Enter your project name"
-                disabled />
-            </div>
-
-            <div class="sub-form-section">
-              <label class="sub-form-label">PROJECT DESCRIPTION <span class="required-star">*</span></label>
-              <textarea class="sub-form-input sub-textarea" id="sub-project-desc"
-                placeholder="Describe what you built, the problem it solves, and key features..." rows="4"
-                disabled></textarea>
+            
+            <div class="sub-form-row">
+              <div class="sub-form-section">
+                <label class="sub-form-label">TEAM NAME</label>
+                <input type="text" class="sub-form-input" id="sub-team-name" readonly />
+              </div>
+              <div class="sub-form-section">
+                <label class="sub-form-label">TEAM ID</label>
+                <input type="text" class="sub-form-input" id="sub-team-id" readonly />
+              </div>
             </div>
 
             <div class="sub-form-row">
               <div class="sub-form-section">
-                <label class="sub-form-label">GITHUB REPO URL <span class="required-star">*</span></label>
-                <input type="url" class="sub-form-input" id="sub-github" placeholder="https://github.com/..."
-                  disabled />
+                <label class="sub-form-label">DOMAIN</label>
+                <input type="text" class="sub-form-input" id="sub-domain" readonly />
               </div>
               <div class="sub-form-section">
-                <label class="sub-form-label">DEMO / VIDEO URL</label>
-                <input type="url" class="sub-form-input" id="sub-demo" placeholder="https://youtube.com/..." disabled />
+                <label class="sub-form-label">PROBLEM STATEMENT</label>
+                <input type="text" class="sub-form-input" id="sub-problem" readonly />
               </div>
             </div>
 
             <div class="sub-form-section">
-              <label class="sub-form-label">TECH STACK USED <span class="required-star">*</span></label>
-              <input type="text" class="sub-form-input" id="sub-tech-stack"
-                placeholder="e.g. React, Node.js, TensorFlow, MongoDB" disabled />
+              <label class="sub-form-label">GITHUB REPO URL <span class="required-star">*</span></label>
+              <input type="url" class="sub-form-input" id="sub-github" placeholder="https://github.com/..." required />
             </div>
 
             <div class="sub-form-section">
-              <label class="sub-form-label">PRESENTATION SLIDE URL</label>
-              <input type="url" class="sub-form-input" id="sub-presentation" placeholder="Google Slides / Canva link..."
-                disabled />
+              <label class="sub-form-label">VIDEO URL <span class="required-star">*</span></label>
+              <input type="url" class="sub-form-input" id="sub-demo" placeholder="https://youtube.com/..." required />
             </div>
 
-            <button type="submit" class="submit-project-btn" id="submit-project-btn" disabled>
+            <button type="submit" class="submit-project-btn" id="submit-project-btn">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="btn-icon">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                <path d="M7 11V7a5 5 0 0110 0v4" />
+                <polyline points="20 6 9 17 4 12" />
               </svg>
-              SUBMISSIONS LOCKED
+              <span id="submit-btn-text">SUBMIT PROJECT</span>
             </button>
           </form>
         </div>

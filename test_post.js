@@ -1,19 +1,20 @@
-const url = 'https://script.google.com/macros/s/AKfycbxrl4LqczUGHAotosip7a6DQds0pjMhlLdfTZ8NS7WsULIKJdBERmjTOgF7sqpZ_5vc/exec';
+const url = 'https://script.google.com/macros/s/AKfycby7ghxX8IomwUeXAVA7hgKYg3mURyxM_1XmqeFHff5tj-XIiLs_AS9LDy2LsKNkiTD8sQ/exec';
 
-const data = {
-    teamName: "Test Team",
-    teamSize: 1,
-    leadName: "Test Lead",
-    leadBatch: "271234",
-    leadPhone: "1234567890",
-    domain: "Web",
-    problemStatement: "Test"
+const testData = {
+    teamId: 'TEST-1234',
+    teamName: 'Debug Team',
+    githubUrl: 'https://github.com/debug',
+    videoUrl: 'https://youtube.com/debug'
 };
 
-fetch(url, {
-    method: 'POST',
-    body: JSON.stringify(data)
-})
-.then(response => response.text())
-.then(text => console.log("Response:", text))
-.catch(err => console.error("Error:", err));
+async function runTest() {
+    console.log("Sending POST 1...");
+    let res = await fetch(url, { method: 'POST', body: JSON.stringify(testData) });
+    console.log("Response 1:", await res.json());
+
+    console.log("\nSending POST 2 (Should Update)...");
+    let res2 = await fetch(url, { method: 'POST', body: JSON.stringify(testData) });
+    console.log("Response 2:", await res2.json());
+}
+
+runTest();
