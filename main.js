@@ -22,6 +22,8 @@
   const splineBg = document.getElementById('spline-bg');
   const splineBgCanvas = document.getElementById('spline-bg-canvas');
   const splineBgLoading = document.getElementById('spline-bg-loading');
+  const splineMoon = document.getElementById('spline-moon');
+  const splineMoonCanvas = document.getElementById('spline-moon-canvas');
   const canvas = document.getElementById('particles');
   const ctx = canvas.getContext('2d');
 
@@ -179,8 +181,9 @@
       }, 1000);
     }
 
-    // Show & load full-page Spline 3D background
+    // Show & load full-page Spline 3D background + moon overlay
     loadSplineBg();
+    loadSplineMoon();
 
     // Kick off hero animations
     document.querySelectorAll('.hero-title .line').forEach(el => {
@@ -220,7 +223,7 @@
   // ══════════════════════════════════════════════
   // FULL-PAGE SPLINE 3D BACKGROUND
   // ══════════════════════════════════════════════
-  const SPLINE_BG_SCENE = 'https://prod.spline.design/9wQpYLhbgnVPDiLC/scene.splinecode';
+  const SPLINE_BG_SCENE = 'https://prod.spline.design/cbLIR9756qJJPx9n/scene.splinecode';
 
   async function loadSplineBg() {
     try {
@@ -237,6 +240,26 @@
     } catch (err) {
       console.warn('[Lunar Forge] Spline background failed to load:', err);
       if (splineBgLoading) splineBgLoading.classList.add('hidden');
+    }
+  }
+
+  // ══════════════════════════════════════════════
+  // SPLINE MOON OVERLAY
+  // ══════════════════════════════════════════════
+  const SPLINE_MOON_SCENE = 'https://prod.spline.design/3irAsJEPtR-P-FQp/scene.splinecode';
+
+  async function loadSplineMoon() {
+    try {
+      if (!splineMoonCanvas) return;
+      const { Application } = await import('https://esm.sh/@splinetool/runtime');
+      const app = new Application(splineMoonCanvas);
+      await app.load(SPLINE_MOON_SCENE);
+
+      console.log('[Lunar Forge] Spline moon overlay loaded!');
+      splineMoon.classList.add('visible');
+
+    } catch (err) {
+      console.warn('[Lunar Forge] Spline moon overlay failed to load:', err);
     }
   }
 
