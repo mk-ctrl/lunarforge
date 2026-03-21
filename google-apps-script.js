@@ -11,10 +11,9 @@
  * 5. Set "Execute as" → "Me"
  * 6. Set "Who has access" → "Anyone"
  * 7. Click "Deploy" and authorize when prompted
- * 8. Copy the Web App URL and paste it into register.js (APPS_SCRIPT_URL)
+ * 8. Copy the Web App URL and paste it into register.js AND login.js (APPS_SCRIPT_URL)
  *
- * The script will automatically create a sheet named "Registrations"
- * with the correct headers on the first submission.
+ * Make sure to clear your existing sheet or manually add the "Password" header if you already created it!
  */
 
 // Sheet name
@@ -37,10 +36,11 @@ function doPost(e) {
         // Timestamp
         const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
 
-        // Append the registration data
+        // Append the registration data (INCLUDING PASSWORD)
         sheet.appendRow([
             timestamp,
             teamId,
+            data.password || '',
             data.teamName || '',
             data.teamSize || '',
             data.leadName || '',
@@ -56,9 +56,9 @@ function doPost(e) {
             data.problemStatement || '',
         ]);
 
-        // Return success with team ID
+        // Return success with team ID and password
         return ContentService
-            .createTextOutput(JSON.stringify({ success: true, teamId: teamId }))
+            .createTextOutput(JSON.stringify({ success: true, teamId: teamId, password: data.password }))
             .setMimeType(ContentService.MimeType.JSON);
 
     } catch (error) {
@@ -69,11 +69,73 @@ function doPost(e) {
 }
 
 /**
- * Handle GET requests (for testing)
+ * Handle GET requests (for testing and LOGIN)
  */
-function doGet() {
+function doGet(e) {
+    // Check if it's a login request
+    if (e && e.parameter && e.parameter.action === 'login') {
+        try {
+            const sheet = getOrCreateSheet();
+            const teamId = e.parameter.teamId;
+            const password = e.parameter.password;
+            
+            const data = sheet.getDataRange().getValues();
+            const headers = data[0];
+            
+            const teamIdIndex = headers.indexOf('Team ID');
+            const passwordIndex = headers.indexOf('Password');
+            
+            if (teamIdIndex === -1 || passwordIndex === -1) {
+                return ContentService.createTextOutput(JSON.stringify({ 
+                    success: false, 
+                    message: 'Server error: Password or Team ID column missing in Sheets.' 
+                })).setMimeType(ContentService.MimeType.JSON);
+            }
+
+            // Search for the Team ID
+            for (let i = 1; i < data.length; i++) {
+                if (data[i][teamIdIndex] === teamId) {
+                    if (data[i][passwordIndex] === password) {
+                        // Success! Return user data in the same format as registration
+                        const sessionData = {
+                            teamId: data[i][teamIdIndex],
+                            password: data[i][passwordIndex],
+                            teamName: data[i][headers.indexOf('Team Name')] || '',
+                            teamSize: data[i][headers.indexOf('Team Size')] || '',
+                            leadName: data[i][headers.indexOf('Lead Name')] || '',
+                            domain: data[i][headers.indexOf('Domain')] || '',
+                            problemStatement: data[i][headers.indexOf('Problem Statement')] || ''
+                            // Add more fields if the dashboard needs them
+                        };
+                        return ContentService.createTextOutput(JSON.stringify({ 
+                            success: true, 
+                            data: sessionData 
+                        })).setMimeType(ContentService.MimeType.JSON);
+                    } else {
+                        return ContentService.createTextOutput(JSON.stringify({ 
+                            success: false, 
+                            message: 'Invalid Password.' 
+                        })).setMimeType(ContentService.MimeType.JSON);
+                    }
+                }
+            }
+            
+            return ContentService.createTextOutput(JSON.stringify({ 
+                success: false, 
+                message: 'Invalid Team ID.' 
+            })).setMimeType(ContentService.MimeType.JSON);
+            
+        } catch (error) {
+           return ContentService.createTextOutput(JSON.stringify({ 
+               success: false, 
+               message: error.message 
+           })).setMimeType(ContentService.MimeType.JSON);
+        }
+    }
+
+    // Default response for simple testing
     return ContentService
-        .createTextOutput(JSON.stringify({ status: 'Lunar Forge Registration API is running' }))
+        .createTextOutput(JSON.stringify({ status: 'Lunar Forge API is running. Login endpoint ready.' }))
         .setMimeType(ContentService.MimeType.JSON);
 }
 
@@ -86,10 +148,11 @@ function getOrCreateSheet() {
 
     if (!sheet) {
         sheet = ss.insertSheet(SHEET_NAME);
-        // Add headers
+        // Add headers (including Password)
         sheet.appendRow([
             'Timestamp',
             'Team ID',
+            'Password',
             'Team Name',
             'Team Size',
             'Lead Name',
@@ -106,7 +169,7 @@ function getOrCreateSheet() {
         ]);
 
         // Bold headers
-        sheet.getRange(1, 1, 1, 15).setFontWeight('bold');
+        sheet.getRange(1, 1, 1, 16).setFontWeight('bold');
         // Freeze header row
         sheet.setFrozenRows(1);
     }

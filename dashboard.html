@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Lunar Forge 1.0</title>
+  <meta name="description"
+    content="Participant dashboard for Lunar Forge 1.0 — View your timeline, problem statement, submission status, teammates, and FAQs." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+
+<body>
+
+  <!-- ═══════════════ PARTICLE CANVAS ═══════════════ -->
+  <canvas id="particles"></canvas>
+
+  <!-- ═══════════════ TOP NAVIGATION ═══════════════ -->
+  <nav class="dash-nav" id="dash-nav">
+    <a href="index.html" class="dash-nav-logo">LUNAR FORGE 1.0</a>
+    <div class="dash-nav-right">
+      <span class="dash-nav-greeting" id="greeting-text">HELLO, NINJA</span>
+      <button class="dash-nav-avatar" id="avatar-btn" aria-label="User menu">
+        <span class="avatar-letter" id="avatar-letter">N</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ═══════════════ DASHBOARD LAYOUT ═══════════════ -->
+  <main class="dash-main">
+
+    <!-- SIDEBAR -->
+    <aside class="dash-sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <span class="sidebar-label">DASHBOARD</span>
+        <h2 class="sidebar-team-name" id="sidebar-team-name">TEAM NINJA</h2>
+        <span class="sidebar-team-id" id="sidebar-team-id">CN-LF01</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="sidebar-link active" data-tab="overview" id="tab-overview">
+          <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="3" width="7" height="7" rx="1.5" />
+            <rect x="14" y="3" width="7" height="7" rx="1.5" />
+            <rect x="3" y="14" width="7" height="7" rx="1.5" />
+            <rect x="14" y="14" width="7" height="7" rx="1.5" />
+          </svg>
+          <span>OVERVIEW</span>
+        </button>
+        <button class="sidebar-link" data-tab="timeline" id="tab-timeline">
+          <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="9" />
+            <polyline points="12 7 12 12 15 15" />
+          </svg>
+          <span>TIMELINE</span>
+        </button>
+        <button class="sidebar-link" data-tab="problem" id="tab-problem">
+          <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="16" y1="13" x2="8" y2="13" />
+            <line x1="16" y1="17" x2="8" y2="17" />
+          </svg>
+          <span>PROBLEM STATEMENT</span>
+        </button>
+        <button class="sidebar-link" data-tab="submission" id="tab-submission">
+          <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+            <polyline points="17 8 12 3 7 8" />
+            <line x1="12" y1="3" x2="12" y2="15" />
+          </svg>
+          <span>SUBMISSION</span>
+        </button>
+        <button class="sidebar-link" data-tab="teammates" id="tab-teammates">
+          <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 00-3-3.87" />
+            <path d="M16 3.13a4 4 0 010 7.75" />
+          </svg>
+          <span>TEAMMATES</span>
+        </button>
+        <button class="sidebar-link" data-tab="faq" id="tab-faq">
+          <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+          <span>FAQ</span>
+        </button>
+
+        <div class="sidebar-divider" style="height:1px; background:rgba(255,255,255,0.05); margin: 16px 0;"></div>
+
+        <button class="sidebar-link sidebar-logout" id="dash-logout-btn" style="color:var(--error);">
+          <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--error);">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          <span>LOGOUT</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="index.html" class="sidebar-footer-link">← BACK TO HOME</a>
+      </div>
+    </aside>
+
+    <!-- CONTENT AREA -->
+    <div class="dash-content" id="dash-content">
+
+      <!-- ═══════════ TAB: OVERVIEW ═══════════ -->
+      <section class="dash-tab active" id="panel-overview">
+
+        <!-- Welcome Hero Banner -->
+        <div class="overview-hero">
+          <div class="overview-hero-bg"></div>
+          <div class="overview-hero-content">
+            <div class="overview-hero-left">
+              <span class="overview-hero-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  style="width:12px;height:12px;">
+                  <circle cx="12" cy="12" r="5" />
+                  <line x1="12" y1="1" x2="12" y2="3" />
+                  <line x1="12" y1="21" x2="12" y2="23" />
+                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                  <line x1="1" y1="12" x2="3" y2="12" />
+                  <line x1="21" y1="12" x2="23" y2="12" />
+                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                </svg>
+                LUNAR FORGE 1.0
+              </span>
+              <h1 class="overview-hero-title" id="overview-hero-greeting">WELCOME BACK, NINJA</h1>
+              <p class="overview-hero-subtitle">Your hackathon command center. Track progress, manage submissions, and
+                stay ahead of every milestone.</p>
+            </div>
+            <div class="overview-hero-right">
+              <div class="overview-hero-status-chip" id="hero-status-chip">
+                <span class="status-pulse"></span>
+                <span id="hero-event-status">UPCOMING</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metrics Row -->
+        <div class="overview-metrics">
+          <div class="metric-card" id="card-status">
+            <div class="metric-card-top">
+              <div class="metric-icon-wrap metric-icon-event">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
+              </div>
+              <span class="metric-badge" id="event-status-badge">UPCOMING</span>
+            </div>
+            <span class="metric-label">EVENT STATUS</span>
+            <span class="metric-value" id="event-status-value">UPCOMING</span>
+          </div>
+
+          <div class="metric-card" id="card-track">
+            <div class="metric-card-top">
+              <div class="metric-icon-wrap metric-icon-track">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <polygon
+                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+              </div>
+            </div>
+            <span class="metric-label">TRACK</span>
+            <span class="metric-value" id="track-value">AI / ML</span>
+          </div>
+
+          <div class="metric-card" id="card-submission">
+            <div class="metric-card-top">
+              <div class="metric-icon-wrap metric-icon-submission">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                  <polyline points="17 8 12 3 7 8" />
+                  <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+              </div>
+              <span class="metric-badge metric-badge-pending" id="submission-badge">NOT YET</span>
+            </div>
+            <span class="metric-label">SUBMISSION</span>
+            <span class="metric-value pending" id="submission-status-value">PENDING</span>
+          </div>
+
+          <div class="metric-card" id="card-team">
+            <div class="metric-card-top">
+              <div class="metric-icon-wrap metric-icon-team">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M23 21v-2a4 4 0 00-3-3.87" />
+                  <path d="M16 3.13a4 4 0 010 7.75" />
+                </svg>
+              </div>
+            </div>
+            <span class="metric-label">TEAM SIZE</span>
+            <span class="metric-value" id="team-size-value">3 MEMBERS</span>
+          </div>
+        </div>
+
+        <!-- Dual Countdown Section -->
+        <div class="overview-countdowns">
+          <!-- Hackathon Start Countdown -->
+          <div class="countdown-block countdown-primary">
+            <div class="countdown-block-header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                style="width:18px;height:18px;color:var(--accent-cyan);">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+              </svg>
+              <span class="countdown-block-title">HACKATHON BEGINS</span>
+            </div>
+            <div class="countdown-row">
+              <div class="cd-unit">
+                <span class="cd-num" id="ov-cd-days">00</span>
+                <span class="cd-lbl">DAYS</span>
+              </div>
+              <span class="cd-sep">:</span>
+              <div class="cd-unit">
+                <span class="cd-num" id="ov-cd-hours">00</span>
+                <span class="cd-lbl">HOURS</span>
+              </div>
+              <span class="cd-sep">:</span>
+              <div class="cd-unit">
+                <span class="cd-num" id="ov-cd-mins">00</span>
+                <span class="cd-lbl">MINS</span>
+              </div>
+              <span class="cd-sep">:</span>
+              <div class="cd-unit">
+                <span class="cd-num" id="ov-cd-secs">00</span>
+                <span class="cd-lbl">SECS</span>
+              </div>
+            </div>
+            <p class="cd-date">MARCH 30, 2026 — 7:00 PM IST</p>
+          </div>
+
+          <!-- Submission Deadline Countdown -->
+          <div class="countdown-block countdown-secondary">
+            <div class="countdown-block-header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                style="width:18px;height:18px;color:var(--warning);">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                <polyline points="17 8 12 3 7 8" />
+                <line x1="12" y1="3" x2="12" y2="15" />
+              </svg>
+              <span class="countdown-block-title">SUBMISSION DEADLINE</span>
+            </div>
+            <div class="countdown-row compact">
+              <div class="cd-unit small">
+                <span class="cd-num" id="ov-sub-days">00</span>
+                <span class="cd-lbl">DAYS</span>
+              </div>
+              <span class="cd-sep">:</span>
+              <div class="cd-unit small">
+                <span class="cd-num" id="ov-sub-hours">00</span>
+                <span class="cd-lbl">HRS</span>
+              </div>
+              <span class="cd-sep">:</span>
+              <div class="cd-unit small">
+                <span class="cd-num" id="ov-sub-mins">00</span>
+                <span class="cd-lbl">MIN</span>
+              </div>
+              <span class="cd-sep">:</span>
+              <div class="cd-unit small">
+                <span class="cd-num" id="ov-sub-secs">00</span>
+                <span class="cd-lbl">SEC</span>
+              </div>
+            </div>
+            <p class="cd-date">MARCH 31, 2026 — 1:00 PM IST</p>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="overview-quicklinks">
+          <span class="overview-section-label">QUICK ACTIONS</span>
+          <div class="quicklink-grid">
+            <button class="quicklink-card" data-goto="timeline">
+              <div class="ql-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="ql-svg">
+                  <circle cx="12" cy="12" r="9" />
+                  <polyline points="12 7 12 12 15 15" />
+                </svg>
+              </div>
+              <span class="ql-text">View Timeline</span>
+              <span class="ql-arrow">→</span>
+            </button>
+            <button class="quicklink-card" data-goto="submission">
+              <div class="ql-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="ql-svg">
+                  <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                  <polyline points="17 8 12 3 7 8" />
+                  <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+              </div>
+              <span class="ql-text">Submit Project</span>
+              <span class="ql-arrow">→</span>
+            </button>
+            <button class="quicklink-card" data-goto="teammates">
+              <div class="ql-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="ql-svg">
+                  <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                </svg>
+              </div>
+              <span class="ql-text">View Team</span>
+              <span class="ql-arrow">→</span>
+            </button>
+            <button class="quicklink-card" data-goto="faq">
+              <div class="ql-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="ql-svg">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" />
+                  <line x1="12" y1="17" x2="12.01" y2="17" />
+                </svg>
+              </div>
+              <span class="ql-text">Read FAQ</span>
+              <span class="ql-arrow">→</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════ TAB: TIMELINE ═══════════ -->
+      <section class="dash-tab" id="panel-timeline">
+        <div class="tab-header">
+          <span class="tab-label">02</span>
+          <h1 class="tab-title">TIMELINE</h1>
+          <p class="tab-subtitle">Track every milestone of Lunar Forge 1.0</p>
+        </div>
+
+        <div class="dash-timeline">
+          <div class="dash-timeline-line"></div>
+
+          <div class="dash-tl-item completed" data-step="1">
+            <div class="dash-tl-dot">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </div>
+            <div class="dash-tl-card">
+              <div class="dash-tl-card-header">
+                <span class="dash-tl-time">MAR 1 — MAR 5</span>
+                <span class="dash-tl-badge completed">COMPLETED</span>
+              </div>
+              <h3 class="dash-tl-title">REGISTRATION OPEN</h3>
+              <p class="dash-tl-desc">Teams register and form their squads for Lunar Forge 1.0. Choose your domain and
+                problem statement.</p>
+            </div>
+          </div>
+
+          <div class="dash-tl-item completed" data-step="2">
+            <div class="dash-tl-dot">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </div>
+            <div class="dash-tl-card">
+              <div class="dash-tl-card-header">
+                <span class="dash-tl-time">MAR 6 — 09:00 AM</span>
+                <span class="dash-tl-badge completed">COMPLETED</span>
+              </div>
+              <h3 class="dash-tl-title">OPENING CEREMONY</h3>
+              <p class="dash-tl-desc">Kickoff, team introductions, track reveals, and rules overview. Get ready to
+                forge!</p>
+            </div>
+          </div>
+
+          <div class="dash-tl-item active" data-step="3">
+            <div class="dash-tl-dot">
+              <div class="tl-dot-pulse"></div>
+            </div>
+            <div class="dash-tl-card">
+              <div class="dash-tl-card-header">
+                <span class="dash-tl-time">MAR 6 — 11:00 AM</span>
+                <span class="dash-tl-badge active">IN PROGRESS</span>
+              </div>
+              <h3 class="dash-tl-title">HACKING BEGINS</h3>
+              <p class="dash-tl-desc">18 hours of uninterrupted building starts now. Code, design, innovate — make it
+                count!</p>
+            </div>
+          </div>
+
+          <div class="dash-tl-item upcoming" data-step="4">
+            <div class="dash-tl-dot"></div>
+            <div class="dash-tl-card">
+              <div class="dash-tl-card-header">
+                <span class="dash-tl-time">MAR 6 — 06:00 PM</span>
+                <span class="dash-tl-badge upcoming">UPCOMING</span>
+              </div>
+              <h3 class="dash-tl-title">MENTOR SESSIONS</h3>
+              <p class="dash-tl-desc">1-on-1 sessions with industry experts. Get feedback, guidance, and insider tips
+                for your project.</p>
+            </div>
+          </div>
+
+          <div class="dash-tl-item upcoming" data-step="5">
+            <div class="dash-tl-dot"></div>
+            <div class="dash-tl-card">
+              <div class="dash-tl-card-header">
+                <span class="dash-tl-time">MAR 7 — 05:00 AM</span>
+                <span class="dash-tl-badge upcoming">UPCOMING</span>
+              </div>
+              <h3 class="dash-tl-title">SUBMISSIONS CLOSE</h3>
+              <p class="dash-tl-desc">Final commits, final pushes. Make sure your demo is recorded and submission is
+                complete.</p>
+            </div>
+          </div>
+
+          <div class="dash-tl-item upcoming" data-step="6">
+            <div class="dash-tl-dot"></div>
+            <div class="dash-tl-card">
+              <div class="dash-tl-card-header">
+                <span class="dash-tl-time">MAR 7 — 10:00 AM</span>
+                <span class="dash-tl-badge upcoming">UPCOMING</span>
+              </div>
+              <h3 class="dash-tl-title">DEMO DAY & AWARDS</h3>
+              <p class="dash-tl-desc">Present your project to the judges. Awards ceremony and celebration of the
+                forgers!</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════ TAB: PROBLEM STATEMENT ═══════════ -->
+      <section class="dash-tab" id="panel-problem">
+        <div class="tab-header">
+          <span class="tab-label">03</span>
+          <h1 class="tab-title">PROBLEM<br />STATEMENT</h1>
+          <p class="tab-subtitle">Your assigned challenge for Lunar Forge 1.0</p>
+        </div>
+
+        <div class="problem-card">
+          <div class="problem-card-header">
+            <span class="problem-badge" id="problem-domain-badge">AI / ML</span>
+            <span class="problem-id" id="problem-id-display">PS-02</span>
+          </div>
+          <h2 class="problem-title" id="problem-title-display">AI-Powered Study Planner</h2>
+          <p class="problem-desc" id="problem-desc-display">
+            Build an intelligent study planner that uses AI/ML to analyze student performance data, learning patterns,
+            and course requirements to generate personalized study schedules. The system should adapt in real-time
+            based on progress, identify weak areas, and suggest optimal study sessions to maximize learning outcomes.
+          </p>
+
+          <div class="problem-details">
+            <div class="problem-detail-item">
+              <span class="problem-detail-label">DOMAIN</span>
+              <span class="problem-detail-value" id="problem-domain-value">AI / ML</span>
+            </div>
+            <div class="problem-detail-item">
+              <span class="problem-detail-label">DIFFICULTY</span>
+              <span class="problem-detail-value difficulty-medium">INTERMEDIATE</span>
+            </div>
+            <div class="problem-detail-item">
+              <span class="problem-detail-label">EXPECTED DELIVERABLES</span>
+              <span class="problem-detail-value">Working Prototype + Presentation</span>
+            </div>
+          </div>
+
+          <div class="problem-resources">
+            <span class="overview-section-label">HELPFUL RESOURCES</span>
+            <div class="resource-chips">
+              <a href="#" class="resource-chip">📄 Problem Brief PDF</a>
+              <a href="#" class="resource-chip">💡 Judging Criteria</a>
+              <a href="#" class="resource-chip">🔗 Sample Datasets</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════ TAB: SUBMISSION ═══════════ -->
+      <section class="dash-tab" id="panel-submission">
+        <div class="tab-header">
+          <span class="tab-label">04</span>
+          <h1 class="tab-title">SUBMISSION</h1>
+          <p class="tab-subtitle">Submit your project before the deadline</p>
+        </div>
+
+        <!-- Submission Status Banner -->
+        <div class="submission-status-banner" id="submission-banner">
+          <div class="submission-status-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+              style="width:24px;height:24px;">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+          </div>
+          <div class="submission-status-text">
+            <h3>SUBMISSION PENDING</h3>
+            <p>Fill out your GitHub URL and Video URL below to submit your project to the judges. You can update your submission later.</p>
+          </div>
+        </div>
+
+        <!-- Deadline Countdown -->
+        <div class="submission-deadline">
+          <span class="overview-section-label">SUBMISSION WINDOW CLOSES IN</span>
+          <div class="countdown-row compact">
+            <div class="cd-unit small">
+              <span class="cd-num" id="sub-cd-days">00</span>
+              <span class="cd-lbl">DAYS</span>
+            </div>
+            <span class="cd-sep">:</span>
+            <div class="cd-unit small">
+              <span class="cd-num" id="sub-cd-hours">00</span>
+              <span class="cd-lbl">HRS</span>
+            </div>
+            <span class="cd-sep">:</span>
+            <div class="cd-unit small">
+              <span class="cd-num" id="sub-cd-mins">00</span>
+              <span class="cd-lbl">MIN</span>
+            </div>
+            <span class="cd-sep">:</span>
+            <div class="cd-unit small">
+              <span class="cd-num" id="sub-cd-secs">00</span>
+              <span class="cd-lbl">SEC</span>
+            </div>
+          </div>
+          <p class="cd-date" style="margin-top: 12px;">MARCH 31, 2026 — 1:00 PM IST</p>
+        </div>
+
+        <!-- Submission Form -->
+        <div class="submission-form-wrapper" id="submission-wrapper">
+          <div class="submission-locked-overlay" id="submission-locked-overlay" style="display: none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+              style="width:40px;height:40px;color:var(--text-muted);">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0110 0v4" />
+            </svg>
+            <span class="locked-overlay-text">SUBMISSIONS OPEN WHEN THE HACKATHON BEGINS</span>
+          </div>
+          <form class="submission-form" id="submission-form">
+            
+            <div class="sub-form-row">
+              <div class="sub-form-section">
+                <label class="sub-form-label">TEAM NAME</label>
+                <input type="text" class="sub-form-input" id="sub-team-name" readonly />
+              </div>
+              <div class="sub-form-section">
+                <label class="sub-form-label">TEAM ID</label>
+                <input type="text" class="sub-form-input" id="sub-team-id" readonly />
+              </div>
+            </div>
+
+            <div class="sub-form-row">
+              <div class="sub-form-section">
+                <label class="sub-form-label">DOMAIN</label>
+                <input type="text" class="sub-form-input" id="sub-domain" readonly />
+              </div>
+              <div class="sub-form-section">
+                <label class="sub-form-label">PROBLEM STATEMENT</label>
+                <input type="text" class="sub-form-input" id="sub-problem" readonly />
+              </div>
+            </div>
+
+            <div class="sub-form-section">
+              <label class="sub-form-label">GITHUB REPO URL <span class="required-star">*</span></label>
+              <input type="url" class="sub-form-input" id="sub-github" placeholder="https://github.com/..." required />
+            </div>
+
+            <div class="sub-form-section">
+              <label class="sub-form-label">VIDEO URL <span class="required-star">*</span></label>
+              <input type="url" class="sub-form-input" id="sub-demo" placeholder="https://youtube.com/..." required />
+            </div>
+
+            <button type="submit" class="submit-project-btn" id="submit-project-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="btn-icon">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              <span id="submit-btn-text">SUBMIT PROJECT</span>
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- ═══════════ TAB: TEAMMATES ═══════════ -->
+      <section class="dash-tab" id="panel-teammates">
+        <div class="tab-header">
+          <span class="tab-label">05</span>
+          <h1 class="tab-title">TEAMMATES</h1>
+          <p class="tab-subtitle">Your squad for Lunar Forge 1.0</p>
+        </div>
+
+        <div class="teammates-grid" id="teammates-grid">
+          <!-- Team Lead -->
+          <div class="teammate-card lead">
+            <div class="teammate-avatar lead-avatar">
+              <span class="teammate-avatar-letter" id="lead-avatar-letter">A</span>
+              <div class="lead-crown">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14">
+                  <path d="M5 16L3 5l5.5 5L12 2l3.5 8L21 5l-2 11H5z" />
+                </svg>
+              </div>
+            </div>
+            <div class="teammate-info">
+              <span class="teammate-role">TEAM LEAD</span>
+              <h3 class="teammate-name" id="lead-name-display">Arjun Vinod</h3>
+              <span class="teammate-batch" id="lead-batch-display">Batch: 278064</span>
+              <span class="teammate-phone" id="lead-phone-display">📱 9876543210</span>
+            </div>
+            <div class="teammate-status online">
+              <span class="status-dot"></span>
+              <span>ONLINE</span>
+            </div>
+          </div>
+
+          <!-- Member 1 -->
+          <div class="teammate-card" id="member1-card">
+            <div class="teammate-avatar">
+              <span class="teammate-avatar-letter" id="m1-avatar-letter">S</span>
+            </div>
+            <div class="teammate-info">
+              <span class="teammate-role">MEMBER</span>
+              <h3 class="teammate-name" id="m1-name-display">Sneha Kumar</h3>
+              <span class="teammate-batch" id="m1-batch-display">Batch: 278102</span>
+              <span class="teammate-phone" id="m1-phone-display">📱 9123456780</span>
+            </div>
+            <div class="teammate-status away">
+              <span class="status-dot"></span>
+              <span>AWAY</span>
+            </div>
+          </div>
+
+          <!-- Member 2 -->
+          <div class="teammate-card" id="member2-card">
+            <div class="teammate-avatar">
+              <span class="teammate-avatar-letter" id="m2-avatar-letter">R</span>
+            </div>
+            <div class="teammate-info">
+              <span class="teammate-role">MEMBER</span>
+              <h3 class="teammate-name" id="m2-name-display">Ravi Shankar</h3>
+              <span class="teammate-batch" id="m2-batch-display">Batch: 278200</span>
+              <span class="teammate-phone" id="m2-phone-display">📱 9988776655</span>
+            </div>
+            <div class="teammate-status online">
+              <span class="status-dot"></span>
+              <span>ONLINE</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Team Chat CTA -->
+        <div class="team-chat-cta">
+          <div class="chat-cta-content">
+            <h3>TEAM COMMUNICATION</h3>
+            <p>Coordinate with your team via WhatsApp channel</p>
+          </div>
+          <a href="#" class="chat-cta-btn" id="whatsapp-team-link">OPEN WHATSAPP →</a>
+        </div>
+      </section>
+
+      <!-- ═══════════ TAB: FAQ ═══════════ -->
+      <section class="dash-tab" id="panel-faq">
+        <div class="tab-header">
+          <span class="tab-label">06</span>
+          <h1 class="tab-title">FAQ</h1>
+          <p class="tab-subtitle">Frequently asked questions about Lunar Forge 1.0</p>
+        </div>
+
+        <div class="faq-list" id="faq-list">
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>What is the duration of the hackathon?</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+            <div class="faq-answer">
+              <p>Lunar Forge 1.0 is an 18-hour hackathon. Hacking begins at 11:00 AM on March 6 and submissions close at
+                5:00 AM on March 7, 2026.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>Can I participate solo?</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+            <div class="faq-answer">
+              <p>Yes! You can participate solo, as a duo (2 members), or as a trio (3 members). Choose the team size
+                that works best for you.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>What should I submit?</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+            <div class="faq-answer">
+              <p>You need to submit a working prototype with a GitHub repository link, a project description, tech stack
+                used, and optionally a demo video and presentation slides.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>What are the judging criteria?</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+            <div class="faq-answer">
+              <p>Projects are judged on: <strong>Innovation</strong> (30%), <strong>Technical Complexity</strong> (25%),
+                <strong>Design & UX</strong> (20%), <strong>Impact & Feasibility</strong> (15%), and
+                <strong>Presentation</strong> (10%).
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>Can I change my problem statement after registration?</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+            <div class="faq-answer">
+              <p>Problem statement changes are allowed until the hacking phase begins. Once hacking starts at 11:00 AM
+                on March 6, your selected problem statement is locked.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>Are there any restrictions on technology/tools?</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+            <div class="faq-answer">
+              <p>No restrictions! You can use any programming language, framework, API, or tool. AI-assisted coding
+                tools (Copilot, ChatGPT, etc.) are allowed but must be disclosed in your submission.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>What happens if I miss the submission deadline?</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+            <div class="faq-answer">
+              <p>Late submissions will not be accepted. Make sure to submit your project before 5:00 AM on March 7. We
+                recommend submitting early and updating if needed.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>Who can I contact for help during the hackathon?</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+            <div class="faq-answer">
+              <p>Reach out to the organizers via the WhatsApp channel. Mentors will also be available during designated
+                mentor sessions for 1-on-1 guidance.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ═══════════════ MOBILE BOTTOM NAV ═══════════════ -->
+  <nav class="mobile-nav" id="mobile-nav">
+    <button class="mobile-nav-btn active" data-tab="overview">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="3" y="3" width="7" height="7" rx="1.5" />
+        <rect x="14" y="3" width="7" height="7" rx="1.5" />
+        <rect x="3" y="14" width="7" height="7" rx="1.5" />
+        <rect x="14" y="14" width="7" height="7" rx="1.5" />
+      </svg>
+      <span>Overview</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="timeline">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="9" />
+        <polyline points="12 7 12 12 15 15" />
+      </svg>
+      <span>Timeline</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="submission">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+        <polyline points="17 8 12 3 7 8" />
+        <line x1="12" y1="3" x2="12" y2="15" />
+      </svg>
+      <span>Submit</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="teammates">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+      </svg>
+      <span>Team</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="faq">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" />
+        <line x1="12" y1="17" x2="12.01" y2="17" />
+      </svg>
+      <span>FAQ</span>
+    </button>
+  </nav>
+
+  <script src="dashboard.js"></script>
+</body>
+
+</html>

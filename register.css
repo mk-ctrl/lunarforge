@@ -522,6 +522,163 @@ body {
     letter-spacing: 0.1em;
 }
 
+/* ── Success Details Card ────────────────── */
+.success-details-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+}
+
+.success-details-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-cyan), var(--success));
+}
+
+.success-details-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.35em;
+    color: var(--accent-cyan);
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--card-border);
+}
+
+.success-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.success-detail-row:last-child {
+    border-bottom: none;
+}
+
+.success-detail-label {
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.35em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.success-detail-value {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: 0.02em;
+}
+
+.success-detail-row-duo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 24px;
+}
+
+.success-detail-row-duo .success-detail-row {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* ── Credential Blocks (ID + Password) ─── */
+.success-credentials {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.success-credential-block {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 18px 20px;
+    text-align: center;
+}
+
+.success-credential-label {
+    display: block;
+    font-size: 0.55rem;
+    font-weight: 600;
+    letter-spacing: 0.4em;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+.success-credential-value-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.success-credential-value {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    color: var(--accent-cyan);
+    letter-spacing: 0.12em;
+    line-height: 1;
+}
+
+.password-value {
+    font-family: 'Courier New', 'Consolas', monospace;
+    font-size: 1.4rem;
+    letter-spacing: 0.15em;
+    color: var(--success);
+}
+
+.copy-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.3s var(--ease-out);
+    flex-shrink: 0;
+}
+
+.copy-btn:hover {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent-cyan);
+}
+
+.credentials-warning {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.7rem;
+    color: #ffab00;
+    font-weight: 400;
+    margin-top: 20px;
+    padding: 12px 16px;
+    background: rgba(255, 171, 0, 0.06);
+    border: 1px solid rgba(255, 171, 0, 0.15);
+    border-radius: 8px;
+    text-align: center;
+}
+
 .success-link {
     display: inline-block;
     color: var(--success);
@@ -602,5 +759,25 @@ body {
 
     .reg-title {
         font-size: clamp(2.5rem, 10vw, 4rem);
+    }
+
+    .success-details-card {
+        padding: 20px 18px;
+    }
+
+    .success-detail-row-duo {
+        grid-template-columns: 1fr;
+    }
+
+    .success-credentials {
+        grid-template-columns: 1fr;
+    }
+
+    .success-credential-value {
+        font-size: 1.5rem;
+    }
+
+    .password-value {
+        font-size: 1.2rem;
     }
 }

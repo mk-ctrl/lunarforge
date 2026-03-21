@@ -14,12 +14,16 @@
   const navbar = document.getElementById('navbar');
   const siteContent = document.getElementById('site-content');
   const menuToggle = document.getElementById('menu-toggle');
+  const navAction1 = document.getElementById('nav-action-1');
+  const navAction2 = document.getElementById('nav-action-2');
   const overlay = document.getElementById('contact-overlay');
   const closeBtn = document.getElementById('contact-close');
   const introVideo = document.getElementById('intro-video');
   const splineBg = document.getElementById('spline-bg');
   const splineBgCanvas = document.getElementById('spline-bg-canvas');
   const splineBgLoading = document.getElementById('spline-bg-loading');
+  const splineMoon = document.getElementById('spline-moon');
+  const splineMoonCanvas = document.getElementById('spline-moon-canvas');
   const canvas = document.getElementById('particles');
   const ctx = canvas.getContext('2d');
 
@@ -43,13 +47,13 @@
     reset() {
       this.x = Math.random() * canvas.width;
       this.y = Math.random() * canvas.height;
-      this.size = Math.random() * 2.5 + 0.5;
+      this.size = 2;
       this.speedX = (Math.random() - 0.5) * 0.3;
       this.speedY = (Math.random() - 0.5) * 0.3;
-      this.opacity = Math.random() * 0.4 + 0.05;
+      this.opacity = 0;
       this.baseOpacity = this.opacity;
       // Some particles are rectangles, some are dots
-      this.isRect = Math.random() > 0.6;
+      this.isRect = 0;
       this.rotation = Math.random() * Math.PI * 2;
       this.rotSpeed = (Math.random() - 0.5) * 0.01;
     }
@@ -63,9 +67,9 @@
       const dx = this.x - mouse.x;
       const dy = this.y - mouse.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < 150) {
-        this.opacity = Math.min(this.baseOpacity + 0.3, 0.8);
-        const force = (150 - dist) / 150 * 0.3;
+      if (dist < 50) {
+        this.opacity = 2;
+        const force = (50 - dist) / 50 * 0.3;
         this.x += (dx / dist) * force;
         this.y += (dy / dist) * force;
       } else {
@@ -100,7 +104,7 @@
 
   function initParticles() {
     resizeCanvas();
-    const count = Math.min(Math.floor((canvas.width * canvas.height) / 8000), 200);
+    const count = Math.min(Math.floor((canvas.width * canvas.height) / 4000), 2000);
     particles = [];
     for (let i = 0; i < count; i++) {
       particles.push(new Particle());
@@ -129,16 +133,8 @@
 
       console.log('[Lunar Forge] Robot loaded!');
 
-      // Randomize camera angle on each load
-      try {
-        const cam = spline.findObjectByName('Camera');
-        if (cam) {
-          const randomAngle = (Math.random() - 0.5) * 0.6; // ±17°
-          cam.rotation.y += randomAngle;
-        }
-      } catch (e) {
-        // Camera manipulation is optional
-      }
+      // Optional: Camera manipulation can be added here if needed in the future
+      // Removed random rotation so robot stays fixed in the middle default position
 
       // Hide loading spinner, show robot
       robotLoading.classList.add('hidden');
@@ -177,19 +173,44 @@
       }, 1000);
     }
 
-    // Show & load full-page Spline 3D background
+    // Show & load full-page Spline 3D background + moon overlay
     loadSplineBg();
-
-    // Kick off hero animations
-    document.querySelectorAll('.hero-title .line').forEach(el => {
-      el.style.animationPlayState = 'running';
-    });
+    loadSplineMoon();
   });
+
+  // ══════════════════════════════════════════════
+  // SESSION & NAVIGATION STATE
+  // ══════════════════════════════════════════════
+  function updateNavForSession() {
+    if (!navAction1 || !navAction2) return;
+
+    if (localStorage.getItem('lunarforge_session')) {
+      // Logged in state: LOGOUT & DASHBOARD
+      navAction1.innerHTML = `<a href="#" id="nav-logout" class="nav-cta" style="border-color:rgba(255,59,92,0.3);color:var(--error);background:transparent;">LOGOUT</a>`;
+      navAction2.innerHTML = `<a href="dashboard.html" class="nav-cta" style="border-color:rgba(0,212,255,0.3);color:var(--accent-cyan);">DASHBOARD</a>`;
+
+      const logoutBtn = document.getElementById('nav-logout');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          localStorage.removeItem('lunarforge_session');
+          updateNavForSession(); // Refresh nav instantly
+        });
+      }
+    } else {
+      // Logged out state: LOGIN & REGISTER
+      navAction1.innerHTML = `<a href="login.html" class="nav-cta" style="border-color:rgba(255,255,255,0.2);color:var(--text);background:transparent;">LOGIN</a>`;
+      navAction2.innerHTML = `<a href="register.html" class="nav-cta">REGISTER</a>`;
+    }
+  }
+
+  // Initialize nav state immediately
+  updateNavForSession();
 
   // ══════════════════════════════════════════════
   // FULL-PAGE SPLINE 3D BACKGROUND
   // ══════════════════════════════════════════════
-  const SPLINE_BG_SCENE = 'https://prod.spline.design/9wQpYLhbgnVPDiLC/scene.splinecode';
+  const SPLINE_BG_SCENE = 'https://prod.spline.design/cbLIR9756qJJPx9n/scene.splinecode';
 
   async function loadSplineBg() {
     try {
@@ -199,8 +220,7 @@
 
       console.log('[Lunar Forge] Spline background loaded!');
 
-      // Hide loading spinner, fade in the background
-      if (splineBgLoading) splineBgLoading.classList.add('hidden');
+      // Fade in the background
       splineBg.classList.add('visible');
 
     } catch (err) {
@@ -210,10 +230,34 @@
   }
 
   // ══════════════════════════════════════════════
-  // COUNTDOWN TIMER — March 6, 2026, 7:00 PM IST
+  // SPLINE MOON OVERLAY
   // ══════════════════════════════════════════════
-  // Target: March 6, 2026, 19:00 IST (UTC+5:30) = 13:30 UTC
-  const TARGET_DATE = new Date(Date.UTC(2026, 2, 6, 13, 30, 0));
+  const SPLINE_MOON_SCENE = 'https://prod.spline.design/3irAsJEPtR-P-FQp/scene.splinecode';
+
+  async function loadSplineMoon() {
+    try {
+      if (!splineMoonCanvas) return;
+      const { Application } = await import('https://esm.sh/@splinetool/runtime');
+      const app = new Application(splineMoonCanvas);
+      await app.load(SPLINE_MOON_SCENE);
+
+      console.log('[Lunar Forge] Spline moon overlay loaded!');
+      // Wait 1.5 seconds for Spline to perform its initial sizing glitch
+      // completely out of sight before triggering the CSS opacity fade-in
+      setTimeout(() => {
+        splineMoon.classList.add('visible');
+      }, 300);
+
+    } catch (err) {
+      console.warn('[Lunar Forge] Spline moon overlay failed to load:', err);
+    }
+  }
+
+  // ══════════════════════════════════════════════
+  // COUNTDOWN TIMER — March 30, 2026, 7:00 PM IST
+  // ══════════════════════════════════════════════
+  // Target: March 30, 2026, 19:00 IST (UTC+5:30) = 13:30 UTC
+  const TARGET_DATE = new Date(Date.UTC(2026, 2, 30, 13, 30, 0));
 
   const cdDays = document.getElementById('cd-days');
   const cdHours = document.getElementById('cd-hours');
@@ -351,8 +395,7 @@
   });
 
   // Boot
-  initParticles();
-  animateParticles();
+  
   setupReveal();
   setupTilt();
 
