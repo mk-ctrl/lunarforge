@@ -38,7 +38,7 @@
 
     // Problem statement
     const problemSelect = document.getElementById('problem-statement');
-    const customPSGroup = document.getElementById('custom-ps-group');
+    const domainSelect = document.getElementById('domain');
 
     // All saveable inputs
     const allInputs = form.querySelectorAll('input, select, textarea');
@@ -125,6 +125,12 @@
         try {
             const data = JSON.parse(raw);
 
+            // Restore domain first so PS can be populated
+            if (data['domain']) {
+                domainSelect.value = data['domain'];
+                populateProblemStatements(data['domain']);
+            }
+
             allInputs.forEach(input => {
                 if (input.type === 'radio') {
                     if (data[input.name] === input.value) {
@@ -141,9 +147,6 @@
             // Trigger team size change to show/hide member sections
             const teamSize = data['teamSize'];
             if (teamSize) handleTeamSizeChange(teamSize);
-
-            // Trigger problem statement change
-            if (data['problem-statement']) handleProblemStatementChange(data['problem-statement']);
 
         } catch (e) {
             // Corrupted data — ignore
@@ -188,20 +191,61 @@
             saveFormState();
         });
     });
+    // ══════════════════════════════════════════════
+    // DOMAIN → PROBLEM STATEMENT MAPPING
+    // ══════════════════════════════════════════════
+    const DOMAIN_PS_MAP = {
+        'Education': [
+            { value: '1.1: Scholarship Recommendation System', label: '1.1 Scholarship Recommendation System' },
+            { value: '1.2: Inclusive Learning Platform', label: '1.2 Inclusive Learning Platform' },
+            { value: '1.3: Meme-to-Knowledge Converter', label: '1.3 Meme-to-Knowledge Converter' },
+            { value: '1.4: Attention-Aware Learning System', label: '1.4 Attention-Aware Learning System' },
+        ],
+        'Sustainability': [
+            { value: '2.1: Home Construction Materials Calculator', label: '2.1 Home Construction Materials Calculator' },
+            { value: '2.2: Carbon Footprint Tracker', label: '2.2 Carbon Footprint Tracker' },
+            { value: '2.3: Smart Meal Planner', label: '2.3 Smart Meal Planner' },
+            { value: '2.4: Sustainable Packaging Advisor', label: '2.4 Sustainable Packaging Advisor' },
+        ],
+        'Agriculture': [
+            { value: '3.1: Crop Disease Identifier', label: '3.1 Crop Disease Identifier' },
+            { value: '3.2: Smart Irrigation Planner', label: '3.2 Smart Irrigation Planner' },
+            { value: '3.3: Farm-to-Market Connector', label: '3.3 Farm-to-Market Connector' },
+            { value: '3.4: Soil Health Analyzer', label: '3.4 Soil Health Analyzer' },
+        ],
+        'Miscellaneous': [
+            { value: '4.1: Personal Finance Tracker', label: '4.1 Personal Finance Tracker' },
+            { value: '4.2: Neighborhood Safety Reporter', label: '4.2 Neighborhood Safety Reporter' },
+            { value: '4.3: Lost & Found Platform', label: '4.3 Lost & Found Platform' },
+            { value: '4.4: Skill Swap Marketplace', label: '4.4 Skill Swap Marketplace' },
+        ],
+    };
 
-    // ══════════════════════════════════════════════
-    // PROBLEM STATEMENT — SHOW / HIDE CUSTOM
-    // ══════════════════════════════════════════════
-    function handleProblemStatementChange(value) {
-        if (value === 'others') {
-            customPSGroup.style.display = '';
-        } else {
-            customPSGroup.style.display = 'none';
+    function populateProblemStatements(domain) {
+        // Clear existing options
+        problemSelect.innerHTML = '';
+
+        if (!domain || !DOMAIN_PS_MAP[domain]) {
+            problemSelect.innerHTML = '<option value="" disabled selected>First select a domain</option>';
+            problemSelect.disabled = true;
+            return;
         }
+
+        // Enable and populate
+        problemSelect.disabled = false;
+        problemSelect.innerHTML = '<option value="" disabled selected>Select a problem statement</option>';
+
+        DOMAIN_PS_MAP[domain].forEach(ps => {
+            const opt = document.createElement('option');
+            opt.value = ps.value;
+            opt.textContent = ps.label;
+            problemSelect.appendChild(opt);
+        });
     }
 
-    problemSelect.addEventListener('change', () => {
-        handleProblemStatementChange(problemSelect.value);
+    // Listen for domain change → populate PS
+    domainSelect.addEventListener('change', () => {
+        populateProblemStatements(domainSelect.value);
         saveFormState();
     });
 
@@ -322,11 +366,6 @@
         const ps = document.getElementById('problem-statement').value;
         if (!ps) { showError('problem-statement-error', 'Select a problem statement'); valid = false; }
 
-        if (ps === 'others') {
-            const customPS = document.getElementById('custom-ps').value.trim();
-            if (!customPS) { showError('custom-ps-error', 'Describe your idea'); valid = false; }
-        }
-
         // Consent
         const consent = document.getElementById('consent').checked;
         if (!consent) { showError('consent-error', 'You must agree to participate'); valid = false; }
@@ -373,7 +412,6 @@
     // ══════════════════════════════════════════════
     function collectFormData() {
         const teamSize = parseInt(document.querySelector('input[name="teamSize"]:checked').value, 10);
-        const ps = document.getElementById('problem-statement').value;
 
         const data = {
             teamName: document.getElementById('team-name').value.trim(),
@@ -388,9 +426,7 @@
             m2Batch: '',
             m2Phone: '',
             domain: document.getElementById('domain').value,
-            problemStatement: ps === 'others'
-                ? 'Others: ' + document.getElementById('custom-ps').value.trim()
-                : ps,
+            problemStatement: document.getElementById('problem-statement').value,
         };
 
         if (teamSize >= 2) {

@@ -174,10 +174,10 @@
                         <label for="domain" class="form-label">DOMAIN <span class="required">*</span></label>
                         <select id="domain" name="domain" class="form-select" required>
                             <option value="" disabled selected>Select a domain</option>
-                            <option value="AI / ML">AI / ML</option>
-                            <option value="Web3">Web3</option>
-                            <option value="Design">Design</option>
-                            <option value="Open Innovation">Open Innovation</option>
+                            <option value="Education">1. Education</option>
+                            <option value="Sustainability">2. Sustainability</option>
+                            <option value="Agriculture">3. Agriculture</option>
+                            <option value="Miscellaneous">4. Miscellaneous</option>
                         </select>
                         <span class="form-error" id="domain-error"></span>
                     </div>
@@ -185,30 +185,10 @@
                     <div class="form-group">
                         <label for="problem-statement" class="form-label">PROBLEM STATEMENT <span
                                 class="required">*</span></label>
-                        <select id="problem-statement" name="problemStatement" class="form-select" required>
-                            <option value="" disabled selected>Select a problem statement</option>
-                            <option value="PS-01: Smart Campus Navigation System">PS-01: Smart Campus Navigation System
-                            </option>
-                            <option value="PS-02: AI-Powered Study Planner">PS-02: AI-Powered Study Planner</option>
-                            <option value="PS-03: Blockchain-Based Certificate Verification">PS-03: Blockchain-Based
-                                Certificate
-                                Verification</option>
-                            <option value="PS-04: Real-Time Crowd Management System">PS-04: Real-Time Crowd Management
-                                System
-                            </option>
-                            <option value="PS-05: Accessible Learning Platform">PS-05: Accessible Learning Platform
-                            </option>
-                            <option value="others">Others (Open Innovation)</option>
+                        <select id="problem-statement" name="problemStatement" class="form-select" required disabled>
+                            <option value="" disabled selected>First select a domain</option>
                         </select>
                         <span class="form-error" id="problem-statement-error"></span>
-                    </div>
-
-                    <div class="form-group" id="custom-ps-group" style="display:none;">
-                        <label for="custom-ps" class="form-label">DESCRIBE YOUR IDEA <span
-                                class="required">*</span></label>
-                        <textarea id="custom-ps" name="customPS" class="form-input form-textarea"
-                            placeholder="Briefly describe your open innovation idea..." rows="3"></textarea>
-                        <span class="form-error" id="custom-ps-error"></span>
                     </div>
                 </fieldset>
 
