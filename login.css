@@ -109,4 +109,23 @@
     .login-card {
         padding: 24px;
     }
+
+    .login-header {
+        margin-bottom: 28px;
+    }
+
+    .login-footer {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .login-register-link {
+        margin-left: 0;
+    }
+
+    .login-alert {
+        font-size: 0.78rem;
+        padding: 12px 14px;
+    }
 }

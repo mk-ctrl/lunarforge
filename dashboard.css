@@ -1765,6 +1765,27 @@ button {
         grid-template-columns: repeat(2, 1fr);
     }
 
+    .overview-metrics {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .overview-countdowns {
+        grid-template-columns: 1fr;
+    }
+
+    .overview-hero-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .overview-hero-subtitle {
+        max-width: 100%;
+    }
+
+    .overview-hero-badge {
+        justify-content: center;
+    }
+
     .quicklink-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -1800,6 +1821,31 @@ button {
         grid-template-columns: 1fr;
     }
 
+    .overview-metrics {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .metric-card {
+        padding: 16px;
+    }
+
+    .metric-value {
+        font-size: 1.1rem;
+    }
+
+    .overview-hero {
+        padding: 28px 20px;
+    }
+
+    .overview-hero-title {
+        font-size: clamp(1.6rem, 5vw, 2.2rem);
+    }
+
+    .overview-hero-subtitle {
+        font-size: 0.78rem;
+    }
+
     .quicklink-grid {
         grid-template-columns: 1fr 1fr;
     }
@@ -1811,6 +1857,23 @@ button {
     .cd-unit {
         min-width: 60px;
         padding: 12px 8px;
+    }
+
+    .cd-unit.small {
+        min-width: 48px;
+        padding: 10px 6px;
+    }
+
+    .cd-num {
+        font-size: 1.8rem;
+    }
+
+    .cd-unit.small .cd-num {
+        font-size: 1.5rem;
+    }
+
+    .countdown-block {
+        padding: 20px 16px;
     }
 
     .problem-card {
@@ -1826,6 +1889,10 @@ button {
         text-align: center;
     }
 
+    .submission-deadline {
+        padding: 20px 16px;
+    }
+
     .teammate-card {
         flex-direction: column;
         text-align: center;
@@ -1839,5 +1906,28 @@ button {
 
     .dash-nav-greeting {
         display: none;
+    }
+
+    .dash-timeline {
+        padding-left: 36px;
+    }
+
+    .dash-tl-dot {
+        left: -30px;
+        width: 20px;
+        height: 20px;
+    }
+
+    .dash-tl-card {
+        padding: 18px 20px;
+    }
+
+    .faq-question {
+        padding: 16px 18px;
+        font-size: 0.82rem;
+    }
+
+    .faq-item.open .faq-answer {
+        padding: 0 18px 16px;
     }
 }

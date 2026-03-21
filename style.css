@@ -788,6 +788,94 @@ canvas+div>a {
 }
 
 /* ══════════════════════════════════════════════
+   PROBLEM STATEMENTS
+   ══════════════════════════════════════════════ */
+.ps-domain {
+  margin-bottom: 64px;
+}
+
+.ps-domain:last-child {
+  margin-bottom: 0;
+}
+
+.ps-domain-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  letter-spacing: 0.08em;
+  margin-bottom: 28px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(0, 212, 255, 0.15);
+  background: linear-gradient(135deg, var(--text) 50%, var(--accent-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ps-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.ps-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 28px 24px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out), transform 0.3s var(--ease-out);
+}
+
+.ps-card:hover {
+  border-color: rgba(0, 68, 255, 0.25);
+  box-shadow: 0 4px 40px rgba(0, 68, 255, 0.06);
+  transform: translateY(-2px);
+}
+
+.ps-card::after {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s;
+  pointer-events: none;
+}
+
+.ps-card:hover::after {
+  opacity: 1;
+}
+
+.ps-number {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  color: var(--accent-cyan);
+  letter-spacing: 0.1em;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.ps-name {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+  line-height: 1.2;
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
+}
+
+.ps-desc {
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: var(--text-dim);
+  font-weight: 300;
+}
+
+/* ══════════════════════════════════════════════
    TIMELINE
    ══════════════════════════════════════════════ */
 .timeline-container {
@@ -1122,8 +1210,8 @@ canvas+div>a {
     padding: 32px 24px;
   }
 
-  .sponsors-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .ps-grid {
+    grid-template-columns: 1fr;
   }
 
   .stat-row {
@@ -1132,6 +1220,21 @@ canvas+div>a {
 
   #navbar {
     padding: 16px 20px;
+  }
+
+  #navbar > div {
+    gap: 10px;
+  }
+
+  .nav-cta {
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    padding: 8px 16px;
+  }
+
+  #menu-toggle {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
   }
 
   .contact-footer {
