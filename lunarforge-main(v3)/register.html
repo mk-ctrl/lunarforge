@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register — Lunar Forge 1.0</title>
+    <meta name="description"
+        content="Register your team for Lunar Forge 1.0 Hackathon by Coding Ninjas Saranathan Community." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="register.css" />
+</head>
+
+<body>
+
+    <!-- ═══════════════ PARTICLE CANVAS ═══════════════ -->
+    <canvas id="particles"></canvas>
+
+    <!-- ═══════════════ TOP BAR ═══════════════ -->
+    <nav class="reg-nav">
+        <a href="index.html" class="reg-back" id="back-link">← BACK</a>
+        <span class="reg-nav-title">LUNAR FORGE 1.0</span>
+    </nav>
+
+    <!-- ═══════════════ REGISTRATION FORM ═══════════════ -->
+    <main class="reg-main">
+        <div class="reg-container" id="reg-form-container">
+
+            <div class="reg-header">
+                <span class="reg-label">REGISTRATION</span>
+                <h1 class="reg-title">JOIN THE<br />FORGE</h1>
+                <p class="reg-subtitle">Fill in your team details to participate in Lunar Forge 1.0</p>
+            </div>
+
+            <form id="reg-form" autocomplete="off" novalidate>
+
+                <!-- ── TEAM INFO ──────────────────────── -->
+                <fieldset class="form-section">
+                    <legend class="form-section-title">TEAM INFO</legend>
+
+                    <div class="form-group">
+                        <label for="team-name" class="form-label">TEAM NAME <span class="required">*</span></label>
+                        <input type="text" id="team-name" name="teamName" class="form-input"
+                            placeholder="Enter your team name" required />
+                        <span class="form-error" id="team-name-error"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">TEAM SIZE <span class="required">*</span></label>
+                        <div class="radio-group" id="team-size-group">
+                            <label class="radio-card">
+                                <input type="radio" name="teamSize" value="1" />
+                                <span class="radio-card-inner">
+                                    <span class="radio-card-title">SOLO</span>
+                                    <span class="radio-card-sub">Just you</span>
+                                </span>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="teamSize" value="2" />
+                                <span class="radio-card-inner">
+                                    <span class="radio-card-title">DUO</span>
+                                    <span class="radio-card-sub">2 members</span>
+                                </span>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="teamSize" value="3" />
+                                <span class="radio-card-inner">
+                                    <span class="radio-card-title">TRIO</span>
+                                    <span class="radio-card-sub">3 members</span>
+                                </span>
+                            </label>
+                        </div>
+                        <span class="form-error" id="team-size-error"></span>
+                    </div>
+                </fieldset>
+
+                <!-- ── TEAM LEAD ──────────────────────── -->
+                <fieldset class="form-section">
+                    <legend class="form-section-title">TEAM LEAD</legend>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="lead-name" class="form-label">FULL NAME <span class="required">*</span></label>
+                            <input type="text" id="lead-name" name="leadName" class="form-input"
+                                placeholder="Enter your name" required />
+                            <span class="form-error" id="lead-name-error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="lead-batch" class="form-label">BATCH NUMBER <span
+                                    class="required">*</span></label>
+                            <input type="text" id="lead-batch" name="leadBatch" class="form-input"
+                                placeholder="e.g. 278064" maxlength="6" required />
+                            <span class="form-error" id="lead-batch-error"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lead-phone" class="form-label">PHONE NUMBER <span class="required">*</span></label>
+                        <input type="tel" id="lead-phone" name="leadPhone" class="form-input"
+                            placeholder="10-digit phone number" maxlength="10" required />
+                        <span class="form-error" id="lead-phone-error"></span>
+                    </div>
+                </fieldset>
+
+                <!-- ── TEAM MEMBERS ───────────────────── -->
+                <fieldset class="form-section member-section" id="members-section" style="display:none;">
+                    <legend class="form-section-title">TEAM MEMBERS</legend>
+
+                    <!-- Member 1 -->
+                    <div class="member-block" id="member-1-block">
+                        <span class="member-badge">MEMBER 1</span>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="m1-name" class="form-label">FULL NAME <span
+                                        class="required">*</span></label>
+                                <input type="text" id="m1-name" name="m1Name" class="form-input"
+                                    placeholder="Member name" />
+                                <span class="form-error" id="m1-name-error"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="m1-batch" class="form-label">BATCH NUMBER <span
+                                        class="required">*</span></label>
+                                <input type="text" id="m1-batch" name="m1Batch" class="form-input"
+                                    placeholder="e.g. 278064" maxlength="6" />
+                                <span class="form-error" id="m1-batch-error"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="m1-phone" class="form-label">PHONE NUMBER <span
+                                    class="required">*</span></label>
+                            <input type="tel" id="m1-phone" name="m1Phone" class="form-input"
+                                placeholder="10-digit phone number" maxlength="10" />
+                            <span class="form-error" id="m1-phone-error"></span>
+                        </div>
+                    </div>
+
+                    <!-- Member 2 -->
+                    <div class="member-block" id="member-2-block" style="display:none;">
+                        <span class="member-badge">MEMBER 2</span>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="m2-name" class="form-label">FULL NAME <span
+                                        class="required">*</span></label>
+                                <input type="text" id="m2-name" name="m2Name" class="form-input"
+                                    placeholder="Member name" />
+                                <span class="form-error" id="m2-name-error"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="m2-batch" class="form-label">BATCH NUMBER <span
+                                        class="required">*</span></label>
+                                <input type="text" id="m2-batch" name="m2Batch" class="form-input"
+                                    placeholder="e.g. 278064" maxlength="6" />
+                                <span class="form-error" id="m2-batch-error"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="m2-phone" class="form-label">PHONE NUMBER <span
+                                    class="required">*</span></label>
+                            <input type="tel" id="m2-phone" name="m2Phone" class="form-input"
+                                placeholder="10-digit phone number" maxlength="10" />
+                            <span class="form-error" id="m2-phone-error"></span>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- ── DOMAIN & PROBLEM STATEMENT ─────── -->
+                <fieldset class="form-section">
+                    <legend class="form-section-title">PROJECT DETAILS</legend>
+
+                    <div class="form-group">
+                        <label for="domain" class="form-label">DOMAIN <span class="required">*</span></label>
+                        <select id="domain" name="domain" class="form-select" required>
+                            <option value="" disabled selected>Select a domain</option>
+                            <option value="AI / ML">AI / ML</option>
+                            <option value="Web3">Web3</option>
+                            <option value="Design">Design</option>
+                            <option value="Open Innovation">Open Innovation</option>
+                        </select>
+                        <span class="form-error" id="domain-error"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="problem-statement" class="form-label">PROBLEM STATEMENT <span
+                                class="required">*</span></label>
+                        <select id="problem-statement" name="problemStatement" class="form-select" required>
+                            <option value="" disabled selected>Select a problem statement</option>
+                            <option value="PS-01: Smart Campus Navigation System">PS-01: Smart Campus Navigation System
+                            </option>
+                            <option value="PS-02: AI-Powered Study Planner">PS-02: AI-Powered Study Planner</option>
+                            <option value="PS-03: Blockchain-Based Certificate Verification">PS-03: Blockchain-Based
+                                Certificate
+                                Verification</option>
+                            <option value="PS-04: Real-Time Crowd Management System">PS-04: Real-Time Crowd Management
+                                System
+                            </option>
+                            <option value="PS-05: Accessible Learning Platform">PS-05: Accessible Learning Platform
+                            </option>
+                            <option value="others">Others (Open Innovation)</option>
+                        </select>
+                        <span class="form-error" id="problem-statement-error"></span>
+                    </div>
+
+                    <div class="form-group" id="custom-ps-group" style="display:none;">
+                        <label for="custom-ps" class="form-label">DESCRIBE YOUR IDEA <span
+                                class="required">*</span></label>
+                        <textarea id="custom-ps" name="customPS" class="form-input form-textarea"
+                            placeholder="Briefly describe your open innovation idea..." rows="3"></textarea>
+                        <span class="form-error" id="custom-ps-error"></span>
+                    </div>
+                </fieldset>
+
+                <!-- ── CONSENT & SUBMIT ───────────────── -->
+                <fieldset class="form-section">
+                    <div class="consent-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="consent" name="consent" />
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-text">I confirm that all the details provided are accurate and I agree
+                                to
+                                participate in Lunar Forge 1.0 hackathon. <span class="required">*</span></span>
+                        </label>
+                        <span class="form-error" id="consent-error"></span>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submit-btn">
+                        <span class="submit-btn-text">SUBMIT REGISTRATION</span>
+                        <span class="submit-btn-loading" style="display:none;">SUBMITTING...</span>
+                    </button>
+                </fieldset>
+
+            </form>
+        </div>
+
+        <!-- ═══════════════ SUCCESS SCREEN ═══════════════ -->
+        <div class="reg-container reg-success" id="reg-success" style="display:none;">
+            <div class="success-icon">✓</div>
+            <h2 class="success-title">REGISTRATION<br />COMPLETE</h2>
+            <p class="success-subtitle">Welcome to Lunar Forge 1.0!</p>
+
+            <div class="success-card">
+                <span class="success-card-label">YOUR TEAM ID</span>
+                <span class="success-card-value" id="team-id-display">CN-LF01</span>
+            </div>
+
+            <div class="success-card" id="whatsapp-card">
+                <span class="success-card-label">JOIN THE WHATSAPP CHANNEL</span>
+                <a href="#" class="success-link" id="whatsapp-link" target="_blank" rel="noopener">
+                    OPEN WHATSAPP CHANNEL →
+                </a>
+            </div>
+
+            <p class="success-note">Screenshot your Team ID for reference. See you at the event! 🚀</p>
+            <a href="index.html" class="success-home-btn">← BACK TO HOME</a>
+        </div>
+    </main>
+
+    <script src="register.js"></script>
+</body>
+
+</html>
