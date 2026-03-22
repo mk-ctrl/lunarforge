@@ -731,7 +731,7 @@ button {
 
 .quicklink-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 12px;
 }
 
@@ -1700,7 +1700,20 @@ button {
     -webkit-backdrop-filter: blur(16px);
     border-top: 1px solid var(--card-border);
     padding: 8px 4px;
-    justify-content: space-around;
+    justify-content: flex-start;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+}
+
+/* Hide scrollbar for mobile nav */
+.mobile-nav::-webkit-scrollbar {
+    display: none;
+}
+.mobile-nav {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 .mobile-nav-btn {
@@ -1714,7 +1727,8 @@ button {
     color: var(--text-muted);
     cursor: pointer;
     transition: color 0.3s;
-    min-width: 56px;
+    min-width: 0;
+    flex: 0 0 calc(20vw - 1.6px);
 }
 
 .mobile-nav-btn svg {
@@ -1761,6 +1775,19 @@ button {
         display: flex;
     }
 
+    /* Subtle gradient to indicate scrollability */
+    body::after {
+        content: '';
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        width: 40px;
+        height: 70px;
+        background: linear-gradient(to right, transparent, rgba(4, 4, 18, 1) 90%);
+        pointer-events: none;
+        z-index: 301;
+    }
+
     .overview-cards {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -1787,7 +1814,7 @@ button {
     }
 
     .quicklink-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     }
 
     .teammates-grid {

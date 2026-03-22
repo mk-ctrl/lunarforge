@@ -216,64 +216,61 @@ function getOrCreateSheet() {
  * ══════════════════════════════════════════════════════
  */
 function sendRegistrationEmail(toEmails, teamName, teamId, password, leadName) {
-    const subject = `🚀 Welcome to Lunar Forge 1.0! Your Registration is Confirmed`;
+    const subject = `Registration Confirmed: Lunar Forge 1.0`;
     
     const htmlBody = `
-    <div style="font-family: 'Inter', Arial, sans-serif; color: #1a1a1a; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+    <div style="font-family: 'Inter', Helvetica, Arial, sans-serif; color: #333333; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
         
         <!-- Header -->
-        <div style="background-color: #0b101e; padding: 30px 20px; text-align: center; border-bottom: 4px solid #00d4ff;">
-            <h1 style="color: #ffffff; margin: 0; font-family: 'Bebas Neue', Arial, sans-serif; font-size: 32px; letter-spacing: 2px;">LUNAR FORGE 1.0</h1>
-            <p style="color: #8fa0c1; margin: 10px 0 0 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Official Registration Confirmation</p>
+        <div style="background-color: #f8f9fa; padding: 30px; border-bottom: 1px solid #e0e0e0; text-align: center;">
+            <h1 style="margin: 0; color: #1a1a1a; font-size: 24px; letter-spacing: 1px;">LUNAR FORGE 1.0</h1>
+            <p style="margin: 8px 0 0 0; color: #666666; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">Registration Confirmation</p>
         </div>
         
         <!-- Body -->
-        <div style="padding: 40px 30px; background-color: #ffffff;">
-            <h2 style="margin-top: 0; color: #0b101e; font-size: 22px;">Welcome, ${leadName}!</h2>
-            <p style="font-size: 15px; line-height: 1.6; color: #4a5568;">
-                Congratulations! <strong>Team ${teamName}</strong> is officially registered for the Lunar Forge 1.0 Hackathon. 
-                We are incredibly excited to see the innovation and creativity your team will bring to the forge.
+        <div style="padding: 30px; background-color: #ffffff;">
+            <p style="font-size: 16px; margin-top: 0;">Dear ${leadName},</p>
+            <p style="font-size: 15px; line-height: 1.6; color: #444444;">
+                We are pleased to confirm that <strong>Team ${teamName}</strong> has successfully registered for the Lunar Forge 1.0 Hackathon.
             </p>
             
             <!-- Credentials Box -->
-            <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 25px; margin: 30px 0;">
-                <h3 style="margin-top: 0; color: #0f172a; font-size: 16px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #00d4ff; padding-bottom: 8px; display: inline-block;">Your Team Credentials</h3>
-                <p style="font-size: 14px; color: #64748b; margin-top: 5px;">Keep these exactly as shown. You will need them to log into the dashboard.</p>
+            <div style="background-color: #f0f4f8; border-left: 4px solid #0056b3; border-radius: 4px; padding: 20px; margin: 25px 0;">
+                <h3 style="margin-top: 0; color: #1a1a1a; font-size: 16px; margin-bottom: 15px;">Your Team Credentials</h3>
+                <p style="font-size: 14px; color: #555555; margin-bottom: 15px; margin-top: 0;">Please retain these credentials to securely access the participant dashboard.</p>
                 
-                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                <table style="width: 100%; border-collapse: collapse;">
                     <tr>
-                        <td style="padding: 10px 0; border-bottom: 1px solid #e2e8f0; font-weight: bold; width: 35%;">TEAM ID</td>
-                        <td style="padding: 10px 0; border-bottom: 1px solid #e2e8f0; color: #00d4ff; font-weight: bold; font-family: monospace; font-size: 16px;">${teamId}</td>
+                        <td style="padding: 8px 0; font-weight: 600; width: 35%; color: #333333; font-size: 14px;">TEAM ID</td>
+                        <td style="padding: 8px 0; font-family: monospace; font-size: 16px; font-weight: bold; color: #0056b3;">${teamId}</td>
                     </tr>
                     <tr>
-                        <td style="padding: 10px 0; font-weight: bold;">PASSWORD</td>
-                        <td style="padding: 10px 0; font-family: monospace; font-size: 16px;">${password}</td>
+                        <td style="padding: 8px 0; font-weight: 600; color: #333333; font-size: 14px;">PASSWORD</td>
+                        <td style="padding: 8px 0; font-family: monospace; font-size: 16px; color: #1a1a1a;">${password}</td>
                     </tr>
                 </table>
             </div>
 
-            <!-- Guidelines -->
-            <h3 style="color: #0b101e; font-size: 18px; margin-top: 40px;">Important Guidelines & Rules 📜</h3>
-            <ul style="font-size: 15px; line-height: 1.6; color: #4a5568; padding-left: 20px;">
-                <li style="margin-bottom: 10px;"><strong>Community:</strong> Every member must absolutely join the <a href="https://chat.whatsapp.com/BOVOzMeJVxmFUtDsMeDH2e" style="color: #00d4ff; font-weight: bold; text-decoration: none;">Official WhatsApp Channel</a>. All critical updates will be posted there.</li>
-                <li style="margin-bottom: 10px;"><strong>Dashboard:</strong> You can log into the participant dashboard at any time to submit your PPT, GitHub Repo, and Demo Video links.</li>
-                <li style="margin-bottom: 10px;"><strong>Submissions:</strong> You can continually update your submission links on the dashboard right up until the final deadline.</li>
-                <li style="margin-bottom: 10px;"><strong>Originality:</strong> Zero-tolerance policy on plagiarism. Pre-built repos or copied code will result in immediate disqualification.</li>
+            <!-- Important Links -->
+            <h3 style="color: #1a1a1a; font-size: 18px; margin-top: 30px; border-bottom: 1px solid #e0e0e0; padding-bottom: 8px;">Next Steps</h3>
+            <ul style="font-size: 15px; line-height: 1.6; color: #444444; padding-left: 20px;">
+                <li style="margin-bottom: 12px;"><strong>Communication:</strong> Join the <a href="https://chat.whatsapp.com/BOVOzMeJVxmFUtDsMeDH2e" style="color: #0056b3; text-decoration: none; font-weight: 600;">Official WhatsApp Channel</a> to receive all announcements.</li>
+                <li style="margin-bottom: 12px;"><strong>Presentation Template:</strong> Download the required <a href="[INSERT_PPT_LINK_HERE]" style="color: #0056b3; text-decoration: none; font-weight: 600;">PPT Template</a> for your final submission.</li>
+                <li style="margin-bottom: 12px;"><strong>Submissions:</strong> Log into the participant dashboard to submit your repository and demo video before the deadline.</li>
             </ul>
             
-            <p style="margin-top: 40px; font-size: 15px; color: #4a5568;">
-                Prepare yourselves. It's time to build.<br>
-                <br>
-                Best of luck,<br>
-                <strong>The Lunar Forge Team</strong>
+            <p style="margin-top: 30px; font-size: 15px; color: #444444; line-height: 1.6;">
+                We look forward to your participation and innovation.<br><br>
+                Sincerely,<br>
+                <strong>The Lunar Forge Organizing Team</strong>
             </p>
         </div>
         
         <!-- Footer -->
-        <div style="background-color: #f1f5f9; padding: 20px; text-align: center; border-top: 1px solid #e2e8f0;">
-            <p style="margin: 0; font-size: 12px; color: #94a3b8;">
-                This is an automated email sent regarding Lunar Forge 1.0.<br>
-                Please do not reply directly to this email.
+        <div style="background-color: #f8f9fa; padding: 20px; text-align: center; border-top: 1px solid #e0e0e0;">
+            <p style="margin: 0; font-size: 12px; color: #888888;">
+                This is an automated administrative email.<br>
+                Please do not reply directly to this address.
             </p>
         </div>
     </div>
@@ -283,7 +280,7 @@ function sendRegistrationEmail(toEmails, teamName, teamId, password, leadName) {
         to: toEmails,
         subject: subject,
         htmlBody: htmlBody,
-        name: "Lunar Forge 1.0",
-        replyTo: "noreply@lunarforge.com"
+        name: "Lunar Forge Hackathon",
+        replyTo: "lunarforge10@gmail.com"
     });
 }

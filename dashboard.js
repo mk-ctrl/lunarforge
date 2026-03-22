@@ -152,15 +152,17 @@
 
 
     // ══════════════════════════════════════════════
-    // FAQ ACCORDION
+    // FAQ & RULES ACCORDION
     // ══════════════════════════════════════════════
-    faqItems.forEach(item => {
+    const accordionItems = document.querySelectorAll('.faq-item');
+    accordionItems.forEach(item => {
         const question = item.querySelector('.faq-question');
         question.addEventListener('click', () => {
             const isOpen = item.classList.contains('open');
 
-            // Close all other items
-            faqItems.forEach(other => {
+            // Close all other items within the same container
+            const container = item.parentElement;
+            container.querySelectorAll('.faq-item').forEach(other => {
                 if (other !== item) other.classList.remove('open');
             });
 
@@ -383,70 +385,70 @@
     // DAY 1 = March 30, 2026 | DAY 2 = March 31, 2026
     const TIMELINE_EVENTS = [
         {
-            label: 'DAY 1 — 🕖 7:00 PM – 7:30 PM',
+            label: 'DAY 1 — 7:00 PM – 7:30 PM',
             title: 'INAUGURATION',
             desc: 'Welcome + HOD address. Rules, theme, judging criteria.',
             start: new Date(Date.UTC(2026, 2, 30, 13, 30, 0)),  // 7:00 PM IST
             end: new Date(Date.UTC(2026, 2, 30, 14, 0, 0)),   // 7:30 PM IST
         },
         {
-            label: 'DAY 1 — 🕢 7:30 PM – 8:15 PM',
+            label: 'DAY 1 — 7:30 PM – 8:15 PM',
             title: 'GITHUB SESSION',
             desc: 'Git workflow + repo setup. Submission guidelines.',
             start: new Date(Date.UTC(2026, 2, 30, 14, 0, 0)),
             end: new Date(Date.UTC(2026, 2, 30, 14, 45, 0)),
         },
         {
-            label: 'DAY 1 — 🕗 8:15 PM – 10:00 PM',
+            label: 'DAY 1 — 8:15 PM – 10:00 PM',
             title: 'HACK TIME',
             desc: 'Teams start building their projects.',
             start: new Date(Date.UTC(2026, 2, 30, 14, 45, 0)),
             end: new Date(Date.UTC(2026, 2, 30, 16, 30, 0)),
         },
         {
-            label: 'DAY 1 — 🕙 10:00 PM – 10:30 PM',
+            label: 'DAY 1 — 10:00 PM – 10:30 PM',
             title: 'GAME 1',
             desc: 'Icebreaker / fun reset to recharge.',
             start: new Date(Date.UTC(2026, 2, 30, 16, 30, 0)),
             end: new Date(Date.UTC(2026, 2, 30, 17, 0, 0)),
         },
         {
-            label: 'DAY 1 — 🕥 10:30 PM – 11:00 PM',
+            label: 'DAY 1 — 10:30 PM – 11:00 PM',
             title: 'HACK TIME',
             desc: 'Short continuation before review.',
             start: new Date(Date.UTC(2026, 2, 30, 17, 0, 0)),
             end: new Date(Date.UTC(2026, 2, 30, 17, 30, 0)),
         },
         {
-            label: 'DAY 1 — 🕚 11:00 PM – 12:00 AM',
+            label: 'DAY 1 — 11:00 PM – 12:00 AM',
             title: 'REVIEW',
             desc: 'Teams present progress. Quick judge feedback.',
             start: new Date(Date.UTC(2026, 2, 30, 17, 30, 0)),
             end: new Date(Date.UTC(2026, 2, 30, 18, 30, 0)),
         },
         {
-            label: 'DAY 2 — 🕛 12:00 AM – 12:30 AM',
+            label: 'DAY 2 — 12:00 AM – 12:30 AM',
             title: 'HACK TIME',
             desc: 'Apply feedback / continue work.',
             start: new Date(Date.UTC(2026, 2, 30, 18, 30, 0)),
             end: new Date(Date.UTC(2026, 2, 30, 19, 0, 0)),
         },
         {
-            label: 'DAY 2 — 🕧 12:30 AM – 1:00 AM',
+            label: 'DAY 2 — 12:30 AM – 1:00 AM',
             title: 'GAME 2',
             desc: 'Energy boost before the long stretch.',
             start: new Date(Date.UTC(2026, 2, 30, 19, 0, 0)),
             end: new Date(Date.UTC(2026, 2, 30, 19, 30, 0)),
         },
         {
-            label: 'DAY 2 — 🌙 1:00 AM – 12:30 PM',
+            label: 'DAY 2 — 1:00 AM – 12:30 PM',
             title: 'CONTINUOUS HACK TIME',
             desc: 'No interruptions. Deep work phase.',
             start: new Date(Date.UTC(2026, 2, 30, 19, 30, 0)),
             end: new Date(Date.UTC(2026, 2, 31, 7, 0, 0)),
         },
         {
-            label: 'DAY 2 — 🕧 12:30 PM – 1:00 PM',
+            label: 'DAY 2 — 12:30 PM – 1:00 PM',
             title: 'FINAL GIT PUSH',
             desc: 'Final submission. README + demo check.',
             start: new Date(Date.UTC(2026, 2, 31, 7, 0, 0)),
