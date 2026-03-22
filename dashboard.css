@@ -1791,7 +1791,36 @@ button {
     }
 
     .teammates-grid {
-        grid-template-columns: 1fr;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+        padding-bottom: 0;
+    }
+    .teammate-card {
+        min-width: 0;
+        padding: 12px 4px;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 6px;
+    }
+    .teammate-avatar {
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        border-radius: 10px;
+    }
+    .teammate-name {
+        font-size: 0.75rem;
+        word-break: break-word;
+    }
+    .teammate-role, .teammate-batch, .teammate-phone {
+        font-size: 0.55rem;
+    }
+    .teammate-status {
+        margin-top: 4px;
+        font-size: 0.55rem;
+        gap: 4px;
     }
 
     .sub-form-row {
@@ -1931,6 +1960,7 @@ button {
         padding: 0 18px 16px;
     }
 }
+
 /* ══════════════════════════════════════════════
    PPT SUBMISSION CARD
    ══════════════════════════════════════════════ */
@@ -2061,8 +2091,15 @@ button {
 }
 
 @keyframes badgePop {
-    from { transform: scale(0.8); opacity: 0; }
-    to   { transform: scale(1);   opacity: 1; }
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 /* ── Success / Error messages ──────────────── */
@@ -2081,8 +2118,15 @@ button {
 }
 
 @keyframes msgSlide {
-    from { opacity: 0; transform: translateY(-6px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .ppt-success-msg {
@@ -2099,7 +2143,9 @@ button {
     transition: opacity 0.2s;
 }
 
-.ppt-success-msg a:hover { opacity: 0.75; }
+.ppt-success-msg a:hover {
+    opacity: 0.75;
+}
 
 .ppt-error-msg {
     background: rgba(255, 59, 92, 0.08);
@@ -2282,7 +2328,8 @@ button {
    MOBILE PPT FAB
    ══════════════════════════════════════════════ */
 .ppt-mob-fab {
-    display: none; /* hidden on desktop */
+    display: none;
+    /* hidden on desktop */
 }
 
 @media (max-width: 767px) {
@@ -2291,7 +2338,8 @@ button {
         align-items: center;
         gap: 10px;
         position: fixed;
-        bottom: 80px; /* above mobile bottom nav */
+        bottom: 80px;
+        /* above mobile bottom nav */
         right: 20px;
         z-index: 300;
         padding: 14px 22px;
@@ -2309,8 +2357,15 @@ button {
     }
 
     @keyframes fabEntrance {
-        from { opacity: 0; transform: translateY(20px) scale(0.9); }
-        to   { opacity: 1; transform: translateY(0) scale(1); }
+        from {
+            opacity: 0;
+            transform: translateY(20px) scale(0.9);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
     }
 
     .ppt-mob-fab::before {

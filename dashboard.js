@@ -149,11 +149,7 @@
         });
     });
 
-    // Mobile PPT FAB click handler
-    const pptMobFab = document.getElementById('ppt-mob-fab');
-    if (pptMobFab) {
-        pptMobFab.addEventListener('click', () => switchTab('submission'));
-    }
+
 
     // ══════════════════════════════════════════════
     // FAQ ACCORDION
@@ -626,6 +622,25 @@
             const problemDomainValue = document.getElementById('problem-domain-value');
             if (problemDomainValue) problemDomainValue.textContent = domain;
 
+            const problemDescriptions = {
+                "Scholarship Recommendation System": "Students often miss out on scholarships due to lack of awareness and eligibility confusion. This system recommends relevant scholarships based on a student’s profile, academic background, and financial need.",
+                "Inclusive Learning Platform": "Many digital learning platforms are not accessible to all learners. This platform integrates assistive technologies like speech-to-text, sign language support, screen readers, and multilingual content to ensure inclusive education.",
+                "Meme-to-Knowledge Converter": "Gen-Z users often ignore important academic or institutional updates. This tool converts important information like exam dates, circulars, or announcements into engaging meme-style content to improve reach and retention.",
+                "Attention-Aware Learning System": "Students lose focus during online lectures, reducing learning efficiency. This system tracks attention using webcam-based facial and eye movement analysis and dynamically adjusts content delivery.",
+                "Home Construction Materials Calculator": "Construction projects often face cost overruns due to poor material estimation. This tool calculates required materials and cost based on building dimensions, reducing waste and improving planning.",
+                "Carbon Footprint Tracker (Online Purchases)": "Consumers are unaware of the environmental impact of their online purchases. This tool estimates and displays the carbon footprint of products in real-time, promoting eco-conscious decisions.",
+                "Smart Meal Planner": "Households waste food due to poor planning. This app suggests weekly meal plans using ingredients already available in the fridge, minimizing waste and saving money.",
+                "Sustainable Travel Planner": "Travelers often prioritize cost and convenience while ignoring environmental impact. This system suggests sustainable travel options with a clear breakdown of cost, carbon footprint, and alternatives.",
+                "Farm-to-Market Digital Platform": "Farmers often lose profits due to intermediaries and inefficient supply chains. This platform connects farmers directly with buyers, ensuring fair pricing and reducing food loss.",
+                "Smart Farming Decision System": "Uses weather, soil, and crop data to give simple recommendations for improving yield and reducing waste.",
+                "Agriculture Resource Optimization Platform": "Combines data to guide farmers in saving water, fertilizers, and costs while increasing income.",
+                "Farmer Loan & Subsidy Tracker": "Farmers struggle to track loan status and government subsidies. This system provides a transparent interface to apply, monitor, and manage financial assistance schemes.",
+                "AI-Based Fake Document Detection": "Fake documents are a major issue in education, banking, and recruitment. This system uses AI to verify authenticity and detect tampering in documents.",
+                "Digital Health Record Management System": "Medical records are often scattered and inaccessible. This system securely stores and manages patient health records for easy access by doctors and patients.",
+                "Digital Declutter System": "Duplicate photos and videos consume unnecessary storage and energy. This system identifies and removes redundant files, optimizing storage and reducing data center load.",
+                "Home Finance Management System": "Individuals struggle to track expenses and savings. This system helps users manage budgets, monitor spending patterns, and improve financial planning."
+            };
+
             if (ps && ps !== 'others') {
                 const problemId = document.getElementById('problem-id-display');
                 const psParts = ps.split(':');
@@ -634,8 +649,16 @@
                 }
 
                 const problemTitle = document.getElementById('problem-title-display');
+                const problemDesc = document.getElementById('problem-desc-display');
                 if (problemTitle && psParts.length > 1) {
-                    problemTitle.textContent = psParts.slice(1).join(':').trim();
+                    const titleText = psParts.slice(1).join(':').trim();
+                    problemTitle.textContent = titleText;
+                    
+                    if (problemDesc && problemDescriptions[titleText]) {
+                        problemDesc.textContent = problemDescriptions[titleText];
+                    } else if (problemDesc) {
+                        problemDesc.textContent = "Your team problem statement description will appear here.";
+                    }
                 }
             } else if (ps === 'others') {
                 const customPS = data['custom-ps'] || data['customPS'] || 'Custom Open Innovation Project';
@@ -644,6 +667,9 @@
 
                 const problemId = document.getElementById('problem-id-display');
                 if (problemId) problemId.textContent = 'OPEN';
+                
+                const problemDesc = document.getElementById('problem-desc-display');
+                if (problemDesc) problemDesc.textContent = "A custom open innovation project defined by your team during registration.";
             }
 
             // Member 1
@@ -962,6 +988,7 @@
             if (pptErrorMsg) pptErrorMsg.style.display = 'none';
             if (pptUploadBtnText) pptUploadBtnText.textContent = 'Replace PPT';
             setPPTBadge(true);
+            if (pptMobFab) pptMobFab.style.display = 'none';
         }
 
         function showPPTError(msg) {
@@ -1156,15 +1183,6 @@
         if (pptMobFab) {
             pptMobFab.addEventListener('click', () => {
                 switchTab('submission');
-                // Give the tab a moment to become visible, then scroll
-                setTimeout(() => {
-                    const card = document.getElementById('ppt-submission-card');
-                    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    // If no file chosen yet, open the file picker
-                    if (!pptFileInput.files.length) {
-                        setTimeout(() => pptFileInput.click(), 400);
-                    }
-                }, 120);
             });
         }
 
