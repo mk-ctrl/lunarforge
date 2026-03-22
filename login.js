@@ -6,7 +6,7 @@
     'use strict';
 
     // Same Google Apps Script URL as registration
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymTF_DGFXvQlOYDY9ZjxD6wuOos6mRhlgRP7OBJL3QrCrQMEFT1ZiUp1M_iYs6tClr/exec';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-tt4Ikp71iqZvrvWjB-13tnhTAypVij7gKEckUXzDOmRRJ7VzxX3kXs-qx5hFP6A8/exec';
     
     // DOM Elements
     const form = document.getElementById('login-form');
