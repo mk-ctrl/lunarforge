@@ -205,7 +205,7 @@
             { value: '2.1: Home Construction Materials Calculator', label: '2.1 Home Construction Materials Calculator' },
             { value: '2.2: Carbon Footprint Tracker', label: '2.2 Carbon Footprint Tracker' },
             { value: '2.3: Smart Meal Planner', label: '2.3 Smart Meal Planner' },
-            { value: '2.4: Sustainable Packaging Advisor', label: '2.4 Sustainable Packaging Advisor' },
+            { value: '2.4: Sustainable Travel Planner', label: '2.4 Sustainable Travel Planner' },
         ],
         'Agriculture': [
             { value: '3.1: Crop Disease Identifier', label: '3.1 Crop Disease Identifier' },
@@ -587,8 +587,8 @@
             const result = await submitToSheets(data);
             // Save minimal data for offline login fallback
             localStorage.setItem(STORAGE_KEY, JSON.stringify({
-                teamId: result.teamId, 
-                password: result.password 
+                teamId: result.teamId,
+                password: result.password
             }));
             showSuccess(result.teamId, result.password, data);
         } catch (err) {
@@ -597,8 +597,8 @@
             const localTeamId = data.teamId || generateLocalTeamId();
             const localPassword = data.password || generatePassword();
             localStorage.setItem(STORAGE_KEY, JSON.stringify({
-                teamId: localTeamId, 
-                password: localPassword 
+                teamId: localTeamId,
+                password: localPassword
             }));
             showSuccess(localTeamId, localPassword, data);
         } finally {
