@@ -9,7 +9,7 @@
     // CONFIGURATION
     // ══════════════════════════════════════════════
     // Paste your deployed Google Apps Script URL here:
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-tt4Ikp71iqZvrvWjB-13tnhTAypVij7gKEckUXzDOmRRJ7VzxX3kXs-qx5hFP6A8/exec';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzCfFTAEbjqQwjGTC7IpPs_YJk1hmPGx7iBWuErE7hsXpSCptd5fHNym85E5zAyXvKPAQ/exec';
 
     // WhatsApp channel link (for team leaders after registration):
     const WHATSAPP_LINK = 'https://chat.whatsapp.com/BOVOzMeJVxmFUtDsMeDH2e?mode=hq1tcla';
