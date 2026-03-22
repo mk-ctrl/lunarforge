@@ -208,16 +208,16 @@
             { value: '2.4: Sustainable Travel Planner', label: '2.4 Sustainable Travel Planner' },
         ],
         'Agriculture': [
-            { value: '3.1: Crop Disease Identifier', label: '3.1 Crop Disease Identifier' },
-            { value: '3.2: Smart Irrigation Planner', label: '3.2 Smart Irrigation Planner' },
-            { value: '3.3: Farm-to-Market Connector', label: '3.3 Farm-to-Market Connector' },
-            { value: '3.4: Soil Health Analyzer', label: '3.4 Soil Health Analyzer' },
+            { value: '3.1: Farm-to-Market Digital Platform', label: '3.1 Farm-to-Market Digital Platform' },
+            { value: '3.2: Smart Farming Decision System', label: '3.2 Smart Farming Decision System' },
+            { value: '3.3: Agriculture Resource Optimization Platform', label: '3.3 Agriculture Resource Optimization Platform' },
+            { value: '3.4: Farmer Loan & Subsidy Tracker', label: '3.4 Farmer Loan & Subsidy Tracker' },
         ],
         'Miscellaneous': [
-            { value: '4.1: Personal Finance Tracker', label: '4.1 Personal Finance Tracker' },
-            { value: '4.2: Neighborhood Safety Reporter', label: '4.2 Neighborhood Safety Reporter' },
-            { value: '4.3: Lost & Found Platform', label: '4.3 Lost & Found Platform' },
-            { value: '4.4: Skill Swap Marketplace', label: '4.4 Skill Swap Marketplace' },
+            { value: '4.1: AI-Based Fake Document Detection', label: '4.1 AI-Based Fake Document Detection' },
+            { value: '4.2: Digital Health Record Management System', label: '4.2 Digital Health Record Management System' },
+            { value: '4.3: Digital Declutter System', label: '4.3 Digital Declutter System' },
+            { value: '4.4: Home Finance Management System', label: '4.4 Home Finance Management System' },
         ],
     };
 
