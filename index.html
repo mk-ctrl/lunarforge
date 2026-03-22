@@ -62,9 +62,11 @@
   <!-- ═══════════════ FULL-PAGE SPLINE 3D BACKGROUND ═══════════════ -->
   <div id="spline-bg">
     <canvas id="spline-bg-canvas"></canvas>
-    <div id="spline-bg-loading" class="spline-bg-loader">
-      <div class="robot-spinner"></div>
-    </div>
+  </div>
+
+  <!-- ═══════════════ SPLINE MOON OVERLAY (above bg) ═══════════════ -->
+  <div id="spline-moon">
+    <canvas id="spline-moon-canvas"></canvas>
   </div>
 
   <!-- ═══════════════ NAVIGATION ═══════════════ -->
@@ -73,7 +75,8 @@
     <div style="display:flex;align-items:center;gap:20px;">
       <!-- Dynamic Nav State: Managed by main.js updateNavForSession() -->
       <span id="nav-action-1">
-        <a href="login.html" class="nav-cta" style="border-color:rgba(255,255,255,0.2);color:var(--text);background:transparent;">LOGIN</a>
+        <a href="login.html" class="nav-cta"
+          style="border-color:rgba(255,255,255,0.2);color:var(--text);background:transparent;">LOGIN</a>
       </span>
       <span id="nav-action-2">
         <a href="register.html" id="nav-register" class="nav-cta">REGISTER</a>
@@ -154,7 +157,7 @@
       </div>
     </section>
 
-    <!-- TRACKS -->
+    <!-- TRACKS (DOMAINS) -->
     <section id="tracks" class="section">
       <div class="section-header reveal">
         <span class="section-label">02</span>
@@ -164,36 +167,149 @@
         <div class="track-card reveal" data-tilt>
           <div class="track-card-inner">
             <span class="track-number">01</span>
-            <h3 class="track-name">AI / ML</h3>
-            <p class="track-desc">Build intelligent systems that learn, adapt, and evolve. From neural networks to
-              generative AI.</p>
+            <h3 class="track-name">EDUCATION</h3>
+            <p class="track-desc">Reimagine how we learn, teach, and grow. Build tools that make education smarter, more inclusive, and engaging.</p>
             <div class="track-glow"></div>
           </div>
         </div>
         <div class="track-card reveal" data-tilt data-delay="100">
           <div class="track-card-inner">
             <span class="track-number">02</span>
-            <h3 class="track-name">WEB3</h3>
-            <p class="track-desc">Decentralized applications, smart contracts, and the future of trustless
-              infrastructure.</p>
+            <h3 class="track-name">SUSTAINABILITY</h3>
+            <p class="track-desc">Tackle climate and resource challenges. Create solutions for a greener, more sustainable future.</p>
             <div class="track-glow"></div>
           </div>
         </div>
         <div class="track-card reveal" data-tilt data-delay="200">
           <div class="track-card-inner">
             <span class="track-number">03</span>
-            <h3 class="track-name">DESIGN</h3>
-            <p class="track-desc">Craft experiences that captivate. UI/UX, creative coding, and immersive digital art.
-            </p>
+            <h3 class="track-name">AGRICULTURE</h3>
+            <p class="track-desc">Empower farmers with technology. Build platforms that optimize resources, connect markets, and drive smart farming.</p>
             <div class="track-glow"></div>
           </div>
         </div>
         <div class="track-card reveal" data-tilt data-delay="300">
           <div class="track-card-inner">
             <span class="track-number">04</span>
-            <h3 class="track-name">OPEN<br />INNOVATION</h3>
-            <p class="track-desc">No limits. Build anything that pushes the boundaries of what's possible.</p>
+            <h3 class="track-name">MISCELLANEOUS</h3>
+            <p class="track-desc">From health to finance to AI security — solve real-world problems across any domain.</p>
             <div class="track-glow"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROBLEM STATEMENTS -->
+    <section id="problem-statements" class="section">
+      <div class="section-header reveal">
+        <span class="section-label">03</span>
+        <h2 class="section-title">PROBLEM<br />STATEMENTS</h2>
+      </div>
+
+      <!-- EDUCATION DOMAIN -->
+      <div class="ps-domain reveal">
+        <h3 class="ps-domain-title">EDUCATION DOMAIN</h3>
+        <div class="ps-grid">
+          <div class="ps-card">
+            <span class="ps-number">1.1</span>
+            <h4 class="ps-name">Scholarship Recommendation System</h4>
+            <p class="ps-desc">Smart Scholarship Matching Platform for Students</p>
+          </div>
+          <div class="ps-card">
+            <span class="ps-number">1.2</span>
+            <h4 class="ps-name">Inclusive Learning Platform</h4>
+            <p class="ps-desc">Accessible Learning Platform for Differently-abled Students</p>
+          </div>
+          <div class="ps-card">
+            <span class="ps-number">1.3</span>
+            <h4 class="ps-name">Meme-to-Knowledge Converter</h4>
+            <p class="ps-desc">AI-Powered Meme-Based Information Delivery System</p>
+          </div>
+          <div class="ps-card">
+            <span class="ps-number">1.4</span>
+            <h4 class="ps-name">Attention-Aware Learning System</h4>
+            <p class="ps-desc">AI-Based Attention Tracking Learning Platform</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUSTAINABILITY DOMAIN -->
+      <div class="ps-domain reveal" data-delay="100">
+        <h3 class="ps-domain-title">SUSTAINABILITY DOMAIN</h3>
+        <div class="ps-grid">
+          <div class="ps-card">
+            <span class="ps-number">2.1</span>
+            <h4 class="ps-name">Home Construction Materials Calculator</h4>
+            <p class="ps-desc">Smart Construction Material Estimation Tool</p>
+          </div>
+          <div class="ps-card">
+            <span class="ps-number">2.2</span>
+            <h4 class="ps-name">Carbon Footprint Tracker (Online Purchases)</h4>
+            <p class="ps-desc">Browser-Based Carbon Footprint Tracker for Online Shopping</p>
+          </div>
+          <div class="ps-card">
+            <span class="ps-number">2.3</span>
+            <h4 class="ps-name">Smart Meal Planner</h4>
+            <p class="ps-desc">AI-Based Food Waste Reduction Meal Planner</p>
+          </div>
+          <div class="ps-card">
+            <span class="ps-number">2.4</span>
+            <h4 class="ps-name">Sustainable Travel Planner</h4>
+            <p class="ps-desc">Eco-Friendly Trip Planning and Optimization Platform</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- AGRICULTURE DOMAIN -->
+      <div class="ps-domain reveal" data-delay="200">
+        <h3 class="ps-domain-title">AGRICULTURE DOMAIN</h3>
+        <div class="ps-grid">
+          <div class="ps-card">
+            <span class="ps-number">3.1</span>
+            <h4 class="ps-name">Farm-to-Market Digital Platform</h4>
+            <p class="ps-desc">Direct Farmer-to-Buyer Marketplace Platform</p>
+          </div>
+          <div class="ps-card">
+            <span class="ps-number">3.2</span>
+            <h4 class="ps-name">Smart Farming Decision System</h4>
+            <p class="ps-desc">Helps farmers make better crop decisions using real-time data.</p>
+          </div>
+          <div class="ps-card">
+            <span class="ps-number">3.3</span>
+            <h4 class="ps-name">Agriculture Resource Optimization Platform</h4>
+            <p class="ps-desc">Enables efficient use of farming resources through smart insights.</p>
+          </div>
+          <div class="ps-card">
+            <span class="ps-number">3.4</span>
+            <h4 class="ps-name">Farmer Loan & Subsidy Tracker</h4>
+            <p class="ps-desc">Digital Platform for Tracking Farmer Loans and Subsidies</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- MISCELLANEOUS -->
+      <div class="ps-domain reveal" data-delay="300">
+        <h3 class="ps-domain-title">MISCELLANEOUS</h3>
+        <div class="ps-grid">
+          <div class="ps-card">
+            <span class="ps-number">4.1</span>
+            <h4 class="ps-name">AI-Based Fake Document Detection</h4>
+            <p class="ps-desc">AI System for Detecting Forged Documents</p>
+          </div>
+          <div class="ps-card">
+            <span class="ps-number">4.2</span>
+            <h4 class="ps-name">Digital Health Record Management System</h4>
+            <p class="ps-desc">Centralized Digital Health Record Platform</p>
+          </div>
+          <div class="ps-card">
+            <span class="ps-number">4.3</span>
+            <h4 class="ps-name">Digital Declutter System</h4>
+            <p class="ps-desc">AI-Powered Duplicate Cloud Media Cleaner</p>
+          </div>
+          <div class="ps-card">
+            <span class="ps-number">4.4</span>
+            <h4 class="ps-name">Home Finance Management System</h4>
+            <p class="ps-desc">Personal Budget and Expense Management Platform</p>
           </div>
         </div>
       </div>
@@ -202,77 +318,96 @@
     <!-- TIMELINE -->
     <section id="timeline" class="section">
       <div class="section-header reveal">
-        <span class="section-label">03</span>
+        <span class="section-label">04</span>
         <h2 class="section-title">TIMELINE</h2>
+        <p style="margin-top: 10px; color: rgba(255, 255, 255, 0.6); font-family: var(--font-body); letter-spacing: 1px;">DAY1: 7:00 PM – DAY2: 1:00 PM</p>
       </div>
       <div class="timeline-container">
         <div class="timeline-line"></div>
         <div class="timeline-item reveal" data-delay="0">
           <div class="timeline-dot"></div>
           <div class="timeline-content">
-            <span class="timeline-time">DAY 1 — 09:00</span>
-            <h3 class="timeline-event">OPENING CEREMONY</h3>
-            <p class="timeline-desc">Kickoff, team formation, and track reveals.</p>
+            <span class="timeline-time">DAY 1 — 🕖 7:00 PM – 7:30 PM</span>
+            <h3 class="timeline-event">INAUGURATION</h3>
+            <p class="timeline-desc">Welcome + HOD address<br>Rules, theme, judging criteria</p>
           </div>
         </div>
         <div class="timeline-item reveal" data-delay="100">
           <div class="timeline-dot"></div>
           <div class="timeline-content">
-            <span class="timeline-time">DAY 1 — 11:00</span>
-            <h3 class="timeline-event">HACKING BEGINS</h3>
-            <p class="timeline-desc">36 hours of uninterrupted building starts now.</p>
+            <span class="timeline-time">DAY 1 — 🕢 7:30 PM – 8:15 PM</span>
+            <h3 class="timeline-event">GITHUB SESSION</h3>
+            <p class="timeline-desc">Git workflow + repo setup<br>Submission guidelines</p>
           </div>
         </div>
         <div class="timeline-item reveal" data-delay="200">
           <div class="timeline-dot"></div>
           <div class="timeline-content">
-            <span class="timeline-time">DAY 1 — 18:00</span>
-            <h3 class="timeline-event">MENTOR SESSIONS</h3>
-            <p class="timeline-desc">1-on-1 sessions with industry experts and sponsors.</p>
+            <span class="timeline-time">DAY 1 — 🕗 8:15 PM – 10:00 PM</span>
+            <h3 class="timeline-event">HACK TIME</h3>
+            <p class="timeline-desc">Teams start building</p>
           </div>
         </div>
         <div class="timeline-item reveal" data-delay="300">
           <div class="timeline-dot"></div>
           <div class="timeline-content">
-            <span class="timeline-time">DAY 2 — 12:00</span>
-            <h3 class="timeline-event">MIDPOINT CHECK-IN</h3>
-            <p class="timeline-desc">Progress reviews and mini-workshops.</p>
+            <span class="timeline-time">DAY 1 — 🕙 10:00 PM – 10:30 PM</span>
+            <h3 class="timeline-event">GAME 1</h3>
+            <p class="timeline-desc">Icebreaker / fun reset</p>
           </div>
         </div>
         <div class="timeline-item reveal" data-delay="400">
           <div class="timeline-dot"></div>
           <div class="timeline-content">
-            <span class="timeline-time">DAY 2 — 23:00</span>
-            <h3 class="timeline-event">SUBMISSIONS CLOSE</h3>
-            <p class="timeline-desc">Final commits, demos prepared.</p>
+            <span class="timeline-time">DAY 1 — 🕥 10:30 PM – 11:00 PM</span>
+            <h3 class="timeline-event">HACK TIME</h3>
+            <p class="timeline-desc">Short continuation before review</p>
           </div>
         </div>
         <div class="timeline-item reveal" data-delay="500">
           <div class="timeline-dot"></div>
           <div class="timeline-content">
-            <span class="timeline-time">DAY 3 — 10:00</span>
-            <h3 class="timeline-event">DEMO DAY & AWARDS</h3>
-            <p class="timeline-desc">Pitch to judges, awards ceremony, and celebration.</p>
+            <span class="timeline-time">DAY 1 — 🕚 11:00 PM – 12:00 AM</span>
+            <h3 class="timeline-event">REVIEW</h3>
+            <p class="timeline-desc">Teams present progress<br>Quick judge feedback</p>
+          </div>
+        </div>
+        <div class="timeline-item reveal" data-delay="600">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <span class="timeline-time">DAY 2 — 🕛 12:00 AM – 12:30 AM</span>
+            <h3 class="timeline-event">HACK TIME</h3>
+            <p class="timeline-desc">Apply feedback / continue work</p>
+          </div>
+        </div>
+        <div class="timeline-item reveal" data-delay="700">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <span class="timeline-time">DAY 2 — 🕧 12:30 AM – 1:00 AM</span>
+            <h3 class="timeline-event">GAME 2</h3>
+            <p class="timeline-desc">Energy boost before long stretch</p>
+          </div>
+        </div>
+        <div class="timeline-item reveal" data-delay="800">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <span class="timeline-time">DAY 2 — 🌙 1:00 AM – 12:30 PM</span>
+            <h3 class="timeline-event">CONTINUOUS HACK TIME</h3>
+            <p class="timeline-desc">No interruptions<br>Deep work phase</p>
+          </div>
+        </div>
+        <div class="timeline-item reveal" data-delay="900">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <span class="timeline-time">DAY 2 — 🕧 12:30 PM – 1:00 PM</span>
+            <h3 class="timeline-event">FINAL GIT PUSH</h3>
+            <p class="timeline-desc">Final submission<br>README + demo check</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- SPONSORS -->
-    <section id="sponsors" class="section">
-      <div class="section-header reveal">
-        <span class="section-label">04</span>
-        <h2 class="section-title">PARTNERS &<br />SPONSORS</h2>
-      </div>
-      <div class="sponsors-grid reveal" data-delay="200">
-        <div class="sponsor-slot">SPONSOR 1</div>
-        <div class="sponsor-slot">SPONSOR 2</div>
-        <div class="sponsor-slot">SPONSOR 3</div>
-        <div class="sponsor-slot">SPONSOR 4</div>
-        <div class="sponsor-slot">SPONSOR 5</div>
-        <div class="sponsor-slot">SPONSOR 6</div>
-      </div>
-    </section>
+
 
     <!-- REGISTER CTA -->
     <section id="register" class="section">

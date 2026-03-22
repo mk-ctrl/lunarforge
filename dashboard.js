@@ -361,6 +361,186 @@
     setInterval(updateSubmissionCountdown, 1000);
 
     // ══════════════════════════════════════════════
+    // DYNAMIC TIMELINE
+    // ══════════════════════════════════════════════
+    // All times in UTC (IST - 5:30)
+    // DAY 1 = March 30, 2026 | DAY 2 = March 31, 2026
+    const TIMELINE_EVENTS = [
+        {
+            label: 'DAY 1 — 🕖 7:00 PM – 7:30 PM',
+            title: 'INAUGURATION',
+            desc: 'Welcome + HOD address. Rules, theme, judging criteria.',
+            start: new Date(Date.UTC(2026, 2, 30, 13, 30, 0)),  // 7:00 PM IST
+            end:   new Date(Date.UTC(2026, 2, 30, 14, 0, 0)),   // 7:30 PM IST
+        },
+        {
+            label: 'DAY 1 — 🕢 7:30 PM – 8:15 PM',
+            title: 'GITHUB SESSION',
+            desc: 'Git workflow + repo setup. Submission guidelines.',
+            start: new Date(Date.UTC(2026, 2, 30, 14, 0, 0)),
+            end:   new Date(Date.UTC(2026, 2, 30, 14, 45, 0)),
+        },
+        {
+            label: 'DAY 1 — 🕗 8:15 PM – 10:00 PM',
+            title: 'HACK TIME',
+            desc: 'Teams start building their projects.',
+            start: new Date(Date.UTC(2026, 2, 30, 14, 45, 0)),
+            end:   new Date(Date.UTC(2026, 2, 30, 16, 30, 0)),
+        },
+        {
+            label: 'DAY 1 — 🕙 10:00 PM – 10:30 PM',
+            title: 'GAME 1',
+            desc: 'Icebreaker / fun reset to recharge.',
+            start: new Date(Date.UTC(2026, 2, 30, 16, 30, 0)),
+            end:   new Date(Date.UTC(2026, 2, 30, 17, 0, 0)),
+        },
+        {
+            label: 'DAY 1 — 🕥 10:30 PM – 11:00 PM',
+            title: 'HACK TIME',
+            desc: 'Short continuation before review.',
+            start: new Date(Date.UTC(2026, 2, 30, 17, 0, 0)),
+            end:   new Date(Date.UTC(2026, 2, 30, 17, 30, 0)),
+        },
+        {
+            label: 'DAY 1 — 🕚 11:00 PM – 12:00 AM',
+            title: 'REVIEW',
+            desc: 'Teams present progress. Quick judge feedback.',
+            start: new Date(Date.UTC(2026, 2, 30, 17, 30, 0)),
+            end:   new Date(Date.UTC(2026, 2, 30, 18, 30, 0)),
+        },
+        {
+            label: 'DAY 2 — 🕛 12:00 AM – 12:30 AM',
+            title: 'HACK TIME',
+            desc: 'Apply feedback / continue work.',
+            start: new Date(Date.UTC(2026, 2, 30, 18, 30, 0)),
+            end:   new Date(Date.UTC(2026, 2, 30, 19, 0, 0)),
+        },
+        {
+            label: 'DAY 2 — 🕧 12:30 AM – 1:00 AM',
+            title: 'GAME 2',
+            desc: 'Energy boost before the long stretch.',
+            start: new Date(Date.UTC(2026, 2, 30, 19, 0, 0)),
+            end:   new Date(Date.UTC(2026, 2, 30, 19, 30, 0)),
+        },
+        {
+            label: 'DAY 2 — 🌙 1:00 AM – 12:30 PM',
+            title: 'CONTINUOUS HACK TIME',
+            desc: 'No interruptions. Deep work phase.',
+            start: new Date(Date.UTC(2026, 2, 30, 19, 30, 0)),
+            end:   new Date(Date.UTC(2026, 2, 31, 7, 0, 0)),
+        },
+        {
+            label: 'DAY 2 — 🕧 12:30 PM – 1:00 PM',
+            title: 'FINAL GIT PUSH',
+            desc: 'Final submission. README + demo check.',
+            start: new Date(Date.UTC(2026, 2, 31, 7, 0, 0)),
+            end:   new Date(Date.UTC(2026, 2, 31, 7, 30, 0)),
+        },
+    ];
+
+    function renderTimeline() {
+        const container = document.getElementById('dash-timeline-container');
+        if (!container) return;
+
+        const now = Date.now();
+
+        // Remove old items (keep the line element)
+        const oldItems = container.querySelectorAll('.dash-tl-item');
+        oldItems.forEach(item => item.remove());
+
+        // Track counts for timeline-line gradient
+        let completedCount = 0;
+        let activeIndex = -1;
+
+        TIMELINE_EVENTS.forEach((evt, i) => {
+            let status, statusClass, badgeText;
+            const startMs = evt.start.getTime();
+            const endMs = evt.end.getTime();
+
+            if (now >= endMs) {
+                status = 'completed';
+                statusClass = 'completed';
+                badgeText = 'COMPLETED';
+                completedCount++;
+            } else if (now >= startMs && now < endMs) {
+                status = 'active';
+                statusClass = 'active';
+                badgeText = 'IN PROGRESS';
+                activeIndex = i;
+            } else {
+                status = 'upcoming';
+                statusClass = 'upcoming';
+                badgeText = 'UPCOMING';
+            }
+
+            // Build dot inner content
+            let dotInner = '';
+            if (status === 'completed') {
+                dotInner = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12" /></svg>`;
+            } else if (status === 'active') {
+                dotInner = `<div class="tl-dot-pulse"></div>`;
+            }
+
+            const itemHTML = `
+                <div class="dash-tl-item ${statusClass}" data-step="${i + 1}" style="animation-delay: ${i * 0.05}s;">
+                    <div class="dash-tl-dot">${dotInner}</div>
+                    <div class="dash-tl-card">
+                        <div class="dash-tl-card-header">
+                            <span class="dash-tl-time">${evt.label}</span>
+                            <span class="dash-tl-badge ${statusClass}">${badgeText}</span>
+                        </div>
+                        <h3 class="dash-tl-title">${evt.title}</h3>
+                        <p class="dash-tl-desc">${evt.desc}</p>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', itemHTML);
+        });
+
+        // Update the timeline-line gradient to reflect progress
+        const line = container.querySelector('.dash-timeline-line');
+        if (line) {
+            const total = TIMELINE_EVENTS.length;
+            const progressPercent = activeIndex >= 0
+                ? Math.round(((activeIndex + 0.5) / total) * 100)
+                : completedCount === total
+                    ? 100
+                    : Math.round((completedCount / total) * 100);
+
+            line.style.background = `linear-gradient(to bottom,
+                var(--accent) 0%,
+                var(--accent) ${progressPercent}%,
+                rgba(255, 255, 255, 0.08) ${progressPercent}%,
+                rgba(255, 255, 255, 0.08) 100%)`;
+        }
+
+        // Update the overview event status badge
+        const heroStatus = document.getElementById('hero-event-status');
+        const eventStatusVal = document.getElementById('event-status-value');
+        const eventStatusBadge = document.getElementById('event-status-badge');
+        if (now < TIMELINE_EVENTS[0].start.getTime()) {
+            // Before event
+            if (heroStatus) heroStatus.textContent = 'UPCOMING';
+            if (eventStatusVal) eventStatusVal.textContent = 'UPCOMING';
+            if (eventStatusBadge) eventStatusBadge.textContent = 'UPCOMING';
+        } else if (now > TIMELINE_EVENTS[TIMELINE_EVENTS.length - 1].end.getTime()) {
+            // After event
+            if (heroStatus) heroStatus.textContent = 'COMPLETED';
+            if (eventStatusVal) eventStatusVal.textContent = 'COMPLETED';
+            if (eventStatusBadge) eventStatusBadge.textContent = 'ENDED';
+        } else {
+            // During event
+            if (heroStatus) heroStatus.textContent = 'LIVE NOW';
+            if (eventStatusVal) eventStatusVal.textContent = 'LIVE';
+            if (eventStatusBadge) eventStatusBadge.textContent = 'LIVE';
+        }
+    }
+
+    // Render on load and update every 30 seconds
+    renderTimeline();
+    setInterval(renderTimeline, 30000);
+
+    // ══════════════════════════════════════════════
     // ══════════════════════════════════════════════
     // POPULATE DATA FROM SESSION
     // ══════════════════════════════════════════════
