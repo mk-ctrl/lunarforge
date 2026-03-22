@@ -24,6 +24,7 @@
     const WHATSAPP_LINK = 'https://chat.whatsapp.com/BOVOzMeJVxmFUtDsMeDH2e?mode=hq1tcla';
     const TARGET_DATE = new Date(Date.UTC(2026, 2, 30, 13, 30, 0)); // March 30, 2026, 7:00 PM IST
     const SUBMISSION_DEADLINE = new Date(Date.UTC(2026, 2, 31, 7, 30, 0)); // March 31, 2026, 1:00 PM IST
+    const PPT_DEADLINE = new Date(Date.UTC(2026, 2, 28, 14, 30, 0)); // March 28, 2026, 8:00 PM IST
 
     // ══════════════════════════════════════════════
     // DOM REFS
@@ -200,8 +201,17 @@
 
     let submissionLocked = false;
     let initialLockCheckDone = false;
+    let isTeamShortlisted = false; // Globally tracks shortlist status
 
     function checkSubmissionLockState(now) {
+        // OVERRIDE: If not shortlisted, lock Final Submission entirely
+        if (!isTeamShortlisted) {
+            if (!submissionLocked) {
+                lockSubmissionUI(false, "LOCKED: Awaiting Evaluation. Only shortlisted teams can submit Final Projects.");
+            }
+            return;
+        }
+
         if (now < TARGET_DATE.getTime() || now > SUBMISSION_DEADLINE.getTime()) {
             if (!submissionLocked || !initialLockCheckDone) {
                 lockSubmissionUI(now > SUBMISSION_DEADLINE.getTime());
@@ -218,7 +228,7 @@
         }
     }
 
-    function lockSubmissionUI(isPastDeadline) {
+    function lockSubmissionUI(isPastDeadline, overrideMessage = null) {
         submissionLocked = true;
         const wrapper = document.getElementById('submission-wrapper');
         const overlay = document.getElementById('submission-locked-overlay');
@@ -230,7 +240,11 @@
         if (overlay) {
             overlay.style.display = 'flex';
             if (overlayText) {
-                overlayText.textContent = isPastDeadline ? 'SUBMISSIONS HAVE CLOSED' : 'SUBMISSIONS OPEN WHEN THE HACKATHON BEGINS';
+                if (overrideMessage) {
+                    overlayText.textContent = overrideMessage;
+                } else {
+                    overlayText.textContent = isPastDeadline ? 'SUBMISSIONS HAVE CLOSED' : 'SUBMISSIONS OPEN WHEN THE HACKATHON BEGINS';
+                }
             }
         }
         
@@ -990,9 +1004,27 @@
                     if (data && data.hasPPT) {
                         showPPTSuccess(data.fileUrl || '');
                     }
+                    if (data && data.hasOwnProperty('isShortlisted')) {
+                        isTeamShortlisted = data.isShortlisted;
+                        // Force a re-check of the lock state immediately
+                        checkSubmissionLockState(Date.now());
+                    }
                 }
             } catch (err) {
                 console.warn('[Lunar Forge] PPT status fetch failed:', err.message);
+            }
+            
+            // Check PPT deadline onload
+            if (Date.now() > PPT_DEADLINE.getTime()) {
+                showPPTError("PPT Submissions Closed (March 28, 8:00 PM IST).");
+                if (pptUploadBtn) pptUploadBtn.style.display = 'none';
+                if (pptDropzone) {
+                    pptDropzone.style.pointerEvents = 'none';
+                    pptDropzone.style.opacity = '0.5';
+                }
+                if (pptFileInput) pptFileInput.disabled = true;
+                if (pptClearBtn) pptClearBtn.style.display = 'none';
+                if (pptBrowseBtn) pptBrowseBtn.style.display = 'none';
             }
         }
 
@@ -1009,6 +1041,10 @@
 
         // ── Upload handler ────────────────────────────────────
         async function uploadPPT() {
+            if (Date.now() > PPT_DEADLINE.getTime()) {
+                showPPTError('PPT Submissions have closed (March 28, 8:00 PM IST).');
+                return;
+            }
             const file = pptFileInput.files[0];
             if (!file) {
                 showPPTError('Please select a file before uploading.');

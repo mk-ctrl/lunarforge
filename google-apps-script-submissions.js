@@ -183,18 +183,38 @@ function doGet(e) {
             const teamIdIdx = colIndex(headers, 'TEAM ID');
             const pptIdx    = colIndex(headers, 'PPT URL');
 
+            // ── CHECK SHORTLIST STATUS ───────────────────────────────────────
+            let isShortlisted = false;
+            try {
+                const ss = SpreadsheetApp.getActiveSpreadsheet();
+                let shortSheet = ss.getSheetByName('ShortlistedTeams');
+                if (shortSheet) {
+                    const shortData = shortSheet.getDataRange().getValues();
+                    // Assuming Team IDs are in Column A (index 0)
+                    for (let s = 1; s < shortData.length; s++) {
+                        const shortId = (shortData[s][0] || '').toString().trim().toUpperCase();
+                        if (shortId === teamId) {
+                            isShortlisted = true;
+                            break;
+                        }
+                    }
+                }
+            } catch (e) {
+                // Ignore if sheet doesn't exist
+            }
+
             for (let i = 1; i < values.length; i++) {
                 const rowTeamId = (values[i][teamIdIdx] || '').toString().trim().toUpperCase();
                 if (rowTeamId === teamId) {
                     const url = pptIdx !== -1 ? (values[i][pptIdx] || '').toString().trim() : '';
                     if (url) {
-                        return jsonResp(true, 'PPT found.', { hasPPT: true, fileUrl: url });
+                        return jsonResp(true, 'PPT found.', { hasPPT: true, fileUrl: url, isShortlisted: isShortlisted });
                     }
-                    return jsonResp(true, 'No PPT yet.', { hasPPT: false });
+                    return jsonResp(true, 'No PPT yet.', { hasPPT: false, isShortlisted: isShortlisted });
                 }
             }
             // Team not found in submissions yet (fine — no PPT)
-            return jsonResp(true, 'Team not in submissions.', { hasPPT: false });
+            return jsonResp(true, 'Team not in submissions.', { hasPPT: false, isShortlisted: isShortlisted });
 
         } catch (err) {
             return jsonResp(false, err.message, { hasPPT: false });
