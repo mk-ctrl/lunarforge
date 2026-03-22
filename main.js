@@ -5,6 +5,12 @@
 (function () {
   'use strict';
 
+  // Force page to always reload at the exact top
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+  window.scrollTo(0, 0);
+
   // ── DOM REFS ────────────────────────────────
   const intro = document.getElementById('intro');
   const enterBtn = document.getElementById('enter-btn');

@@ -9,7 +9,7 @@
     // CONFIGURATION
     // ══════════════════════════════════════════════
     // Paste your deployed Google Apps Script URL here:
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymTF_DGFXvQlOYDY9ZjxD6wuOos6mRhlgRP7OBJL3QrCrQMEFT1ZiUp1M_iYs6tClr/exec';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzCfFTAEbjqQwjGTC7IpPs_YJk1hmPGx7iBWuErE7hsXpSCptd5fHNym85E5zAyXvKPAQ/exec';
 
     // WhatsApp channel link (for team leaders after registration):
     const WHATSAPP_LINK = 'https://chat.whatsapp.com/BOVOzMeJVxmFUtDsMeDH2e?mode=hq1tcla';
@@ -38,7 +38,7 @@
 
     // Problem statement
     const problemSelect = document.getElementById('problem-statement');
-    const customPSGroup = document.getElementById('custom-ps-group');
+    const domainSelect = document.getElementById('domain');
 
     // All saveable inputs
     const allInputs = form.querySelectorAll('input, select, textarea');
@@ -125,6 +125,12 @@
         try {
             const data = JSON.parse(raw);
 
+            // Restore domain first so PS can be populated
+            if (data['domain']) {
+                domainSelect.value = data['domain'];
+                populateProblemStatements(data['domain']);
+            }
+
             allInputs.forEach(input => {
                 if (input.type === 'radio') {
                     if (data[input.name] === input.value) {
@@ -141,9 +147,6 @@
             // Trigger team size change to show/hide member sections
             const teamSize = data['teamSize'];
             if (teamSize) handleTeamSizeChange(teamSize);
-
-            // Trigger problem statement change
-            if (data['problem-statement']) handleProblemStatementChange(data['problem-statement']);
 
         } catch (e) {
             // Corrupted data — ignore
@@ -188,20 +191,61 @@
             saveFormState();
         });
     });
+    // ══════════════════════════════════════════════
+    // DOMAIN → PROBLEM STATEMENT MAPPING
+    // ══════════════════════════════════════════════
+    const DOMAIN_PS_MAP = {
+        'Education': [
+            { value: '1.1: Scholarship Recommendation System', label: '1.1 Scholarship Recommendation System' },
+            { value: '1.2: Inclusive Learning Platform', label: '1.2 Inclusive Learning Platform' },
+            { value: '1.3: Meme-to-Knowledge Converter', label: '1.3 Meme-to-Knowledge Converter' },
+            { value: '1.4: Attention-Aware Learning System', label: '1.4 Attention-Aware Learning System' },
+        ],
+        'Sustainability': [
+            { value: '2.1: Home Construction Materials Calculator', label: '2.1 Home Construction Materials Calculator' },
+            { value: '2.2: Carbon Footprint Tracker', label: '2.2 Carbon Footprint Tracker' },
+            { value: '2.3: Smart Meal Planner', label: '2.3 Smart Meal Planner' },
+            { value: '2.4: Sustainable Travel Planner', label: '2.4 Sustainable Travel Planner' },
+        ],
+        'Agriculture': [
+            { value: '3.1: Crop Disease Identifier', label: '3.1 Crop Disease Identifier' },
+            { value: '3.2: Smart Irrigation Planner', label: '3.2 Smart Irrigation Planner' },
+            { value: '3.3: Farm-to-Market Connector', label: '3.3 Farm-to-Market Connector' },
+            { value: '3.4: Soil Health Analyzer', label: '3.4 Soil Health Analyzer' },
+        ],
+        'Miscellaneous': [
+            { value: '4.1: Personal Finance Tracker', label: '4.1 Personal Finance Tracker' },
+            { value: '4.2: Neighborhood Safety Reporter', label: '4.2 Neighborhood Safety Reporter' },
+            { value: '4.3: Lost & Found Platform', label: '4.3 Lost & Found Platform' },
+            { value: '4.4: Skill Swap Marketplace', label: '4.4 Skill Swap Marketplace' },
+        ],
+    };
 
-    // ══════════════════════════════════════════════
-    // PROBLEM STATEMENT — SHOW / HIDE CUSTOM
-    // ══════════════════════════════════════════════
-    function handleProblemStatementChange(value) {
-        if (value === 'others') {
-            customPSGroup.style.display = '';
-        } else {
-            customPSGroup.style.display = 'none';
+    function populateProblemStatements(domain) {
+        // Clear existing options
+        problemSelect.innerHTML = '';
+
+        if (!domain || !DOMAIN_PS_MAP[domain]) {
+            problemSelect.innerHTML = '<option value="" disabled selected>First select a domain</option>';
+            problemSelect.disabled = true;
+            return;
         }
+
+        // Enable and populate
+        problemSelect.disabled = false;
+        problemSelect.innerHTML = '<option value="" disabled selected>Select a problem statement</option>';
+
+        DOMAIN_PS_MAP[domain].forEach(ps => {
+            const opt = document.createElement('option');
+            opt.value = ps.value;
+            opt.textContent = ps.label;
+            problemSelect.appendChild(opt);
+        });
     }
 
-    problemSelect.addEventListener('change', () => {
-        handleProblemStatementChange(problemSelect.value);
+    // Listen for domain change → populate PS
+    domainSelect.addEventListener('change', () => {
+        populateProblemStatements(domainSelect.value);
         saveFormState();
     });
 
@@ -236,6 +280,10 @@
 
     function validatePhone(value) {
         return /^\d{10}$/.test(value);
+    }
+
+    function validateEmail(value) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
     }
 
     function validateForm() {
@@ -275,6 +323,13 @@
             valid = false;
         }
 
+        const leadEmail = document.getElementById('lead-email').value.trim();
+        if (!leadEmail) { showError('lead-email-error', 'Email is required'); valid = false; }
+        else if (!validateEmail(leadEmail)) {
+            showError('lead-email-error', 'Must be a valid email address');
+            valid = false;
+        }
+
         // Members (if duo or trio)
         if (teamSize >= 2) {
             const m1Name = document.getElementById('m1-name').value.trim();
@@ -291,6 +346,13 @@
             if (!m1Phone) { showError('m1-phone-error', 'Phone number is required'); valid = false; }
             else if (!validatePhone(m1Phone)) {
                 showError('m1-phone-error', 'Must be a valid 10-digit number');
+                valid = false;
+            }
+
+            const m1Email = document.getElementById('m1-email').value.trim();
+            if (!m1Email) { showError('m1-email-error', 'Email is required'); valid = false; }
+            else if (!validateEmail(m1Email)) {
+                showError('m1-email-error', 'Must be a valid email address');
                 valid = false;
             }
         }
@@ -312,6 +374,13 @@
                 showError('m2-phone-error', 'Must be a valid 10-digit number');
                 valid = false;
             }
+
+            const m2Email = document.getElementById('m2-email').value.trim();
+            if (!m2Email) { showError('m2-email-error', 'Email is required'); valid = false; }
+            else if (!validateEmail(m2Email)) {
+                showError('m2-email-error', 'Must be a valid email address');
+                valid = false;
+            }
         }
 
         // Domain
@@ -321,11 +390,6 @@
         // Problem statement
         const ps = document.getElementById('problem-statement').value;
         if (!ps) { showError('problem-statement-error', 'Select a problem statement'); valid = false; }
-
-        if (ps === 'others') {
-            const customPS = document.getElementById('custom-ps').value.trim();
-            if (!customPS) { showError('custom-ps-error', 'Describe your idea'); valid = false; }
-        }
 
         // Consent
         const consent = document.getElementById('consent').checked;
@@ -373,7 +437,6 @@
     // ══════════════════════════════════════════════
     function collectFormData() {
         const teamSize = parseInt(document.querySelector('input[name="teamSize"]:checked').value, 10);
-        const ps = document.getElementById('problem-statement').value;
 
         const data = {
             teamName: document.getElementById('team-name').value.trim(),
@@ -381,28 +444,31 @@
             leadName: document.getElementById('lead-name').value.trim(),
             leadBatch: document.getElementById('lead-batch').value.trim(),
             leadPhone: document.getElementById('lead-phone').value.trim(),
+            leadEmail: document.getElementById('lead-email').value.trim(),
             m1Name: '',
             m1Batch: '',
             m1Phone: '',
+            m1Email: '',
             m2Name: '',
             m2Batch: '',
             m2Phone: '',
+            m2Email: '',
             domain: document.getElementById('domain').value,
-            problemStatement: ps === 'others'
-                ? 'Others: ' + document.getElementById('custom-ps').value.trim()
-                : ps,
+            problemStatement: document.getElementById('problem-statement').value,
         };
 
         if (teamSize >= 2) {
             data.m1Name = document.getElementById('m1-name').value.trim();
             data.m1Batch = document.getElementById('m1-batch').value.trim();
             data.m1Phone = document.getElementById('m1-phone').value.trim();
+            data.m1Email = document.getElementById('m1-email').value.trim();
         }
 
         if (teamSize >= 3) {
             data.m2Name = document.getElementById('m2-name').value.trim();
             data.m2Batch = document.getElementById('m2-batch').value.trim();
             data.m2Phone = document.getElementById('m2-phone').value.trim();
+            data.m2Email = document.getElementById('m2-email').value.trim();
         }
 
         return data;
@@ -551,8 +617,8 @@
             const result = await submitToSheets(data);
             // Save minimal data for offline login fallback
             localStorage.setItem(STORAGE_KEY, JSON.stringify({
-                teamId: result.teamId, 
-                password: result.password 
+                teamId: result.teamId,
+                password: result.password
             }));
             showSuccess(result.teamId, result.password, data);
         } catch (err) {
@@ -561,8 +627,8 @@
             const localTeamId = data.teamId || generateLocalTeamId();
             const localPassword = data.password || generatePassword();
             localStorage.setItem(STORAGE_KEY, JSON.stringify({
-                teamId: localTeamId, 
-                password: localPassword 
+                teamId: localTeamId,
+                password: localPassword
             }));
             showSuccess(localTeamId, localPassword, data);
         } finally {

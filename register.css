@@ -780,4 +780,30 @@ body {
     .password-value {
         font-size: 1.2rem;
     }
+
+    .success-home-btn {
+        display: block;
+        width: 100%;
+        text-align: center;
+        margin-right: 0 !important;
+        margin-bottom: 10px;
+    }
+
+    .success-note {
+        margin: 24px 0 16px;
+    }
+
+    .credentials-warning {
+        font-size: 0.65rem;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .reg-back {
+        font-size: 0.65rem;
+    }
+
+    .reg-nav-title {
+        font-size: 0.9rem;
+    }
 }

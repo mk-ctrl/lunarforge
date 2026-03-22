@@ -19,11 +19,12 @@
     // CONFIGURATION
     // ══════════════════════════════════════════════
     // ** PASTE YOUR NEW APPS SCRIPT URL HERE **
-    const SUBMISSION_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby7ghxX8IomwUeXAVA7hgKYg3mURyxM_1XmqeFHff5tj-XIiLs_AS9LDy2LsKNkiTD8sQ/exec';
-    
+    const SUBMISSION_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz3WJYa90NAniPifnhfRI3zAFRC33Fr33_oRGGvGTf54XWSzxi63ZL4yMiFAPo9jXHBfg/exec';
+
     const WHATSAPP_LINK = 'https://chat.whatsapp.com/BOVOzMeJVxmFUtDsMeDH2e?mode=hq1tcla';
     const TARGET_DATE = new Date(Date.UTC(2026, 2, 30, 13, 30, 0)); // March 30, 2026, 7:00 PM IST
     const SUBMISSION_DEADLINE = new Date(Date.UTC(2026, 2, 31, 7, 30, 0)); // March 31, 2026, 1:00 PM IST
+    const PPT_DEADLINE = new Date(Date.UTC(2026, 2, 28, 14, 30, 0)); // March 28, 2026, 8:00 PM IST
 
     // ══════════════════════════════════════════════
     // DOM REFS
@@ -148,6 +149,8 @@
         });
     });
 
+
+
     // ══════════════════════════════════════════════
     // FAQ ACCORDION
     // ══════════════════════════════════════════════
@@ -200,8 +203,17 @@
 
     let submissionLocked = false;
     let initialLockCheckDone = false;
+    let isTeamShortlisted = false; // Globally tracks shortlist status
 
     function checkSubmissionLockState(now) {
+        // OVERRIDE: If not shortlisted, lock Final Submission entirely
+        if (!isTeamShortlisted) {
+            if (!submissionLocked) {
+                lockSubmissionUI(false, "LOCKED: Awaiting Evaluation. Only shortlisted teams can submit Final Projects.");
+            }
+            return;
+        }
+
         if (now < TARGET_DATE.getTime() || now > SUBMISSION_DEADLINE.getTime()) {
             if (!submissionLocked || !initialLockCheckDone) {
                 lockSubmissionUI(now > SUBMISSION_DEADLINE.getTime());
@@ -218,22 +230,26 @@
         }
     }
 
-    function lockSubmissionUI(isPastDeadline) {
+    function lockSubmissionUI(isPastDeadline, overrideMessage = null) {
         submissionLocked = true;
         const wrapper = document.getElementById('submission-wrapper');
         const overlay = document.getElementById('submission-locked-overlay');
         const btn = document.getElementById('submit-project-btn');
         const ql = document.querySelector('[data-goto="submission"]');
         const overlayText = overlay ? overlay.querySelector('.locked-overlay-text') : null;
-        
+
         if (wrapper) wrapper.classList.add('submission-disabled');
         if (overlay) {
             overlay.style.display = 'flex';
             if (overlayText) {
-                overlayText.textContent = isPastDeadline ? 'SUBMISSIONS HAVE CLOSED' : 'SUBMISSIONS OPEN WHEN THE HACKATHON BEGINS';
+                if (overrideMessage) {
+                    overlayText.textContent = overrideMessage;
+                } else {
+                    overlayText.textContent = isPastDeadline ? 'SUBMISSIONS HAVE CLOSED' : 'SUBMISSIONS OPEN WHEN THE HACKATHON BEGINS';
+                }
             }
         }
-        
+
         ['sub-github', 'sub-demo'].forEach(id => {
             const el = document.getElementById(id);
             if (el) el.disabled = true;
@@ -361,13 +377,193 @@
     setInterval(updateSubmissionCountdown, 1000);
 
     // ══════════════════════════════════════════════
+    // DYNAMIC TIMELINE
+    // ══════════════════════════════════════════════
+    // All times in UTC (IST - 5:30)
+    // DAY 1 = March 30, 2026 | DAY 2 = March 31, 2026
+    const TIMELINE_EVENTS = [
+        {
+            label: 'DAY 1 — 🕖 7:00 PM – 7:30 PM',
+            title: 'INAUGURATION',
+            desc: 'Welcome + HOD address. Rules, theme, judging criteria.',
+            start: new Date(Date.UTC(2026, 2, 30, 13, 30, 0)),  // 7:00 PM IST
+            end: new Date(Date.UTC(2026, 2, 30, 14, 0, 0)),   // 7:30 PM IST
+        },
+        {
+            label: 'DAY 1 — 🕢 7:30 PM – 8:15 PM',
+            title: 'GITHUB SESSION',
+            desc: 'Git workflow + repo setup. Submission guidelines.',
+            start: new Date(Date.UTC(2026, 2, 30, 14, 0, 0)),
+            end: new Date(Date.UTC(2026, 2, 30, 14, 45, 0)),
+        },
+        {
+            label: 'DAY 1 — 🕗 8:15 PM – 10:00 PM',
+            title: 'HACK TIME',
+            desc: 'Teams start building their projects.',
+            start: new Date(Date.UTC(2026, 2, 30, 14, 45, 0)),
+            end: new Date(Date.UTC(2026, 2, 30, 16, 30, 0)),
+        },
+        {
+            label: 'DAY 1 — 🕙 10:00 PM – 10:30 PM',
+            title: 'GAME 1',
+            desc: 'Icebreaker / fun reset to recharge.',
+            start: new Date(Date.UTC(2026, 2, 30, 16, 30, 0)),
+            end: new Date(Date.UTC(2026, 2, 30, 17, 0, 0)),
+        },
+        {
+            label: 'DAY 1 — 🕥 10:30 PM – 11:00 PM',
+            title: 'HACK TIME',
+            desc: 'Short continuation before review.',
+            start: new Date(Date.UTC(2026, 2, 30, 17, 0, 0)),
+            end: new Date(Date.UTC(2026, 2, 30, 17, 30, 0)),
+        },
+        {
+            label: 'DAY 1 — 🕚 11:00 PM – 12:00 AM',
+            title: 'REVIEW',
+            desc: 'Teams present progress. Quick judge feedback.',
+            start: new Date(Date.UTC(2026, 2, 30, 17, 30, 0)),
+            end: new Date(Date.UTC(2026, 2, 30, 18, 30, 0)),
+        },
+        {
+            label: 'DAY 2 — 🕛 12:00 AM – 12:30 AM',
+            title: 'HACK TIME',
+            desc: 'Apply feedback / continue work.',
+            start: new Date(Date.UTC(2026, 2, 30, 18, 30, 0)),
+            end: new Date(Date.UTC(2026, 2, 30, 19, 0, 0)),
+        },
+        {
+            label: 'DAY 2 — 🕧 12:30 AM – 1:00 AM',
+            title: 'GAME 2',
+            desc: 'Energy boost before the long stretch.',
+            start: new Date(Date.UTC(2026, 2, 30, 19, 0, 0)),
+            end: new Date(Date.UTC(2026, 2, 30, 19, 30, 0)),
+        },
+        {
+            label: 'DAY 2 — 🌙 1:00 AM – 12:30 PM',
+            title: 'CONTINUOUS HACK TIME',
+            desc: 'No interruptions. Deep work phase.',
+            start: new Date(Date.UTC(2026, 2, 30, 19, 30, 0)),
+            end: new Date(Date.UTC(2026, 2, 31, 7, 0, 0)),
+        },
+        {
+            label: 'DAY 2 — 🕧 12:30 PM – 1:00 PM',
+            title: 'FINAL GIT PUSH',
+            desc: 'Final submission. README + demo check.',
+            start: new Date(Date.UTC(2026, 2, 31, 7, 0, 0)),
+            end: new Date(Date.UTC(2026, 2, 31, 7, 30, 0)),
+        },
+    ];
+
+    function renderTimeline() {
+        const container = document.getElementById('dash-timeline-container');
+        if (!container) return;
+
+        const now = Date.now();
+
+        // Remove old items (keep the line element)
+        const oldItems = container.querySelectorAll('.dash-tl-item');
+        oldItems.forEach(item => item.remove());
+
+        // Track counts for timeline-line gradient
+        let completedCount = 0;
+        let activeIndex = -1;
+
+        TIMELINE_EVENTS.forEach((evt, i) => {
+            let status, statusClass, badgeText;
+            const startMs = evt.start.getTime();
+            const endMs = evt.end.getTime();
+
+            if (now >= endMs) {
+                status = 'completed';
+                statusClass = 'completed';
+                badgeText = 'COMPLETED';
+                completedCount++;
+            } else if (now >= startMs && now < endMs) {
+                status = 'active';
+                statusClass = 'active';
+                badgeText = 'IN PROGRESS';
+                activeIndex = i;
+            } else {
+                status = 'upcoming';
+                statusClass = 'upcoming';
+                badgeText = 'UPCOMING';
+            }
+
+            // Build dot inner content
+            let dotInner = '';
+            if (status === 'completed') {
+                dotInner = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12" /></svg>`;
+            } else if (status === 'active') {
+                dotInner = `<div class="tl-dot-pulse"></div>`;
+            }
+
+            const itemHTML = `
+                <div class="dash-tl-item ${statusClass}" data-step="${i + 1}" style="animation-delay: ${i * 0.05}s;">
+                    <div class="dash-tl-dot">${dotInner}</div>
+                    <div class="dash-tl-card">
+                        <div class="dash-tl-card-header">
+                            <span class="dash-tl-time">${evt.label}</span>
+                            <span class="dash-tl-badge ${statusClass}">${badgeText}</span>
+                        </div>
+                        <h3 class="dash-tl-title">${evt.title}</h3>
+                        <p class="dash-tl-desc">${evt.desc}</p>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', itemHTML);
+        });
+
+        // Update the timeline-line gradient to reflect progress
+        const line = container.querySelector('.dash-timeline-line');
+        if (line) {
+            const total = TIMELINE_EVENTS.length;
+            const progressPercent = activeIndex >= 0
+                ? Math.round(((activeIndex + 0.5) / total) * 100)
+                : completedCount === total
+                    ? 100
+                    : Math.round((completedCount / total) * 100);
+
+            line.style.background = `linear-gradient(to bottom,
+                var(--accent) 0%,
+                var(--accent) ${progressPercent}%,
+                rgba(255, 255, 255, 0.08) ${progressPercent}%,
+                rgba(255, 255, 255, 0.08) 100%)`;
+        }
+
+        // Update the overview event status badge
+        const heroStatus = document.getElementById('hero-event-status');
+        const eventStatusVal = document.getElementById('event-status-value');
+        const eventStatusBadge = document.getElementById('event-status-badge');
+        if (now < TIMELINE_EVENTS[0].start.getTime()) {
+            // Before event
+            if (heroStatus) heroStatus.textContent = 'UPCOMING';
+            if (eventStatusVal) eventStatusVal.textContent = 'UPCOMING';
+            if (eventStatusBadge) eventStatusBadge.textContent = 'UPCOMING';
+        } else if (now > TIMELINE_EVENTS[TIMELINE_EVENTS.length - 1].end.getTime()) {
+            // After event
+            if (heroStatus) heroStatus.textContent = 'COMPLETED';
+            if (eventStatusVal) eventStatusVal.textContent = 'COMPLETED';
+            if (eventStatusBadge) eventStatusBadge.textContent = 'ENDED';
+        } else {
+            // During event
+            if (heroStatus) heroStatus.textContent = 'LIVE NOW';
+            if (eventStatusVal) eventStatusVal.textContent = 'LIVE';
+            if (eventStatusBadge) eventStatusBadge.textContent = 'LIVE';
+        }
+    }
+
+    // Render on load and update every 30 seconds
+    renderTimeline();
+    setInterval(renderTimeline, 30000);
+
+    // ══════════════════════════════════════════════
     // ══════════════════════════════════════════════
     // POPULATE DATA FROM SESSION
     // ══════════════════════════════════════════════
     function populateDashboard() {
         // We already verified sessionData exists at the top
         const raw = sessionData;
-        
+
         try {
             const data = JSON.parse(raw);
 
@@ -426,6 +622,25 @@
             const problemDomainValue = document.getElementById('problem-domain-value');
             if (problemDomainValue) problemDomainValue.textContent = domain;
 
+            const problemDescriptions = {
+                "Scholarship Recommendation System": "Students often miss out on scholarships due to lack of awareness and eligibility confusion. This system recommends relevant scholarships based on a student’s profile, academic background, and financial need.",
+                "Inclusive Learning Platform": "Many digital learning platforms are not accessible to all learners. This platform integrates assistive technologies like speech-to-text, sign language support, screen readers, and multilingual content to ensure inclusive education.",
+                "Meme-to-Knowledge Converter": "Gen-Z users often ignore important academic or institutional updates. This tool converts important information like exam dates, circulars, or announcements into engaging meme-style content to improve reach and retention.",
+                "Attention-Aware Learning System": "Students lose focus during online lectures, reducing learning efficiency. This system tracks attention using webcam-based facial and eye movement analysis and dynamically adjusts content delivery.",
+                "Home Construction Materials Calculator": "Construction projects often face cost overruns due to poor material estimation. This tool calculates required materials and cost based on building dimensions, reducing waste and improving planning.",
+                "Carbon Footprint Tracker (Online Purchases)": "Consumers are unaware of the environmental impact of their online purchases. This tool estimates and displays the carbon footprint of products in real-time, promoting eco-conscious decisions.",
+                "Smart Meal Planner": "Households waste food due to poor planning. This app suggests weekly meal plans using ingredients already available in the fridge, minimizing waste and saving money.",
+                "Sustainable Travel Planner": "Travelers often prioritize cost and convenience while ignoring environmental impact. This system suggests sustainable travel options with a clear breakdown of cost, carbon footprint, and alternatives.",
+                "Farm-to-Market Digital Platform": "Farmers often lose profits due to intermediaries and inefficient supply chains. This platform connects farmers directly with buyers, ensuring fair pricing and reducing food loss.",
+                "Smart Farming Decision System": "Uses weather, soil, and crop data to give simple recommendations for improving yield and reducing waste.",
+                "Agriculture Resource Optimization Platform": "Combines data to guide farmers in saving water, fertilizers, and costs while increasing income.",
+                "Farmer Loan & Subsidy Tracker": "Farmers struggle to track loan status and government subsidies. This system provides a transparent interface to apply, monitor, and manage financial assistance schemes.",
+                "AI-Based Fake Document Detection": "Fake documents are a major issue in education, banking, and recruitment. This system uses AI to verify authenticity and detect tampering in documents.",
+                "Digital Health Record Management System": "Medical records are often scattered and inaccessible. This system securely stores and manages patient health records for easy access by doctors and patients.",
+                "Digital Declutter System": "Duplicate photos and videos consume unnecessary storage and energy. This system identifies and removes redundant files, optimizing storage and reducing data center load.",
+                "Home Finance Management System": "Individuals struggle to track expenses and savings. This system helps users manage budgets, monitor spending patterns, and improve financial planning."
+            };
+
             if (ps && ps !== 'others') {
                 const problemId = document.getElementById('problem-id-display');
                 const psParts = ps.split(':');
@@ -434,8 +649,16 @@
                 }
 
                 const problemTitle = document.getElementById('problem-title-display');
+                const problemDesc = document.getElementById('problem-desc-display');
                 if (problemTitle && psParts.length > 1) {
-                    problemTitle.textContent = psParts.slice(1).join(':').trim();
+                    const titleText = psParts.slice(1).join(':').trim();
+                    problemTitle.textContent = titleText;
+
+                    if (problemDesc && problemDescriptions[titleText]) {
+                        problemDesc.textContent = problemDescriptions[titleText];
+                    } else if (problemDesc) {
+                        problemDesc.textContent = "Your team problem statement description will appear here.";
+                    }
                 }
             } else if (ps === 'others') {
                 const customPS = data['custom-ps'] || data['customPS'] || 'Custom Open Innovation Project';
@@ -444,6 +667,9 @@
 
                 const problemId = document.getElementById('problem-id-display');
                 if (problemId) problemId.textContent = 'OPEN';
+
+                const problemDesc = document.getElementById('problem-desc-display');
+                if (problemDesc) problemDesc.textContent = "A custom open innovation project defined by your team during registration.";
             }
 
             // Member 1
@@ -495,6 +721,12 @@
             const finalTeamId = data['teamId'] || defaultId;
             if (teamIdDisplay) teamIdDisplay.textContent = finalTeamId;
 
+            const ovTeamId = document.getElementById('overview-team-id');
+            if (ovTeamId) ovTeamId.textContent = finalTeamId;
+
+            const tmTeamId = document.getElementById('teammates-team-id');
+            if (tmTeamId) tmTeamId.textContent = finalTeamId;
+
             // Pre-fill read-only submission fields
             const subTeamId = document.getElementById('sub-team-id');
             if (subTeamId) subTeamId.value = finalTeamId;
@@ -536,7 +768,7 @@
 
             const submitBtn = document.getElementById('submit-project-btn');
             const submitBtnText = document.getElementById('submit-btn-text');
-            
+
             if (submitBtn) submitBtn.disabled = true;
             if (submitBtnText) submitBtnText.textContent = 'SUBMITTING...';
 
@@ -560,7 +792,7 @@
                         body: JSON.stringify(submissionData),
                         redirect: 'follow'
                     });
-                    
+
                     if (response.ok && response.type !== 'opaque') {
                         try {
                             const resJson = await response.json();
@@ -711,8 +943,274 @@
     }
 
     // ══════════════════════════════════════════════
+    // PPT SUBMISSION
+    // ══════════════════════════════════════════════
+    (function initPPTSubmission() {
+        // ── DOM refs ────────────────────────────────
+        const pptFileInput = document.getElementById('ppt-file-input');
+        const pptDropzone = document.getElementById('ppt-dropzone');
+        const pptBrowseBtn = document.getElementById('ppt-browse-btn');
+        const pptChosenFile = document.getElementById('ppt-chosen-file');
+        const pptChosenName = document.getElementById('ppt-chosen-name');
+        const pptClearBtn = document.getElementById('ppt-clear-btn');
+        const pptUploadBtn = document.getElementById('ppt-upload-btn');
+        const pptUploadBtnText = document.getElementById('ppt-upload-btn-text');
+        const pptStatusBadge = document.getElementById('ppt-status-badge');
+        const pptSuccessMsg = document.getElementById('ppt-success-msg');
+        const pptDriveLink = document.getElementById('ppt-drive-link');
+        const pptErrorMsg = document.getElementById('ppt-error-msg');
+        const pptErrorText = document.getElementById('ppt-error-text');
+        const pptMobFab = document.getElementById('ppt-mob-fab');
+
+        if (!pptFileInput) return; // PPT section not present
+
+        // ── Get teamId from session ──────────────────
+        let pptTeamId = '';
+        try {
+            const sd = JSON.parse(sessionData || '{}');
+            pptTeamId = sd.teamId || sd['teamId'] || '';
+            // Fallback: try sidebar element
+            if (!pptTeamId) {
+                const el = document.getElementById('sidebar-team-id');
+                if (el) pptTeamId = el.textContent.trim();
+            }
+        } catch (e) { /* ignore */ }
+
+        // ── Helpers ──────────────────────────────────
+        function setPPTBadge(uploaded) {
+            if (!pptStatusBadge) return;
+            pptStatusBadge.className = 'ppt-status-badge ' + (uploaded ? 'ppt-badge-uploaded' : 'ppt-badge-pending');
+            pptStatusBadge.innerHTML = uploaded
+                ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg> Uploaded`
+                : `<svg viewBox="0 0 10 10" width="8" height="8" fill="currentColor"><circle cx="5" cy="5" r="5"/></svg> Pending`;
+        }
+
+        function showPPTSuccess(fileUrl) {
+            if (pptSuccessMsg) pptSuccessMsg.style.display = 'flex';
+            if (pptDriveLink && fileUrl) {
+                pptDriveLink.href = fileUrl;
+                pptDriveLink.textContent = 'View / Download →';
+            }
+            if (pptErrorMsg) pptErrorMsg.style.display = 'none';
+            if (pptUploadBtnText) pptUploadBtnText.textContent = 'Replace PPT';
+            setPPTBadge(true);
+            if (pptMobFab) pptMobFab.style.display = 'none';
+        }
+
+        function showPPTError(msg) {
+            if (pptErrorMsg) pptErrorMsg.style.display = 'flex';
+            if (pptErrorText) pptErrorText.textContent = msg || 'Upload failed. Please try again.';
+            if (pptSuccessMsg) pptSuccessMsg.style.display = 'none';
+        }
+
+        function hidePPTMessages() {
+            if (pptSuccessMsg) pptSuccessMsg.style.display = 'none';
+            if (pptErrorMsg) pptErrorMsg.style.display = 'none';
+        }
+
+        function setSelectedFile(file) {
+            if (!file) {
+                pptChosenFile.style.display = 'none';
+                pptDropzone.style.display = '';
+                pptFileInput.value = '';
+                return;
+            }
+            pptChosenName.textContent = file.name;
+            pptChosenFile.style.display = 'flex';
+            pptDropzone.style.display = 'none';
+        }
+
+        function setUploading(loading) {
+            if (!pptUploadBtn) return;
+            pptUploadBtn.disabled = loading;
+            if (pptUploadBtnText) {
+                pptUploadBtnText.textContent = loading ? 'Uploading…' : (pptUploadBtnText.textContent === 'Uploading…' ? 'Upload PPT' : pptUploadBtnText.textContent);
+            }
+            if (loading && pptUploadBtnText) pptUploadBtnText.textContent = 'Uploading…';
+        }
+
+        // ── Fetch PPT status on page load ────────────
+        async function fetchPPTStatus() {
+            if (!pptTeamId) return;
+            let hasPptSubmit = false;
+            try {
+                const url = new URL(SUBMISSION_APPS_SCRIPT_URL);
+                url.searchParams.set('action', 'getPPTStatus');
+                url.searchParams.set('teamId', pptTeamId);
+
+                const res = await fetch(url.toString(), { method: 'GET', redirect: 'follow' });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.hasPPT) {
+                        showPPTSuccess(data.fileUrl || '');
+                        hasPptSubmit = true;
+                    }
+                    if (data && data.hasOwnProperty('isShortlisted')) {
+                        isTeamShortlisted = data.isShortlisted;
+                        // Force a re-check of the lock state immediately
+                        checkSubmissionLockState(Date.now());
+                    }
+                }
+            } catch (err) {
+                console.warn('[Lunar Forge] PPT status fetch failed:', err.message);
+            }
+
+            // Check PPT deadline onload
+            if (Date.now() > PPT_DEADLINE.getTime()) {
+                showPPTError("PPT Submissions Closed (March 28, 8:00 PM IST).");
+                if (pptUploadBtn) pptUploadBtn.style.display = 'none';
+                if (pptDropzone) {
+                    pptDropzone.style.pointerEvents = 'none';
+                    pptDropzone.style.opacity = '0.5';
+                }
+                if (pptFileInput) pptFileInput.disabled = true;
+                if (pptClearBtn) pptClearBtn.style.display = 'none';
+                if (pptBrowseBtn) pptBrowseBtn.style.display = 'none';
+            } else if (!hasPptSubmit) {
+                // If not submitted & deadline is active, elegantly reveal the FAB!
+                if (pptMobFab) pptMobFab.classList.add('show-fab');
+            }
+        }
+
+        // ── Helpers ──────────────────────────────────────────
+        /** Read a File object as a Base64 string (no data-URI prefix). */
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onerror = () => reject(new Error('File read failed.'));
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // ── Upload handler ────────────────────────────────────
+        async function uploadPPT() {
+            if (Date.now() > PPT_DEADLINE.getTime()) {
+                showPPTError('PPT Submissions have closed (March 28, 8:00 PM IST).');
+                return;
+            }
+            const file = pptFileInput.files[0];
+            if (!file) {
+                showPPTError('Please select a file before uploading.');
+                return;
+            }
+            if (!pptTeamId) {
+                showPPTError('Session error: Team ID not found. Please log out and log in again.');
+                return;
+            }
+
+            hidePPTMessages();
+            setUploading(true);
+
+            try {
+                // Convert file → Base64 and POST as JSON (Apps Script can't read raw multipart)
+                const base64Data = await fileToBase64(file);
+
+                const payload = JSON.stringify({
+                    action: 'uploadPPT',
+                    teamId: pptTeamId,
+                    fileBase64: base64Data,
+                    fileName: file.name,
+                    mimeType: file.type || 'application/octet-stream'
+                });
+
+                const res = await fetch(SUBMISSION_APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    body: payload,
+                    redirect: 'follow'
+                });
+
+                if (res.ok) {
+                    let result = null;
+                    try { result = await res.json(); } catch (_) { /* opaque */ }
+
+                    if (result && result.success) {
+                        showPPTSuccess(result.fileUrl || '');
+                        setSelectedFile(null);
+                    } else if (result && (result.error || result.message)) {
+                        showPPTError(result.error || result.message);
+                    } else {
+                        // Opaque response — assume success
+                        showPPTSuccess('');
+                        setSelectedFile(null);
+                    }
+                } else {
+                    showPPTError(`Server returned ${res.status}. Please try again.`);
+                }
+            } catch (err) {
+                console.error('[Lunar Forge] PPT upload error:', err);
+                showPPTError('Upload failed: ' + err.message);
+            } finally {
+                pptUploadBtn.disabled = false;
+                if (pptUploadBtnText && pptUploadBtnText.textContent === 'Uploading…') {
+                    pptUploadBtnText.textContent = 'Upload PPT';
+                }
+            }
+        }
+
+        // ── Wire up UI events ────────────────────────
+        // Browse button → open file picker
+        pptBrowseBtn && pptBrowseBtn.addEventListener('click', () => pptFileInput.click());
+
+        // File picked via dialog
+        pptFileInput.addEventListener('change', () => {
+            setSelectedFile(pptFileInput.files[0] || null);
+            hidePPTMessages();
+        });
+
+        // Clear selected file
+        pptClearBtn && pptClearBtn.addEventListener('click', () => setSelectedFile(null));
+
+        // Drag & drop
+        pptDropzone && pptDropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            pptDropzone.classList.add('ppt-dropzone-over');
+        });
+        pptDropzone && pptDropzone.addEventListener('dragleave', () => {
+            pptDropzone.classList.remove('ppt-dropzone-over');
+        });
+        pptDropzone && pptDropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            pptDropzone.classList.remove('ppt-dropzone-over');
+            const dt = e.dataTransfer;
+            if (dt && dt.files.length) {
+                const f = dt.files[0];
+                // Validate type
+                const ok = /\.(pptx|ppt|pdf)$/i.test(f.name);
+                if (!ok) { showPPTError('Please drop a .pptx, .ppt, or .pdf file.'); return; }
+                // Inject file into hidden input (DataTransfer trick)
+                const transfer = new DataTransfer();
+                transfer.items.add(f);
+                pptFileInput.files = transfer.files;
+                setSelectedFile(f);
+                hidePPTMessages();
+            }
+        });
+
+        // Upload button
+        pptUploadBtn && pptUploadBtn.addEventListener('click', uploadPPT);
+
+        // Mobile FAB — switch to submission tab then scroll to PPT card
+        if (pptMobFab) {
+            pptMobFab.addEventListener('click', () => {
+                switchTab('submission');
+            });
+        }
+
+        // Fetch status immediately
+        fetchPPTStatus();
+    })();
+
+    // ══════════════════════════════════════════════
     // INIT
     // ══════════════════════════════════════════════
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+    const contentArea = document.getElementById('dash-content');
+    if (contentArea) contentArea.scrollTop = 0;
+
     populateDashboard();
     checkExistingSubmission();
     handleHash();

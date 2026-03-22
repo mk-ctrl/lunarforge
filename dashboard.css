@@ -1765,12 +1765,69 @@ button {
         grid-template-columns: repeat(2, 1fr);
     }
 
+    .overview-metrics {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .overview-countdowns {
+        grid-template-columns: 1fr;
+    }
+
+    .overview-hero-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .overview-hero-subtitle {
+        max-width: 100%;
+    }
+
+    .overview-hero-badge {
+        justify-content: center;
+    }
+
     .quicklink-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 
     .teammates-grid {
-        grid-template-columns: 1fr;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+        padding-bottom: 0;
+    }
+
+    .teammate-card {
+        min-width: 0;
+        padding: 12px 4px;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 6px;
+    }
+
+    .teammate-avatar {
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        border-radius: 10px;
+    }
+
+    .teammate-name {
+        font-size: 0.75rem;
+        word-break: break-word;
+    }
+
+    .teammate-role,
+    .teammate-batch,
+    .teammate-phone {
+        font-size: 0.55rem;
+    }
+
+    .teammate-status {
+        margin-top: 4px;
+        font-size: 0.55rem;
+        gap: 4px;
     }
 
     .sub-form-row {
@@ -1800,6 +1857,31 @@ button {
         grid-template-columns: 1fr;
     }
 
+    .overview-metrics {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .metric-card {
+        padding: 16px;
+    }
+
+    .metric-value {
+        font-size: 1.1rem;
+    }
+
+    .overview-hero {
+        padding: 28px 20px;
+    }
+
+    .overview-hero-title {
+        font-size: clamp(1.6rem, 5vw, 2.2rem);
+    }
+
+    .overview-hero-subtitle {
+        font-size: 0.78rem;
+    }
+
     .quicklink-grid {
         grid-template-columns: 1fr 1fr;
     }
@@ -1811,6 +1893,23 @@ button {
     .cd-unit {
         min-width: 60px;
         padding: 12px 8px;
+    }
+
+    .cd-unit.small {
+        min-width: 48px;
+        padding: 10px 6px;
+    }
+
+    .cd-num {
+        font-size: 1.8rem;
+    }
+
+    .cd-unit.small .cd-num {
+        font-size: 1.5rem;
+    }
+
+    .countdown-block {
+        padding: 20px 16px;
     }
 
     .problem-card {
@@ -1826,6 +1925,10 @@ button {
         text-align: center;
     }
 
+    .submission-deadline {
+        padding: 20px 16px;
+    }
+
     .teammate-card {
         flex-direction: column;
         text-align: center;
@@ -1839,5 +1942,521 @@ button {
 
     .dash-nav-greeting {
         display: none;
+    }
+
+    .dash-timeline {
+        padding-left: 36px;
+    }
+
+    .dash-tl-dot {
+        left: -30px;
+        width: 20px;
+        height: 20px;
+    }
+
+    .dash-tl-card {
+        padding: 18px 20px;
+    }
+
+    .faq-question {
+        padding: 16px 18px;
+        font-size: 0.82rem;
+    }
+
+    .faq-item.open .faq-answer {
+        padding: 0 18px 16px;
+    }
+}
+
+/* ══════════════════════════════════════════════
+   PPT SUBMISSION CARD
+   ══════════════════════════════════════════════ */
+.ppt-submission-card {
+    position: relative;
+    background: rgba(0, 212, 255, 0.035);
+    border: 1px solid rgba(0, 212, 255, 0.18);
+    border-radius: 18px;
+    padding: 32px 36px;
+    margin-bottom: 36px;
+    overflow: hidden;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: border-color 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out);
+}
+
+.ppt-submission-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-cyan), var(--accent), transparent);
+    border-radius: 18px 18px 0 0;
+}
+
+.ppt-submission-card::after {
+    content: '';
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(0, 212, 255, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.ppt-submission-card:hover {
+    border-color: rgba(0, 212, 255, 0.3);
+    box-shadow: 0 8px 40px rgba(0, 212, 255, 0.07);
+}
+
+/* ── Card header ───────────────────────────── */
+.ppt-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 24px;
+}
+
+.ppt-card-header-left {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+}
+
+.ppt-card-icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    color: var(--accent-cyan);
+    opacity: 0.85;
+    margin-top: 2px;
+}
+
+.ppt-card-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.ppt-required-tag {
+    font-family: var(--font-body);
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--warning);
+    background: rgba(255, 171, 0, 0.12);
+    border: 1px solid rgba(255, 171, 0, 0.25);
+    padding: 3px 10px;
+    border-radius: 6px;
+    vertical-align: middle;
+}
+
+.ppt-card-subtitle {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    font-weight: 300;
+}
+
+.ppt-format-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    padding: 6px 12px;
+    background: rgba(255, 171, 0, 0.08);
+    border: 1px solid rgba(255, 171, 0, 0.4);
+    color: #ffab00;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    text-decoration: none;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 0 18px rgba(255, 171, 0, 0.25);
+    transition: all 0.3s ease;
+}
+
+.ppt-format-icon {
+    width: 14px;
+    height: 14px;
+}
+
+.ppt-format-btn:hover {
+    background: #ffab00;
+    color: #0b101e;
+    border-color: #ffab00;
+    box-shadow: 0 0 24px rgba(255, 171, 0, 0.7);
+}
+
+/* ── Status badges ─────────────────────────── */
+.ppt-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    padding: 6px 14px;
+    border-radius: 30px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: all 0.4s var(--ease-out);
+    text-transform: uppercase;
+}
+
+.ppt-badge-pending {
+    background: rgba(255, 152, 0, 0.12);
+    color: var(--pending);
+    border: 1px solid rgba(255, 152, 0, 0.25);
+}
+
+.ppt-badge-uploaded {
+    background: rgba(0, 230, 118, 0.12);
+    color: var(--success);
+    border: 1px solid rgba(0, 230, 118, 0.25);
+    animation: badgePop 0.4s var(--ease-out);
+}
+
+@keyframes badgePop {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* ── Success / Error messages ──────────────── */
+.ppt-success-msg,
+.ppt-error-msg {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-size: 0.82rem;
+    font-weight: 400;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    animation: msgSlide 0.35s var(--ease-out);
+}
+
+@keyframes msgSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.ppt-success-msg {
+    background: rgba(0, 230, 118, 0.08);
+    border: 1px solid rgba(0, 230, 118, 0.25);
+    color: var(--success);
+}
+
+.ppt-success-msg a {
+    color: var(--success);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    font-weight: 600;
+    transition: opacity 0.2s;
+}
+
+.ppt-success-msg a:hover {
+    opacity: 0.75;
+}
+
+.ppt-error-msg {
+    background: rgba(255, 59, 92, 0.08);
+    border: 1px solid rgba(255, 59, 92, 0.25);
+    color: var(--error);
+}
+
+/* ── Upload area ───────────────────────────── */
+.ppt-upload-area {
+    margin-bottom: 20px;
+}
+
+.ppt-dropzone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 36px 24px;
+    border: 2px dashed rgba(0, 212, 255, 0.2);
+    border-radius: 12px;
+    background: rgba(0, 212, 255, 0.03);
+    cursor: default;
+    transition: all 0.3s var(--ease-out);
+    text-align: center;
+}
+
+.ppt-dropzone.ppt-dropzone-over {
+    border-color: var(--accent-cyan);
+    background: rgba(0, 212, 255, 0.07);
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.1) inset;
+}
+
+.ppt-dropzone-text {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+}
+
+.ppt-browse-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 22px;
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 8px;
+    color: var(--accent-cyan);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    transition: all 0.3s var(--ease-out);
+}
+
+.ppt-browse-btn:hover {
+    background: rgba(0, 212, 255, 0.18);
+    box-shadow: 0 0 18px rgba(0, 212, 255, 0.15);
+    transform: translateY(-1px);
+}
+
+.ppt-dropzone-hint {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 6px;
+    letter-spacing: 0.05em;
+}
+
+/* ── Chosen file display ───────────────────── */
+.ppt-chosen-file {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: rgba(0, 212, 255, 0.06);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 10px;
+    font-size: 0.82rem;
+    color: var(--text);
+    animation: msgSlide 0.3s var(--ease-out);
+}
+
+#ppt-chosen-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ppt-clear-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: color 0.2s, background 0.2s;
+    flex-shrink: 0;
+}
+
+.ppt-clear-btn:hover {
+    color: var(--error);
+    background: rgba(255, 59, 92, 0.1);
+}
+
+/* ── Upload button ─────────────────────────── */
+.ppt-upload-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 32px;
+    background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent) 100%);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.35s var(--ease-out);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.2);
+}
+
+.ppt-upload-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.0);
+    transition: background 0.3s;
+}
+
+.ppt-upload-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.35);
+}
+
+.ppt-upload-btn:hover::after {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.ppt-upload-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* ══════════════════════════════════════════════
+   FINAL SUBMISSION OUTER WRAPPER
+   ══════════════════════════════════════════════ */
+.final-submission-outer {
+    margin-top: 8px;
+}
+
+.final-submission-heading {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+    letter-spacing: 0.04em;
+    color: var(--text);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.final-sub-heading-tag {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+}
+
+/* ══════════════════════════════════════════════
+   MOBILE PPT FAB
+   ══════════════════════════════════════════════ */
+.ppt-mob-fab {
+    display: none;
+    /* hidden on desktop */
+}
+
+@media (max-width: 767px) {
+    .ppt-mob-fab {
+        display: none;
+        align-items: center;
+        gap: 10px;
+        position: fixed;
+        bottom: 80px;
+        /* above mobile bottom nav */
+        right: 20px;
+        z-index: 300;
+        padding: 14px 22px;
+        background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent) 100%);
+        border: none;
+        border-radius: 50px;
+        color: #fff;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        cursor: pointer;
+        box-shadow: 0 6px 28px rgba(0, 212, 255, 0.4);
+        animation: fabEntrance 0.6s var(--ease-out) both;
+    }
+
+    .ppt-mob-fab.show-fab {
+        display: flex;
+    }
+
+    @keyframes fabEntrance {
+        from {
+            opacity: 0;
+            transform: translateY(20px) scale(0.9);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    .ppt-mob-fab::before {
+        content: '';
+        position: absolute;
+        inset: -3px;
+        border-radius: 50px;
+        background: linear-gradient(135deg, var(--accent-cyan), var(--accent));
+        opacity: 0;
+        z-index: -1;
+        transition: opacity 0.3s;
+        filter: blur(10px);
+    }
+
+    .ppt-mob-fab:hover::before,
+    .ppt-mob-fab:active::before {
+        opacity: 0.6;
+    }
+
+    .ppt-mob-fab:active {
+        transform: scale(0.95);
+    }
+
+    /* Mobile tweaks for PPT card */
+    .ppt-submission-card {
+        padding: 24px 20px;
+    }
+
+    .ppt-card-header {
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .ppt-card-header-left {
+        gap: 12px;
+    }
+
+    .ppt-card-icon {
+        width: 30px;
+        height: 30px;
+    }
+
+    .ppt-dropzone {
+        padding: 28px 16px;
+    }
+
+    .final-submission-heading {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        font-size: 1.4rem;
     }
 }
