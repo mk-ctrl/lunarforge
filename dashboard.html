@@ -84,6 +84,15 @@
           </svg>
           <span>TEAMMATES</span>
         </button>
+        <button class="sidebar-link" data-tab="rules" id="tab-rules">
+          <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="16" y1="13" x2="8" y2="13" />
+            <line x1="16" y1="17" x2="8" y2="17" />
+          </svg>
+          <span>RULES</span>
+        </button>
         <button class="sidebar-link" data-tab="faq" id="tab-faq">
           <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <circle cx="12" cy="12" r="10" />
@@ -324,6 +333,18 @@
                 </svg>
               </div>
               <span class="ql-text">Read FAQ</span>
+              <span class="ql-arrow">→</span>
+            </button>
+            <button class="quicklink-card" data-goto="rules">
+              <div class="ql-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="ql-svg">
+                  <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                </svg>
+              </div>
+              <span class="ql-text">Read Rules</span>
               <span class="ql-arrow">→</span>
             </button>
           </div>
@@ -637,10 +658,85 @@
         </div>
       </section>
 
+      <!-- ═══════════ TAB: RULES ═══════════ -->
+      <section class="dash-tab" id="panel-rules">
+        <div class="tab-header">
+          <span class="tab-label">06</span>
+          <h1 class="tab-title">OFFICIAL<br />RULES</h1>
+          <p class="tab-subtitle">Guidelines and regulations for Lunar Forge 1.0</p>
+        </div>
+
+        <div class="faq-list" id="rules-list">
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>1. Participation Rules</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9" /></svg>
+            </button>
+            <div class="faq-answer"><p>Individual participation allowed. Team participation allowed (Maximum 3 members). Only boys-only or girls-only teams — no mixed-gender teams. One participant can be part of only one team. Registration is mandatory before deadline. No changes in team members after registration.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>2. Problem Statement (PS)</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9" /></svg>
+            </button>
+            <div class="faq-answer"><p>Problem Statement will be provided by organizers. Participants must strictly work only on the given PS. No changing of problem statement after the event begins. Any deviation from PS may lead to disqualification.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>3. Duration</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9" /></svg>
+            </button>
+            <div class="faq-answer"><p>18 hours (Overnight event). Event starts at 7:00 PM and ends at 1:00 PM next day. Strict submission deadline — late submissions will not be accepted.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>4. Project Development Rules</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9" /></svg>
+            </button>
+            <div class="faq-answer"><p>Project must be original. Major development must happen during hackathon hours. Pre-written code/templates must be declared. Fully pre-built projects are not allowed. Open-source libraries allowed. Any programming language allowed.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>5. Submission Requirements</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9" /></svg>
+            </button>
+            <div class="faq-answer"><p>Mandatory submissions: Working prototype, GitHub repository (public), PPT presentation. Demo video is mandatory. README file must be included with the repo.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>6. Evaluation Criteria</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9" /></svg>
+            </button>
+            <div class="faq-answer"><p>Projects will be evaluated on: Innovation &amp; Creativity, Technical Implementation, Problem Relevance, Presentation Quality, and Completeness of submission.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>7. Checkpoints &amp; Monitoring</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9" /></svg>
+            </button>
+            <div class="faq-answer"><p>There will be scheduled checkpoints during the hackathon. Organizers may visit teams to monitor progress. Teams must be present and working at all checkpoints. Non-compliance may lead to disqualification.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>8. Presentation Rules</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9" /></svg>
+            </button>
+            <div class="faq-answer"><p>Each team will get a fixed time slot for final presentation. Presentation must follow the official PPT template. Live demo is highly encouraged. Questions from judges must be answered by team members only.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>9. Code of Conduct</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9" /></svg>
+            </button>
+            <div class="faq-answer"><p>Respectful behavior towards all participants, organizers, and judges is mandatory. Plagiarism, cheating, or unsportsmanlike conduct will result in immediate disqualification. Decisions by organizers and judges are final.</p></div>
+          </div>
+        </div>
+      </section>
+
       <!-- ═══════════ TAB: FAQ ═══════════ -->
       <section class="dash-tab" id="panel-faq">
         <div class="tab-header">
-          <span class="tab-label">06</span>
+          <span class="tab-label">07</span>
           <h1 class="tab-title">FAQ</h1>
           <p class="tab-subtitle">Frequently asked questions about Lunar Forge 1.0</p>
         </div>
@@ -654,8 +750,7 @@
               </svg>
             </button>
             <div class="faq-answer">
-              <p>Lunar Forge 1.0 is an 18-hour hackathon. Hacking begins at 11:00 AM on March 6 and submissions close at
-                5:00 AM on March 7, 2026.</p>
+              <p>Lunar Forge 1.0 is an 18-hour hackathon. Hacking begins at 7:00 PM on March 30 and submissions close at 1:00 PM on March 31, 2026.</p>
             </div>
           </div>
 
@@ -680,23 +775,7 @@
               </svg>
             </button>
             <div class="faq-answer">
-              <p>You need to submit a working prototype with a GitHub repository link, a project description, tech stack
-                used, and optionally a demo video and presentation slides.</p>
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">
-              <span>What are the judging criteria?</span>
-              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="6 9 12 15 18 9" />
-              </svg>
-            </button>
-            <div class="faq-answer">
-              <p>Projects are judged on: <strong>Innovation</strong> (30%), <strong>Technical Complexity</strong> (25%),
-                <strong>Design & UX</strong> (20%), <strong>Impact & Feasibility</strong> (15%), and
-                <strong>Presentation</strong> (10%).
-              </p>
+              <p>You need to submit a working prototype with a GitHub repository link, a project description, tech stack used, a demo video (mandatory), and a PPT presentation.</p>
             </div>
           </div>
 
@@ -708,8 +787,7 @@
               </svg>
             </button>
             <div class="faq-answer">
-              <p>Problem statement changes are allowed until the hacking phase begins. Once hacking starts at 11:00 AM
-                on March 6, your selected problem statement is locked.</p>
+              <p>No. Problem statement cannot be changed after registration. You must work on the PS you selected during sign-up.</p>
             </div>
           </div>
 
@@ -721,8 +799,7 @@
               </svg>
             </button>
             <div class="faq-answer">
-              <p>No restrictions! You can use any programming language, framework, API, or tool. AI-assisted coding
-                tools (Copilot, ChatGPT, etc.) are allowed but must be disclosed in your submission.</p>
+              <p>No restrictions! You can use any programming language, framework, API, or tool. AI tools are allowed and do not need to be disclosed.</p>
             </div>
           </div>
 
@@ -734,8 +811,7 @@
               </svg>
             </button>
             <div class="faq-answer">
-              <p>Late submissions will not be accepted. Make sure to submit your project before 5:00 AM on March 7. We
-                recommend submitting early and updating if needed.</p>
+              <p>Late submissions will not be accepted. Make sure to submit your project before 1:00 PM on March 31. We recommend submitting early and updating if needed.</p>
             </div>
           </div>
 
@@ -775,6 +851,15 @@
       </svg>
       <span>Timeline</span>
     </button>
+    <button class="mobile-nav-btn" data-tab="problem">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+        <polyline points="14 2 14 8 20 8" />
+        <line x1="16" y1="13" x2="8" y2="13" />
+        <line x1="16" y1="17" x2="8" y2="17" />
+      </svg>
+      <span>Problem</span>
+    </button>
     <button class="mobile-nav-btn" data-tab="submission">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
         <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
@@ -790,14 +875,22 @@
       </svg>
       <span>Team</span>
     </button>
-    <button class="mobile-nav-btn" data-tab="problem">
+    <button class="mobile-nav-btn" data-tab="rules">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
-        <polyline points="14 2 14 8 20 8" />
-        <line x1="16" y1="13" x2="8" y2="13" />
-        <line x1="16" y1="17" x2="8" y2="17" />
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
+        <line x1="16" y1="13" x2="8" y2="13"></line>
+        <line x1="16" y1="17" x2="8" y2="17"></line>
       </svg>
-      <span>Problem</span>
+      <span>Rules</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="faq">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" />
+        <line x1="12" y1="17" x2="12.01" y2="17" />
+      </svg>
+      <span>FAQ</span>
     </button>
   </nav>
 
