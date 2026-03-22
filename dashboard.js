@@ -20,7 +20,7 @@
     // ══════════════════════════════════════════════
     // ** PASTE YOUR NEW APPS SCRIPT URL HERE **
     const SUBMISSION_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz3WJYa90NAniPifnhfRI3zAFRC33Fr33_oRGGvGTf54XWSzxi63ZL4yMiFAPo9jXHBfg/exec';
-    
+
     const WHATSAPP_LINK = 'https://chat.whatsapp.com/BOVOzMeJVxmFUtDsMeDH2e?mode=hq1tcla';
     const TARGET_DATE = new Date(Date.UTC(2026, 2, 30, 13, 30, 0)); // March 30, 2026, 7:00 PM IST
     const SUBMISSION_DEADLINE = new Date(Date.UTC(2026, 2, 31, 7, 30, 0)); // March 31, 2026, 1:00 PM IST
@@ -237,7 +237,7 @@
         const btn = document.getElementById('submit-project-btn');
         const ql = document.querySelector('[data-goto="submission"]');
         const overlayText = overlay ? overlay.querySelector('.locked-overlay-text') : null;
-        
+
         if (wrapper) wrapper.classList.add('submission-disabled');
         if (overlay) {
             overlay.style.display = 'flex';
@@ -249,7 +249,7 @@
                 }
             }
         }
-        
+
         ['sub-github', 'sub-demo'].forEach(id => {
             const el = document.getElementById(id);
             if (el) el.disabled = true;
@@ -387,70 +387,70 @@
             title: 'INAUGURATION',
             desc: 'Welcome + HOD address. Rules, theme, judging criteria.',
             start: new Date(Date.UTC(2026, 2, 30, 13, 30, 0)),  // 7:00 PM IST
-            end:   new Date(Date.UTC(2026, 2, 30, 14, 0, 0)),   // 7:30 PM IST
+            end: new Date(Date.UTC(2026, 2, 30, 14, 0, 0)),   // 7:30 PM IST
         },
         {
             label: 'DAY 1 — 🕢 7:30 PM – 8:15 PM',
             title: 'GITHUB SESSION',
             desc: 'Git workflow + repo setup. Submission guidelines.',
             start: new Date(Date.UTC(2026, 2, 30, 14, 0, 0)),
-            end:   new Date(Date.UTC(2026, 2, 30, 14, 45, 0)),
+            end: new Date(Date.UTC(2026, 2, 30, 14, 45, 0)),
         },
         {
             label: 'DAY 1 — 🕗 8:15 PM – 10:00 PM',
             title: 'HACK TIME',
             desc: 'Teams start building their projects.',
             start: new Date(Date.UTC(2026, 2, 30, 14, 45, 0)),
-            end:   new Date(Date.UTC(2026, 2, 30, 16, 30, 0)),
+            end: new Date(Date.UTC(2026, 2, 30, 16, 30, 0)),
         },
         {
             label: 'DAY 1 — 🕙 10:00 PM – 10:30 PM',
             title: 'GAME 1',
             desc: 'Icebreaker / fun reset to recharge.',
             start: new Date(Date.UTC(2026, 2, 30, 16, 30, 0)),
-            end:   new Date(Date.UTC(2026, 2, 30, 17, 0, 0)),
+            end: new Date(Date.UTC(2026, 2, 30, 17, 0, 0)),
         },
         {
             label: 'DAY 1 — 🕥 10:30 PM – 11:00 PM',
             title: 'HACK TIME',
             desc: 'Short continuation before review.',
             start: new Date(Date.UTC(2026, 2, 30, 17, 0, 0)),
-            end:   new Date(Date.UTC(2026, 2, 30, 17, 30, 0)),
+            end: new Date(Date.UTC(2026, 2, 30, 17, 30, 0)),
         },
         {
             label: 'DAY 1 — 🕚 11:00 PM – 12:00 AM',
             title: 'REVIEW',
             desc: 'Teams present progress. Quick judge feedback.',
             start: new Date(Date.UTC(2026, 2, 30, 17, 30, 0)),
-            end:   new Date(Date.UTC(2026, 2, 30, 18, 30, 0)),
+            end: new Date(Date.UTC(2026, 2, 30, 18, 30, 0)),
         },
         {
             label: 'DAY 2 — 🕛 12:00 AM – 12:30 AM',
             title: 'HACK TIME',
             desc: 'Apply feedback / continue work.',
             start: new Date(Date.UTC(2026, 2, 30, 18, 30, 0)),
-            end:   new Date(Date.UTC(2026, 2, 30, 19, 0, 0)),
+            end: new Date(Date.UTC(2026, 2, 30, 19, 0, 0)),
         },
         {
             label: 'DAY 2 — 🕧 12:30 AM – 1:00 AM',
             title: 'GAME 2',
             desc: 'Energy boost before the long stretch.',
             start: new Date(Date.UTC(2026, 2, 30, 19, 0, 0)),
-            end:   new Date(Date.UTC(2026, 2, 30, 19, 30, 0)),
+            end: new Date(Date.UTC(2026, 2, 30, 19, 30, 0)),
         },
         {
             label: 'DAY 2 — 🌙 1:00 AM – 12:30 PM',
             title: 'CONTINUOUS HACK TIME',
             desc: 'No interruptions. Deep work phase.',
             start: new Date(Date.UTC(2026, 2, 30, 19, 30, 0)),
-            end:   new Date(Date.UTC(2026, 2, 31, 7, 0, 0)),
+            end: new Date(Date.UTC(2026, 2, 31, 7, 0, 0)),
         },
         {
             label: 'DAY 2 — 🕧 12:30 PM – 1:00 PM',
             title: 'FINAL GIT PUSH',
             desc: 'Final submission. README + demo check.',
             start: new Date(Date.UTC(2026, 2, 31, 7, 0, 0)),
-            end:   new Date(Date.UTC(2026, 2, 31, 7, 30, 0)),
+            end: new Date(Date.UTC(2026, 2, 31, 7, 30, 0)),
         },
     ];
 
@@ -563,7 +563,7 @@
     function populateDashboard() {
         // We already verified sessionData exists at the top
         const raw = sessionData;
-        
+
         try {
             const data = JSON.parse(raw);
 
@@ -653,7 +653,7 @@
                 if (problemTitle && psParts.length > 1) {
                     const titleText = psParts.slice(1).join(':').trim();
                     problemTitle.textContent = titleText;
-                    
+
                     if (problemDesc && problemDescriptions[titleText]) {
                         problemDesc.textContent = problemDescriptions[titleText];
                     } else if (problemDesc) {
@@ -667,7 +667,7 @@
 
                 const problemId = document.getElementById('problem-id-display');
                 if (problemId) problemId.textContent = 'OPEN';
-                
+
                 const problemDesc = document.getElementById('problem-desc-display');
                 if (problemDesc) problemDesc.textContent = "A custom open innovation project defined by your team during registration.";
             }
@@ -721,6 +721,12 @@
             const finalTeamId = data['teamId'] || defaultId;
             if (teamIdDisplay) teamIdDisplay.textContent = finalTeamId;
 
+            const ovTeamId = document.getElementById('overview-team-id');
+            if (ovTeamId) ovTeamId.textContent = finalTeamId;
+
+            const tmTeamId = document.getElementById('teammates-team-id');
+            if (tmTeamId) tmTeamId.textContent = finalTeamId;
+
             // Pre-fill read-only submission fields
             const subTeamId = document.getElementById('sub-team-id');
             if (subTeamId) subTeamId.value = finalTeamId;
@@ -762,7 +768,7 @@
 
             const submitBtn = document.getElementById('submit-project-btn');
             const submitBtnText = document.getElementById('submit-btn-text');
-            
+
             if (submitBtn) submitBtn.disabled = true;
             if (submitBtnText) submitBtnText.textContent = 'SUBMITTING...';
 
@@ -786,7 +792,7 @@
                         body: JSON.stringify(submissionData),
                         redirect: 'follow'
                     });
-                    
+
                     if (response.ok && response.type !== 'opaque') {
                         try {
                             const resJson = await response.json();
@@ -941,20 +947,20 @@
     // ══════════════════════════════════════════════
     (function initPPTSubmission() {
         // ── DOM refs ────────────────────────────────
-        const pptFileInput      = document.getElementById('ppt-file-input');
-        const pptDropzone       = document.getElementById('ppt-dropzone');
-        const pptBrowseBtn      = document.getElementById('ppt-browse-btn');
-        const pptChosenFile     = document.getElementById('ppt-chosen-file');
-        const pptChosenName     = document.getElementById('ppt-chosen-name');
-        const pptClearBtn       = document.getElementById('ppt-clear-btn');
-        const pptUploadBtn      = document.getElementById('ppt-upload-btn');
-        const pptUploadBtnText  = document.getElementById('ppt-upload-btn-text');
-        const pptStatusBadge    = document.getElementById('ppt-status-badge');
-        const pptSuccessMsg     = document.getElementById('ppt-success-msg');
-        const pptDriveLink      = document.getElementById('ppt-drive-link');
-        const pptErrorMsg       = document.getElementById('ppt-error-msg');
-        const pptErrorText      = document.getElementById('ppt-error-text');
-        const pptMobFab         = document.getElementById('ppt-mob-fab');
+        const pptFileInput = document.getElementById('ppt-file-input');
+        const pptDropzone = document.getElementById('ppt-dropzone');
+        const pptBrowseBtn = document.getElementById('ppt-browse-btn');
+        const pptChosenFile = document.getElementById('ppt-chosen-file');
+        const pptChosenName = document.getElementById('ppt-chosen-name');
+        const pptClearBtn = document.getElementById('ppt-clear-btn');
+        const pptUploadBtn = document.getElementById('ppt-upload-btn');
+        const pptUploadBtnText = document.getElementById('ppt-upload-btn-text');
+        const pptStatusBadge = document.getElementById('ppt-status-badge');
+        const pptSuccessMsg = document.getElementById('ppt-success-msg');
+        const pptDriveLink = document.getElementById('ppt-drive-link');
+        const pptErrorMsg = document.getElementById('ppt-error-msg');
+        const pptErrorText = document.getElementById('ppt-error-text');
+        const pptMobFab = document.getElementById('ppt-mob-fab');
 
         if (!pptFileInput) return; // PPT section not present
 
@@ -1046,7 +1052,7 @@
             } catch (err) {
                 console.warn('[Lunar Forge] PPT status fetch failed:', err.message);
             }
-            
+
             // Check PPT deadline onload
             if (Date.now() > PPT_DEADLINE.getTime()) {
                 showPPTError("PPT Submissions Closed (March 28, 8:00 PM IST).");
@@ -1096,16 +1102,16 @@
                 const base64Data = await fileToBase64(file);
 
                 const payload = JSON.stringify({
-                    action    : 'uploadPPT',
-                    teamId    : pptTeamId,
+                    action: 'uploadPPT',
+                    teamId: pptTeamId,
                     fileBase64: base64Data,
-                    fileName  : file.name,
-                    mimeType  : file.type || 'application/octet-stream'
+                    fileName: file.name,
+                    mimeType: file.type || 'application/octet-stream'
                 });
 
                 const res = await fetch(SUBMISSION_APPS_SCRIPT_URL, {
-                    method  : 'POST',
-                    body    : payload,
+                    method: 'POST',
+                    body: payload,
                     redirect: 'follow'
                 });
 
@@ -1193,6 +1199,13 @@
     // ══════════════════════════════════════════════
     // INIT
     // ══════════════════════════════════════════════
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+    const contentArea = document.getElementById('dash-content');
+    if (contentArea) contentArea.scrollTop = 0;
+
     populateDashboard();
     checkExistingSubmission();
     handleHash();
