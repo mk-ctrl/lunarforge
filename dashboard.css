@@ -1796,6 +1796,7 @@ button {
         gap: 6px;
         padding-bottom: 0;
     }
+
     .teammate-card {
         min-width: 0;
         padding: 12px 4px;
@@ -1804,19 +1805,25 @@ button {
         text-align: center;
         gap: 6px;
     }
+
     .teammate-avatar {
         width: 32px;
         height: 32px;
         min-width: 32px;
         border-radius: 10px;
     }
+
     .teammate-name {
         font-size: 0.75rem;
         word-break: break-word;
     }
-    .teammate-role, .teammate-batch, .teammate-phone {
+
+    .teammate-role,
+    .teammate-batch,
+    .teammate-phone {
         font-size: 0.55rem;
     }
+
     .teammate-status {
         margin-top: 4px;
         font-size: 0.55rem;
@@ -2334,7 +2341,7 @@ button {
 
 @media (max-width: 767px) {
     .ppt-mob-fab {
-        display: flex;
+        display: none;
         align-items: center;
         gap: 10px;
         position: fixed;
@@ -2353,7 +2360,11 @@ button {
         text-transform: uppercase;
         cursor: pointer;
         box-shadow: 0 6px 28px rgba(0, 212, 255, 0.4);
-        animation: fabEntrance 0.6s 0.8s var(--ease-out) both;
+        animation: fabEntrance 0.6s var(--ease-out) both;
+    }
+
+    .ppt-mob-fab.show-fab {
+        display: flex;
     }
 
     @keyframes fabEntrance {

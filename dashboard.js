@@ -1032,6 +1032,7 @@
         // ── Fetch PPT status on page load ────────────
         async function fetchPPTStatus() {
             if (!pptTeamId) return;
+            let hasPptSubmit = false;
             try {
                 const url = new URL(SUBMISSION_APPS_SCRIPT_URL);
                 url.searchParams.set('action', 'getPPTStatus');
@@ -1042,6 +1043,7 @@
                     const data = await res.json();
                     if (data && data.hasPPT) {
                         showPPTSuccess(data.fileUrl || '');
+                        hasPptSubmit = true;
                     }
                     if (data && data.hasOwnProperty('isShortlisted')) {
                         isTeamShortlisted = data.isShortlisted;
@@ -1064,6 +1066,9 @@
                 if (pptFileInput) pptFileInput.disabled = true;
                 if (pptClearBtn) pptClearBtn.style.display = 'none';
                 if (pptBrowseBtn) pptBrowseBtn.style.display = 'none';
+            } else if (!hasPptSubmit) {
+                // If not submitted & deadline is active, elegantly reveal the FAB!
+                if (pptMobFab) pptMobFab.classList.add('show-fab');
             }
         }
 
