@@ -2068,6 +2068,36 @@ button {
     font-weight: 300;
 }
 
+.ppt-format-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    padding: 6px 12px;
+    background: rgba(255, 171, 0, 0.08);
+    border: 1px solid rgba(255, 171, 0, 0.4);
+    color: #ffab00;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    text-decoration: none;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 0 18px rgba(255, 171, 0, 0.25);
+    transition: all 0.3s ease;
+}
+
+.ppt-format-icon {
+    width: 14px;
+    height: 14px;
+}
+
+.ppt-format-btn:hover {
+    background: #ffab00;
+    color: #0b101e;
+    border-color: #ffab00;
+    box-shadow: 0 0 24px rgba(255, 171, 0, 0.7);
+}
+
 /* ── Status badges ─────────────────────────── */
 .ppt-status-badge {
     display: inline-flex;
