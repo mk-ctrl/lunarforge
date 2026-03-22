@@ -149,6 +149,12 @@
         });
     });
 
+    // Mobile PPT FAB click handler
+    const pptMobFab = document.getElementById('ppt-mob-fab');
+    if (pptMobFab) {
+        pptMobFab.addEventListener('click', () => switchTab('submission'));
+    }
+
     // ══════════════════════════════════════════════
     // FAQ ACCORDION
     // ══════════════════════════════════════════════
