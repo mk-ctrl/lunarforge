@@ -9,7 +9,7 @@
     // CONFIGURATION
     // ══════════════════════════════════════════════
     // Paste your deployed Google Apps Script URL here:
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymTF_DGFXvQlOYDY9ZjxD6wuOos6mRhlgRP7OBJL3QrCrQMEFT1ZiUp1M_iYs6tClr/exec';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-tt4Ikp71iqZvrvWjB-13tnhTAypVij7gKEckUXzDOmRRJ7VzxX3kXs-qx5hFP6A8/exec';
 
     // WhatsApp channel link (for team leaders after registration):
     const WHATSAPP_LINK = 'https://chat.whatsapp.com/BOVOzMeJVxmFUtDsMeDH2e?mode=hq1tcla';
@@ -238,6 +238,10 @@
         return /^\d{10}$/.test(value);
     }
 
+    function validateEmail(value) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    }
+
     function validateForm() {
         clearErrors();
         let valid = true;
@@ -275,6 +279,13 @@
             valid = false;
         }
 
+        const leadEmail = document.getElementById('lead-email').value.trim();
+        if (!leadEmail) { showError('lead-email-error', 'Email is required'); valid = false; }
+        else if (!validateEmail(leadEmail)) {
+            showError('lead-email-error', 'Must be a valid email address');
+            valid = false;
+        }
+
         // Members (if duo or trio)
         if (teamSize >= 2) {
             const m1Name = document.getElementById('m1-name').value.trim();
@@ -291,6 +302,13 @@
             if (!m1Phone) { showError('m1-phone-error', 'Phone number is required'); valid = false; }
             else if (!validatePhone(m1Phone)) {
                 showError('m1-phone-error', 'Must be a valid 10-digit number');
+                valid = false;
+            }
+
+            const m1Email = document.getElementById('m1-email').value.trim();
+            if (!m1Email) { showError('m1-email-error', 'Email is required'); valid = false; }
+            else if (!validateEmail(m1Email)) {
+                showError('m1-email-error', 'Must be a valid email address');
                 valid = false;
             }
         }
@@ -310,6 +328,13 @@
             if (!m2Phone) { showError('m2-phone-error', 'Phone number is required'); valid = false; }
             else if (!validatePhone(m2Phone)) {
                 showError('m2-phone-error', 'Must be a valid 10-digit number');
+                valid = false;
+            }
+
+            const m2Email = document.getElementById('m2-email').value.trim();
+            if (!m2Email) { showError('m2-email-error', 'Email is required'); valid = false; }
+            else if (!validateEmail(m2Email)) {
+                showError('m2-email-error', 'Must be a valid email address');
                 valid = false;
             }
         }
@@ -381,12 +406,15 @@
             leadName: document.getElementById('lead-name').value.trim(),
             leadBatch: document.getElementById('lead-batch').value.trim(),
             leadPhone: document.getElementById('lead-phone').value.trim(),
+            leadEmail: document.getElementById('lead-email').value.trim(),
             m1Name: '',
             m1Batch: '',
             m1Phone: '',
+            m1Email: '',
             m2Name: '',
             m2Batch: '',
             m2Phone: '',
+            m2Email: '',
             domain: document.getElementById('domain').value,
             problemStatement: ps === 'others'
                 ? 'Others: ' + document.getElementById('custom-ps').value.trim()
@@ -397,12 +425,14 @@
             data.m1Name = document.getElementById('m1-name').value.trim();
             data.m1Batch = document.getElementById('m1-batch').value.trim();
             data.m1Phone = document.getElementById('m1-phone').value.trim();
+            data.m1Email = document.getElementById('m1-email').value.trim();
         }
 
         if (teamSize >= 3) {
             data.m2Name = document.getElementById('m2-name').value.trim();
             data.m2Batch = document.getElementById('m2-batch').value.trim();
             data.m2Phone = document.getElementById('m2-phone').value.trim();
+            data.m2Email = document.getElementById('m2-email').value.trim();
         }
 
         return data;

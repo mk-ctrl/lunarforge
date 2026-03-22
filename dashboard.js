@@ -19,7 +19,7 @@
     // CONFIGURATION
     // ══════════════════════════════════════════════
     // ** PASTE YOUR NEW APPS SCRIPT URL HERE **
-    const SUBMISSION_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby7ghxX8IomwUeXAVA7hgKYg3mURyxM_1XmqeFHff5tj-XIiLs_AS9LDy2LsKNkiTD8sQ/exec';
+    const SUBMISSION_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz3WJYa90NAniPifnhfRI3zAFRC33Fr33_oRGGvGTf54XWSzxi63ZL4yMiFAPo9jXHBfg/exec';
     
     const WHATSAPP_LINK = 'https://chat.whatsapp.com/BOVOzMeJVxmFUtDsMeDH2e?mode=hq1tcla';
     const TARGET_DATE = new Date(Date.UTC(2026, 2, 30, 13, 30, 0)); // March 30, 2026, 7:00 PM IST
@@ -709,6 +709,246 @@
             window.location.href = 'index.html';
         });
     }
+
+    // ══════════════════════════════════════════════
+    // PPT SUBMISSION
+    // ══════════════════════════════════════════════
+    (function initPPTSubmission() {
+        // ── DOM refs ────────────────────────────────
+        const pptFileInput      = document.getElementById('ppt-file-input');
+        const pptDropzone       = document.getElementById('ppt-dropzone');
+        const pptBrowseBtn      = document.getElementById('ppt-browse-btn');
+        const pptChosenFile     = document.getElementById('ppt-chosen-file');
+        const pptChosenName     = document.getElementById('ppt-chosen-name');
+        const pptClearBtn       = document.getElementById('ppt-clear-btn');
+        const pptUploadBtn      = document.getElementById('ppt-upload-btn');
+        const pptUploadBtnText  = document.getElementById('ppt-upload-btn-text');
+        const pptStatusBadge    = document.getElementById('ppt-status-badge');
+        const pptSuccessMsg     = document.getElementById('ppt-success-msg');
+        const pptDriveLink      = document.getElementById('ppt-drive-link');
+        const pptErrorMsg       = document.getElementById('ppt-error-msg');
+        const pptErrorText      = document.getElementById('ppt-error-text');
+        const pptMobFab         = document.getElementById('ppt-mob-fab');
+
+        if (!pptFileInput) return; // PPT section not present
+
+        // ── Get teamId from session ──────────────────
+        let pptTeamId = '';
+        try {
+            const sd = JSON.parse(sessionData || '{}');
+            pptTeamId = sd.teamId || sd['teamId'] || '';
+            // Fallback: try sidebar element
+            if (!pptTeamId) {
+                const el = document.getElementById('sidebar-team-id');
+                if (el) pptTeamId = el.textContent.trim();
+            }
+        } catch (e) { /* ignore */ }
+
+        // ── Helpers ──────────────────────────────────
+        function setPPTBadge(uploaded) {
+            if (!pptStatusBadge) return;
+            pptStatusBadge.className = 'ppt-status-badge ' + (uploaded ? 'ppt-badge-uploaded' : 'ppt-badge-pending');
+            pptStatusBadge.innerHTML = uploaded
+                ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg> Uploaded`
+                : `<svg viewBox="0 0 10 10" width="8" height="8" fill="currentColor"><circle cx="5" cy="5" r="5"/></svg> Pending`;
+        }
+
+        function showPPTSuccess(fileUrl) {
+            if (pptSuccessMsg) pptSuccessMsg.style.display = 'flex';
+            if (pptDriveLink && fileUrl) {
+                pptDriveLink.href = fileUrl;
+                pptDriveLink.textContent = 'View / Download →';
+            }
+            if (pptErrorMsg) pptErrorMsg.style.display = 'none';
+            if (pptUploadBtnText) pptUploadBtnText.textContent = 'Replace PPT';
+            setPPTBadge(true);
+        }
+
+        function showPPTError(msg) {
+            if (pptErrorMsg) pptErrorMsg.style.display = 'flex';
+            if (pptErrorText) pptErrorText.textContent = msg || 'Upload failed. Please try again.';
+            if (pptSuccessMsg) pptSuccessMsg.style.display = 'none';
+        }
+
+        function hidePPTMessages() {
+            if (pptSuccessMsg) pptSuccessMsg.style.display = 'none';
+            if (pptErrorMsg) pptErrorMsg.style.display = 'none';
+        }
+
+        function setSelectedFile(file) {
+            if (!file) {
+                pptChosenFile.style.display = 'none';
+                pptDropzone.style.display = '';
+                pptFileInput.value = '';
+                return;
+            }
+            pptChosenName.textContent = file.name;
+            pptChosenFile.style.display = 'flex';
+            pptDropzone.style.display = 'none';
+        }
+
+        function setUploading(loading) {
+            if (!pptUploadBtn) return;
+            pptUploadBtn.disabled = loading;
+            if (pptUploadBtnText) {
+                pptUploadBtnText.textContent = loading ? 'Uploading…' : (pptUploadBtnText.textContent === 'Uploading…' ? 'Upload PPT' : pptUploadBtnText.textContent);
+            }
+            if (loading && pptUploadBtnText) pptUploadBtnText.textContent = 'Uploading…';
+        }
+
+        // ── Fetch PPT status on page load ────────────
+        async function fetchPPTStatus() {
+            if (!pptTeamId) return;
+            try {
+                const url = new URL(SUBMISSION_APPS_SCRIPT_URL);
+                url.searchParams.set('action', 'getPPTStatus');
+                url.searchParams.set('teamId', pptTeamId);
+
+                const res = await fetch(url.toString(), { method: 'GET', redirect: 'follow' });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.hasPPT) {
+                        showPPTSuccess(data.fileUrl || '');
+                    }
+                }
+            } catch (err) {
+                console.warn('[Lunar Forge] PPT status fetch failed:', err.message);
+            }
+        }
+
+        // ── Helpers ──────────────────────────────────────────
+        /** Read a File object as a Base64 string (no data-URI prefix). */
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onerror = () => reject(new Error('File read failed.'));
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // ── Upload handler ────────────────────────────────────
+        async function uploadPPT() {
+            const file = pptFileInput.files[0];
+            if (!file) {
+                showPPTError('Please select a file before uploading.');
+                return;
+            }
+            if (!pptTeamId) {
+                showPPTError('Session error: Team ID not found. Please log out and log in again.');
+                return;
+            }
+
+            hidePPTMessages();
+            setUploading(true);
+
+            try {
+                // Convert file → Base64 and POST as JSON (Apps Script can't read raw multipart)
+                const base64Data = await fileToBase64(file);
+
+                const payload = JSON.stringify({
+                    action    : 'uploadPPT',
+                    teamId    : pptTeamId,
+                    fileBase64: base64Data,
+                    fileName  : file.name,
+                    mimeType  : file.type || 'application/octet-stream'
+                });
+
+                const res = await fetch(SUBMISSION_APPS_SCRIPT_URL, {
+                    method  : 'POST',
+                    body    : payload,
+                    redirect: 'follow'
+                });
+
+                if (res.ok) {
+                    let result = null;
+                    try { result = await res.json(); } catch (_) { /* opaque */ }
+
+                    if (result && result.success) {
+                        showPPTSuccess(result.fileUrl || '');
+                        setSelectedFile(null);
+                    } else if (result && (result.error || result.message)) {
+                        showPPTError(result.error || result.message);
+                    } else {
+                        // Opaque response — assume success
+                        showPPTSuccess('');
+                        setSelectedFile(null);
+                    }
+                } else {
+                    showPPTError(`Server returned ${res.status}. Please try again.`);
+                }
+            } catch (err) {
+                console.error('[Lunar Forge] PPT upload error:', err);
+                showPPTError('Upload failed: ' + err.message);
+            } finally {
+                pptUploadBtn.disabled = false;
+                if (pptUploadBtnText && pptUploadBtnText.textContent === 'Uploading…') {
+                    pptUploadBtnText.textContent = 'Upload PPT';
+                }
+            }
+        }
+
+        // ── Wire up UI events ────────────────────────
+        // Browse button → open file picker
+        pptBrowseBtn && pptBrowseBtn.addEventListener('click', () => pptFileInput.click());
+
+        // File picked via dialog
+        pptFileInput.addEventListener('change', () => {
+            setSelectedFile(pptFileInput.files[0] || null);
+            hidePPTMessages();
+        });
+
+        // Clear selected file
+        pptClearBtn && pptClearBtn.addEventListener('click', () => setSelectedFile(null));
+
+        // Drag & drop
+        pptDropzone && pptDropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            pptDropzone.classList.add('ppt-dropzone-over');
+        });
+        pptDropzone && pptDropzone.addEventListener('dragleave', () => {
+            pptDropzone.classList.remove('ppt-dropzone-over');
+        });
+        pptDropzone && pptDropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            pptDropzone.classList.remove('ppt-dropzone-over');
+            const dt = e.dataTransfer;
+            if (dt && dt.files.length) {
+                const f = dt.files[0];
+                // Validate type
+                const ok = /\.(pptx|ppt|pdf)$/i.test(f.name);
+                if (!ok) { showPPTError('Please drop a .pptx, .ppt, or .pdf file.'); return; }
+                // Inject file into hidden input (DataTransfer trick)
+                const transfer = new DataTransfer();
+                transfer.items.add(f);
+                pptFileInput.files = transfer.files;
+                setSelectedFile(f);
+                hidePPTMessages();
+            }
+        });
+
+        // Upload button
+        pptUploadBtn && pptUploadBtn.addEventListener('click', uploadPPT);
+
+        // Mobile FAB — switch to submission tab then scroll to PPT card
+        if (pptMobFab) {
+            pptMobFab.addEventListener('click', () => {
+                switchTab('submission');
+                // Give the tab a moment to become visible, then scroll
+                setTimeout(() => {
+                    const card = document.getElementById('ppt-submission-card');
+                    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // If no file chosen yet, open the file picker
+                    if (!pptFileInput.files.length) {
+                        setTimeout(() => pptFileInput.click(), 400);
+                    }
+                }, 120);
+            });
+        }
+
+        // Fetch status immediately
+        fetchPPTStatus();
+    })();
 
     // ══════════════════════════════════════════════
     // INIT

@@ -482,102 +482,161 @@
         <div class="tab-header">
           <span class="tab-label">04</span>
           <h1 class="tab-title">SUBMISSION</h1>
-          <p class="tab-subtitle">Submit your project before the deadline</p>
+          <p class="tab-subtitle">Submit your PPT and project before the deadline</p>
         </div>
 
-        <!-- Submission Status Banner -->
-        <div class="submission-status-banner" id="submission-banner">
-          <div class="submission-status-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-              style="width:24px;height:24px;">
-              <circle cx="12" cy="12" r="10" />
-              <polyline points="12 6 12 12 16 14" />
-            </svg>
-          </div>
-          <div class="submission-status-text">
-            <h3>SUBMISSION PENDING</h3>
-            <p>Fill out your GitHub URL and Video URL below to submit your project to the judges. You can update your submission later.</p>
-          </div>
-        </div>
-
-        <!-- Deadline Countdown -->
-        <div class="submission-deadline">
-          <span class="overview-section-label">SUBMISSION WINDOW CLOSES IN</span>
-          <div class="countdown-row compact">
-            <div class="cd-unit small">
-              <span class="cd-num" id="sub-cd-days">00</span>
-              <span class="cd-lbl">DAYS</span>
-            </div>
-            <span class="cd-sep">:</span>
-            <div class="cd-unit small">
-              <span class="cd-num" id="sub-cd-hours">00</span>
-              <span class="cd-lbl">HRS</span>
-            </div>
-            <span class="cd-sep">:</span>
-            <div class="cd-unit small">
-              <span class="cd-num" id="sub-cd-mins">00</span>
-              <span class="cd-lbl">MIN</span>
-            </div>
-            <span class="cd-sep">:</span>
-            <div class="cd-unit small">
-              <span class="cd-num" id="sub-cd-secs">00</span>
-              <span class="cd-lbl">SEC</span>
-            </div>
-          </div>
-          <p class="cd-date" style="margin-top: 12px;">MARCH 31, 2026 — 1:00 PM IST</p>
-        </div>
-
-        <!-- Submission Form -->
-        <div class="submission-form-wrapper" id="submission-wrapper">
-          <div class="submission-locked-overlay" id="submission-locked-overlay" style="display: none;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-              style="width:40px;height:40px;color:var(--text-muted);">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-              <path d="M7 11V7a5 5 0 0110 0v4" />
-            </svg>
-            <span class="locked-overlay-text">SUBMISSIONS OPEN WHEN THE HACKATHON BEGINS</span>
-          </div>
-          <form class="submission-form" id="submission-form">
-            
-            <div class="sub-form-row">
-              <div class="sub-form-section">
-                <label class="sub-form-label">TEAM NAME</label>
-                <input type="text" class="sub-form-input" id="sub-team-name" readonly />
-              </div>
-              <div class="sub-form-section">
-                <label class="sub-form-label">TEAM ID</label>
-                <input type="text" class="sub-form-input" id="sub-team-id" readonly />
-              </div>
-            </div>
-
-            <div class="sub-form-row">
-              <div class="sub-form-section">
-                <label class="sub-form-label">DOMAIN</label>
-                <input type="text" class="sub-form-input" id="sub-domain" readonly />
-              </div>
-              <div class="sub-form-section">
-                <label class="sub-form-label">PROBLEM STATEMENT</label>
-                <input type="text" class="sub-form-input" id="sub-problem" readonly />
-              </div>
-            </div>
-
-            <div class="sub-form-section">
-              <label class="sub-form-label">GITHUB REPO URL <span class="required-star">*</span></label>
-              <input type="url" class="sub-form-input" id="sub-github" placeholder="https://github.com/..." required />
-            </div>
-
-            <div class="sub-form-section">
-              <label class="sub-form-label">VIDEO URL <span class="required-star">*</span></label>
-              <input type="url" class="sub-form-input" id="sub-demo" placeholder="https://youtube.com/..." required />
-            </div>
-
-            <button type="submit" class="submit-project-btn" id="submit-project-btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="btn-icon">
-                <polyline points="20 6 9 17 4 12" />
+        <!-- ─────────── PPT SUBMISSION (always unlocked) ─────────── -->
+        <div class="ppt-submission-card" id="ppt-submission-card">
+          <div class="ppt-card-header">
+            <div class="ppt-card-header-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="ppt-card-icon">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <rect x="8" y="13" width="8" height="1.5" rx=".75"/>
+                <rect x="8" y="16" width="5" height="1.5" rx=".75"/>
               </svg>
-              <span id="submit-btn-text">SUBMIT PROJECT</span>
-            </button>
-          </form>
+              <div>
+                <h2 class="ppt-card-title">PPT Submission <span class="ppt-required-tag">Required</span></h2>
+                <p class="ppt-card-subtitle">Upload your presentation (.pptx, .ppt, or .pdf)</p>
+              </div>
+            </div>
+            <!-- Status badge — rendered by JS -->
+            <span class="ppt-status-badge ppt-badge-pending" id="ppt-status-badge">
+              <svg viewBox="0 0 10 10" width="8" height="8" fill="currentColor"><circle cx="5" cy="5" r="5"/></svg>
+              Pending
+            </span>
+          </div>
+
+          <!-- Success message (hidden until upload) -->
+          <div class="ppt-success-msg" id="ppt-success-msg" style="display:none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px;height:18px;flex-shrink:0;">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            <span>PPT uploaded successfully! &nbsp;<a href="#" id="ppt-drive-link" target="_blank" rel="noopener">View / Download →</a></span>
+          </div>
+
+          <!-- Error message (hidden until error) -->
+          <div class="ppt-error-msg" id="ppt-error-msg" style="display:none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <span id="ppt-error-text">Upload failed. Please try again.</span>
+          </div>
+
+          <!-- Upload area -->
+          <div class="ppt-upload-area" id="ppt-upload-area">
+            <input type="file" id="ppt-file-input" accept=".pptx,.ppt,.pdf" style="display:none;" />
+            <div class="ppt-dropzone" id="ppt-dropzone">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:36px;height:36px;color:var(--accent-cyan);margin-bottom:10px;">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+              <p class="ppt-dropzone-text">Drag & drop your file here, or</p>
+              <button type="button" class="ppt-browse-btn" id="ppt-browse-btn">Browse File</button>
+              <p class="ppt-dropzone-hint">.pptx · .ppt · .pdf &nbsp;·&nbsp; Max 50 MB</p>
+            </div>
+            <!-- Chosen file name display -->
+            <div class="ppt-chosen-file" id="ppt-chosen-file" style="display:none;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:16px;height:16px;color:var(--accent-cyan);flex-shrink:0;">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/>
+              </svg>
+              <span id="ppt-chosen-name">file.pptx</span>
+              <button type="button" class="ppt-clear-btn" id="ppt-clear-btn" aria-label="Remove file">✕</button>
+            </div>
+          </div>
+
+          <button type="button" class="ppt-upload-btn" id="ppt-upload-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <span id="ppt-upload-btn-text">Upload PPT</span>
+          </button>
+        </div>
+
+        <!-- ─────────── FINAL SUBMISSION ─────────── -->
+        <div class="final-submission-outer">
+          <h2 class="final-submission-heading">Final Submission <span class="final-sub-heading-tag">(GitHub Repo + Demo Video)</span></h2>
+
+          <!-- Submission Status Banner -->
+          <div class="submission-status-banner" id="submission-banner">
+            <div class="submission-status-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                style="width:24px;height:24px;">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+            </div>
+            <div class="submission-status-text">
+              <h3>SUBMISSION PENDING</h3>
+              <p>Fill out your GitHub URL and Video URL below to submit your project to the judges. You can update your submission later.</p>
+            </div>
+          </div>
+
+          <!-- Deadline Countdown -->
+          <div class="submission-deadline">
+            <span class="overview-section-label">SUBMISSION WINDOW CLOSES IN</span>
+            <div class="countdown-row compact">
+              <div class="cd-unit small"><span class="cd-num" id="sub-cd-days">00</span><span class="cd-lbl">DAYS</span></div>
+              <span class="cd-sep">:</span>
+              <div class="cd-unit small"><span class="cd-num" id="sub-cd-hours">00</span><span class="cd-lbl">HRS</span></div>
+              <span class="cd-sep">:</span>
+              <div class="cd-unit small"><span class="cd-num" id="sub-cd-mins">00</span><span class="cd-lbl">MIN</span></div>
+              <span class="cd-sep">:</span>
+              <div class="cd-unit small"><span class="cd-num" id="sub-cd-secs">00</span><span class="cd-lbl">SEC</span></div>
+            </div>
+            <p class="cd-date" style="margin-top: 12px;">MARCH 31, 2026 — 1:00 PM IST</p>
+          </div>
+
+          <!-- Submission Form Wrapper -->
+          <div class="submission-form-wrapper" id="submission-wrapper">
+            <div class="submission-locked-overlay" id="submission-locked-overlay" style="display: none;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                style="width:40px;height:40px;color:var(--text-muted);">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0110 0v4" />
+              </svg>
+              <span class="locked-overlay-text">SUBMISSIONS OPEN WHEN THE HACKATHON BEGINS</span>
+            </div>
+            <form class="submission-form" id="submission-form">
+              <div class="sub-form-row">
+                <div class="sub-form-section">
+                  <label class="sub-form-label">TEAM NAME</label>
+                  <input type="text" class="sub-form-input" id="sub-team-name" readonly />
+                </div>
+                <div class="sub-form-section">
+                  <label class="sub-form-label">TEAM ID</label>
+                  <input type="text" class="sub-form-input" id="sub-team-id" readonly />
+                </div>
+              </div>
+              <div class="sub-form-row">
+                <div class="sub-form-section">
+                  <label class="sub-form-label">DOMAIN</label>
+                  <input type="text" class="sub-form-input" id="sub-domain" readonly />
+                </div>
+                <div class="sub-form-section">
+                  <label class="sub-form-label">PROBLEM STATEMENT</label>
+                  <input type="text" class="sub-form-input" id="sub-problem" readonly />
+                </div>
+              </div>
+              <div class="sub-form-section">
+                <label class="sub-form-label">GITHUB REPO URL <span class="required-star">*</span></label>
+                <input type="url" class="sub-form-input" id="sub-github" placeholder="https://github.com/..." required />
+              </div>
+              <div class="sub-form-section">
+                <label class="sub-form-label">VIDEO URL <span class="required-star">*</span></label>
+                <input type="url" class="sub-form-input" id="sub-demo" placeholder="https://youtube.com/..." required />
+              </div>
+              <button type="submit" class="submit-project-btn" id="submit-project-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="btn-icon">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+                <span id="submit-btn-text">SUBMIT PROJECT</span>
+              </button>
+            </form>
+          </div>
         </div>
       </section>
 
@@ -819,6 +878,17 @@
       <span>FAQ</span>
     </button>
   </nav>
+
+  <!-- ═══════════════ MOBILE PPT FAB ═══════════════ -->
+  <!-- Only visible on mobile (< 768 px) via CSS -->
+  <button class="ppt-mob-fab" id="ppt-mob-fab" aria-label="Upload PPT">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;">
+      <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+      <polyline points="17 8 12 3 7 8"/>
+      <line x1="12" y1="3" x2="12" y2="15"/>
+    </svg>
+    <span>Upload PPT</span>
+  </button>
 
   <script src="dashboard.js"></script>
 </body>
