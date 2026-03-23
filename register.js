@@ -9,7 +9,7 @@
     // CONFIGURATION
     // ══════════════════════════════════════════════
     // Paste your deployed Google Apps Script URL here:
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzCfFTAEbjqQwjGTC7IpPs_YJk1hmPGx7iBWuErE7hsXpSCptd5fHNym85E5zAyXvKPAQ/exec';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-tt4Ikp71iqZvrvWjB-13tnhTAypVij7gKEckUXzDOmRRJ7VzxX3kXs-qx5hFP6A8/exec';
 
     // WhatsApp channel link (for team leaders after registration):
     const WHATSAPP_LINK = 'https://chat.whatsapp.com/BOVOzMeJVxmFUtDsMeDH2e?mode=hq1tcla';
@@ -597,6 +597,21 @@
     }
 
     // ══════════════════════════════════════════════
+    // LOCAL CSV BACKUP
+    // ══════════════════════════════════════════════
+    function saveRegistrationToLocalCSV(data) {
+        try {
+            fetch('/save-csv', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'registration', data: data })
+            }).then(r => r.json())
+              .then(r => console.log('[Lunar Forge] Local CSV saved:', r))
+              .catch(e => console.warn('[Lunar Forge] Local CSV save failed (server not running?):', e.message));
+        } catch (e) { /* ignore */ }
+    }
+
+    // ══════════════════════════════════════════════
     // FORM SUBMIT HANDLER
     // ══════════════════════════════════════════════
     form.addEventListener('submit', async (e) => {
@@ -620,6 +635,10 @@
                 teamId: result.teamId,
                 password: result.password
             }));
+            // Also save to local CSV
+            data.teamId = result.teamId;
+            data.password = result.password;
+            saveRegistrationToLocalCSV(data);
             showSuccess(result.teamId, result.password, data);
         } catch (err) {
             console.error('[Lunar Forge] Registration error:', err);
@@ -630,6 +649,10 @@
                 teamId: localTeamId,
                 password: localPassword
             }));
+            // Also save to local CSV
+            data.teamId = localTeamId;
+            data.password = localPassword;
+            saveRegistrationToLocalCSV(data);
             showSuccess(localTeamId, localPassword, data);
         } finally {
             setLoading(false);

@@ -6,7 +6,7 @@
     'use strict';
 
     // Same Google Apps Script URL as registration
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzCfFTAEbjqQwjGTC7IpPs_YJk1hmPGx7iBWuErE7hsXpSCptd5fHNym85E5zAyXvKPAQ/exec';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-tt4Ikp71iqZvrvWjB-13tnhTAypVij7gKEckUXzDOmRRJ7VzxX3kXs-qx5hFP6A8/exec';
 
     // DOM Elements
     const form = document.getElementById('login-form');
@@ -109,6 +109,22 @@
     }
 
     // ══════════════════════════════════════════════
+    // LOCAL CSV BACKUP
+    // ══════════════════════════════════════════════
+    function saveLoginToLocalCSV(teamId, status, sessionData) {
+        try {
+            const payload = Object.assign({}, sessionData || {}, { teamId, status });
+            fetch('/save-csv', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'login', data: payload })
+            }).then(r => r.json())
+              .then(r => console.log('[Lunar Forge] Login CSV saved:', r))
+              .catch(e => console.warn('[Lunar Forge] Login CSV save failed:', e.message));
+        } catch (e) { /* ignore */ }
+    }
+
+    // ══════════════════════════════════════════════
     // AUTHENTICATION LOGIC
     // ══════════════════════════════════════════════
     form.addEventListener('submit', async (e) => {
@@ -154,12 +170,14 @@
 
                     // Store full session data (matching the structure needed by dashboard)
                     localStorage.setItem('lunarforge_session', JSON.stringify(result.data));
+                    saveLoginToLocalCSV(teamId, 'success', result.data);
 
                     // Redirect to dashboard
                     window.location.href = 'dashboard.html';
                     return;
                 } else if (result.success === false) {
                     showError(result.message || 'Invalid Team ID or Password.');
+                    saveLoginToLocalCSV(teamId, 'failed', null);
                     setLoading(false);
                     return;
                 }
@@ -181,6 +199,7 @@
                         console.log('[Lunar Forge] Offline login successful using local cache');
                         // Create session from registration data
                         localStorage.setItem('lunarforge_session', rawReg);
+                        saveLoginToLocalCSV(teamId, 'success-offline', regData);
                         window.location.href = 'dashboard.html';
                         return;
                     } else if (regData.teamId === teamId) {
