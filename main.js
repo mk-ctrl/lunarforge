@@ -130,12 +130,14 @@
   // SPLINE ROBOT — Load on intro screen
   // ══════════════════════════════════════════════
   const ROBOT_SCENE = 'https://prod.spline.design/x4zhGT-Zgpo9FFOy/scene.splinecode';
+  let robotSplineApp = null;
 
   async function loadRobot() {
     try {
       const { Application } = await import('https://esm.sh/@splinetool/runtime');
       const spline = new Application(robotCanvas);
       await spline.load(ROBOT_SCENE);
+      robotSplineApp = spline;
 
       console.log('[Lunar Forge] Robot loaded!');
 
@@ -177,6 +179,20 @@
         introVideo.src = '';
         introVideo.load();
       }, 1000);
+    }
+
+    // Destroy the Spline robot 3D instance to free GPU memory
+    if (robotSplineApp) {
+      setTimeout(() => {
+        try {
+          robotSplineApp.dispose();
+          robotCanvas.remove();
+          robotSplineApp = null;
+          console.log('[Lunar Forge] Robot GPU resources freed!');
+        } catch (e) {
+          console.error('[Lunar Forge] Error destroying robot:', e);
+        }
+      }, 1000); // Delete it exactly when the fade finishes (1 second)
     }
 
     // Show & load full-page Spline 3D background + moon overlay
