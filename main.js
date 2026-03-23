@@ -130,12 +130,14 @@
   // SPLINE ROBOT — Load on intro screen
   // ══════════════════════════════════════════════
   const ROBOT_SCENE = 'https://prod.spline.design/x4zhGT-Zgpo9FFOy/scene.splinecode';
+  let robotSplineApp = null;
 
   async function loadRobot() {
     try {
       const { Application } = await import('https://esm.sh/@splinetool/runtime');
       const spline = new Application(robotCanvas);
       await spline.load(ROBOT_SCENE);
+      robotSplineApp = spline;
 
       console.log('[Lunar Forge] Robot loaded!');
 
@@ -177,6 +179,20 @@
         introVideo.src = '';
         introVideo.load();
       }, 1000);
+    }
+
+    // Destroy the Spline robot 3D instance to free GPU memory
+    if (robotSplineApp) {
+      setTimeout(() => {
+        try {
+          robotSplineApp.dispose();
+          robotCanvas.remove();
+          robotSplineApp = null;
+          console.log('[Lunar Forge] Robot GPU resources freed!');
+        } catch (e) {
+          console.error('[Lunar Forge] Error destroying robot:', e);
+        }
+      }, 1000); // Delete it exactly when the fade finishes (1 second)
     }
 
     // Show & load full-page Spline 3D background + moon overlay
@@ -241,6 +257,19 @@
   const SPLINE_MOON_SCENE = 'https://prod.spline.design/3irAsJEPtR-P-FQp/scene.splinecode';
 
   async function loadSplineMoon() {
+    if (window.innerWidth <= 768) {
+      console.log('[Lunar Forge] Moon overlay skipped on mobile view for performance.');
+      // Show the parent wrapper so the static image fades in
+      if (splineMoon) {
+        setTimeout(() => {
+          splineMoon.classList.add('visible');
+        }, 300);
+      }
+      // Hide only the 3D canvas instead of the whole wrapper
+      if (splineMoonCanvas) splineMoonCanvas.style.display = 'none';
+      return;
+    }
+    
     try {
       if (!splineMoonCanvas) return;
       const { Application } = await import('https://esm.sh/@splinetool/runtime');
@@ -345,12 +374,27 @@
   // ══════════════════════════════════════════════
   function setupTilt() {
     const cards = document.querySelectorAll('[data-tilt]');
+    let isScrolling = false;
+    let scrollTimeout;
+
+    window.addEventListener('scroll', () => {
+      isScrolling = true;
+      cards.forEach(card => {
+        const inner = card.querySelector('.track-card-inner');
+        if (inner) inner.style.transform = '';
+      });
+      window.clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        isScrolling = false;
+      }, 150);
+    });
 
     cards.forEach(card => {
       const inner = card.querySelector('.track-card-inner');
       if (!inner) return;
 
       card.addEventListener('mousemove', (e) => {
+        if (isScrolling) return;
         const rect = card.getBoundingClientRect();
         const x = (e.clientX - rect.left) / rect.width - 0.5;
         const y = (e.clientY - rect.top) / rect.height - 0.5;
