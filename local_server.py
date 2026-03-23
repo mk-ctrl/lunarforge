@@ -1,6 +1,7 @@
 """
 Lunar Forge 1.0 — Local Development Server
 Serves static files AND saves registration/login data to local CSV files.
+Uses file locking + upsert logic (update-or-insert by Team ID) for ACID safety.
 
 Usage:  python local_server.py
         (replaces: python -m http.server 8080)
@@ -10,11 +11,15 @@ import http.server
 import json
 import csv
 import os
+import threading
 from datetime import datetime
 
 PORT = 8080
 REG_CSV = "registrations.csv"
 LOGIN_CSV = "logins.csv"
+
+# Thread lock for concurrent request safety
+csv_lock = threading.Lock()
 
 REG_HEADERS = [
     "Timestamp", "Team ID", "Password", "Team Name", "Team Size",
@@ -41,6 +46,50 @@ def ensure_csv(filepath, headers):
             csv.writer(f).writerow(headers)
 
 
+def upsert_csv(filepath, headers, new_row, key_col="Team ID"):
+    """
+    Atomic upsert: if a row with the same Team ID exists, update it.
+    Otherwise append a new row. Uses lock for thread safety.
+    """
+    key_index = headers.index(key_col)
+    key_value = new_row[key_index]
+
+    with csv_lock:
+        ensure_csv(filepath, headers)
+
+        # Read all existing rows
+        with open(filepath, "r", newline="", encoding="utf-8") as f:
+            reader = csv.reader(f)
+            all_rows = list(reader)
+
+        # First row is headers
+        header_row = all_rows[0] if all_rows else headers
+        data_rows = all_rows[1:] if len(all_rows) > 1 else []
+
+        # Find existing row by Team ID
+        updated = False
+        for i, row in enumerate(data_rows):
+            if len(row) > key_index and row[key_index] == key_value:
+                data_rows[i] = new_row  # Update in place
+                updated = True
+                break
+
+        if not updated:
+            data_rows.append(new_row)  # Insert new
+
+        # Write everything back atomically (write to temp, then rename)
+        tmp_path = filepath + ".tmp"
+        with open(tmp_path, "w", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f)
+            writer.writerow(header_row)
+            writer.writerows(data_rows)
+
+        # Atomic replace
+        os.replace(tmp_path, filepath)
+
+    return "updated" if updated else "inserted"
+
+
 class LunarForgeHandler(http.server.SimpleHTTPRequestHandler):
 
     def do_POST(self):
@@ -53,55 +102,53 @@ class LunarForgeHandler(http.server.SimpleHTTPRequestHandler):
 
                 if action == "registration":
                     d = body.get("data", {})
-                    ensure_csv(REG_CSV, REG_HEADERS)
-                    with open(REG_CSV, "a", newline="", encoding="utf-8") as f:
-                        csv.writer(f).writerow([
-                            ts,
-                            d.get("teamId", ""),
-                            d.get("password", ""),
-                            d.get("teamName", ""),
-                            d.get("teamSize", ""),
-                            d.get("leadName", ""),
-                            d.get("leadBatch", ""),
-                            d.get("leadPhone", ""),
-                            d.get("m1Name", ""),
-                            d.get("m1Batch", ""),
-                            d.get("m1Phone", ""),
-                            d.get("m2Name", ""),
-                            d.get("m2Batch", ""),
-                            d.get("m2Phone", ""),
-                            d.get("domain", ""),
-                            d.get("problemStatement", ""),
-                            d.get("leadEmail", ""),
-                            d.get("m1Email", ""),
-                            d.get("m2Email", ""),
-                        ])
-                    self._respond(200, {"success": True, "saved": "registration"})
+                    row = [
+                        ts,
+                        d.get("teamId", ""),
+                        d.get("password", ""),
+                        d.get("teamName", ""),
+                        d.get("teamSize", ""),
+                        d.get("leadName", ""),
+                        d.get("leadBatch", ""),
+                        d.get("leadPhone", ""),
+                        d.get("m1Name", ""),
+                        d.get("m1Batch", ""),
+                        d.get("m1Phone", ""),
+                        d.get("m2Name", ""),
+                        d.get("m2Batch", ""),
+                        d.get("m2Phone", ""),
+                        d.get("domain", ""),
+                        d.get("problemStatement", ""),
+                        d.get("leadEmail", ""),
+                        d.get("m1Email", ""),
+                        d.get("m2Email", ""),
+                    ]
+                    result = upsert_csv(REG_CSV, REG_HEADERS, row)
+                    self._respond(200, {"success": True, "saved": "registration", "action": result})
 
                 elif action == "login":
                     d = body.get("data", {})
-                    ensure_csv(LOGIN_CSV, LOGIN_HEADERS)
-                    with open(LOGIN_CSV, "a", newline="", encoding="utf-8") as f:
-                        csv.writer(f).writerow([
-                            ts,
-                            d.get("teamId", ""),
-                            d.get("password", ""),
-                            d.get("teamName", d.get("team-name", "")),
-                            d.get("teamSize", ""),
-                            d.get("leadName", d.get("lead-name", "")),
-                            d.get("leadBatch", d.get("lead-batch", "")),
-                            d.get("leadPhone", d.get("lead-phone", "")),
-                            d.get("m1Name", d.get("m1-name", "")),
-                            d.get("m1Batch", d.get("m1-batch", "")),
-                            d.get("m1Phone", d.get("m1-phone", "")),
-                            d.get("m2Name", d.get("m2-name", "")),
-                            d.get("m2Batch", d.get("m2-batch", "")),
-                            d.get("m2Phone", d.get("m2-phone", "")),
-                            d.get("domain", ""),
-                            d.get("problemStatement", d.get("problem-statement", "")),
-                            d.get("status", "success"),
-                        ])
-                    self._respond(200, {"success": True, "saved": "login"})
+                    row = [
+                        ts,
+                        d.get("teamId", ""),
+                        d.get("password", ""),
+                        d.get("teamName", d.get("team-name", "")),
+                        d.get("teamSize", ""),
+                        d.get("leadName", d.get("lead-name", "")),
+                        d.get("leadBatch", d.get("lead-batch", "")),
+                        d.get("leadPhone", d.get("lead-phone", "")),
+                        d.get("m1Name", d.get("m1-name", "")),
+                        d.get("m1Batch", d.get("m1-batch", "")),
+                        d.get("m1Phone", d.get("m1-phone", "")),
+                        d.get("m2Name", d.get("m2-name", "")),
+                        d.get("m2Batch", d.get("m2-batch", "")),
+                        d.get("m2Phone", d.get("m2-phone", "")),
+                        d.get("domain", ""),
+                        d.get("problemStatement", d.get("problem-statement", "")),
+                        d.get("status", "success"),
+                    ]
+                    result = upsert_csv(LOGIN_CSV, LOGIN_HEADERS, row)
+                    self._respond(200, {"success": True, "saved": "login", "action": result})
 
                 else:
                     self._respond(400, {"error": "Unknown action"})
@@ -133,4 +180,5 @@ if __name__ == "__main__":
     print(f"Lunar Forge local server running on http://localhost:{PORT}")
     print(f"  Registration CSV: {os.path.abspath(REG_CSV)}")
     print(f"  Login CSV:        {os.path.abspath(LOGIN_CSV)}")
+    print(f"  ACID: upsert by Team ID + thread locking enabled")
     http.server.HTTPServer(("", PORT), LunarForgeHandler).serve_forever()
