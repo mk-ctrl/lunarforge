@@ -1311,6 +1311,9 @@ canvas+div>a {
     /* At 20vw height, a 5-letter condensed font (like Bebas Neue) takes roughly 50vw width */
     font-size: 30vw;
   }
+  .welcome-org {
+  font-size: 0.55rem;
+  }
 }
 
 @media (max-width: 480px) {
