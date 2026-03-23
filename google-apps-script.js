@@ -27,20 +27,35 @@ function doPost(e) {
     try {
         const data = JSON.parse(e.postData.contents);
         const sheet = getOrCreateSheet();
-
-        // Generate team ID based on current row count
-        const lastRow = sheet.getLastRow();
-        const teamNumber = lastRow; // Row 1 = headers, so row 2 = team 1
-        const teamId = TEAM_ID_PREFIX + String(teamNumber).padStart(2, '0');
-
-        // Timestamp
         const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
 
-        // Append the registration data (INCLUDING PASSWORD)
-        sheet.appendRow([
+        // ── UPSERT: Check if Lead Phone already exists (prevents duplicates) ──
+        const allData = sheet.getDataRange().getValues();
+        const headers = allData[0];
+        const leadPhoneCol = headers.indexOf('Lead Phone');
+        const teamIdCol = headers.indexOf('Team ID');
+        const passwordCol = headers.indexOf('Password');
+        let existingRow = -1;
+        let existingTeamId = '';
+        let existingPassword = '';
+
+        if (leadPhoneCol !== -1 && data.leadPhone) {
+            for (let i = 1; i < allData.length; i++) {
+                if (String(allData[i][leadPhoneCol]).trim() === String(data.leadPhone).trim()) {
+                    existingRow = i + 1; // Sheet rows are 1-indexed
+                    existingTeamId = allData[i][teamIdCol] || '';
+                    existingPassword = allData[i][passwordCol] || '';
+                    break;
+                }
+            }
+        }
+
+        let teamId, password, action;
+
+        const rowData = [
             timestamp,
-            teamId,
-            data.password || '',
+            '',  // Team ID placeholder
+            '',  // Password placeholder
             data.teamName || '',
             data.teamSize || '',
             data.leadName || '',
@@ -57,21 +72,42 @@ function doPost(e) {
             data.leadEmail || '',
             data.m1Email || '',
             data.m2Email || ''
-        ]);
+        ];
+
+        if (existingRow > 0) {
+            // UPDATE existing row — keep original Team ID & Password
+            teamId = existingTeamId;
+            password = existingPassword;
+            rowData[1] = teamId;
+            rowData[2] = password;
+            sheet.getRange(existingRow, 1, 1, rowData.length).setValues([rowData]);
+            action = 'updated';
+        } else {
+            // INSERT new row — generate new Team ID
+            const lastRow = sheet.getLastRow();
+            const teamNumber = lastRow;
+            teamId = TEAM_ID_PREFIX + String(teamNumber).padStart(2, '0');
+            password = data.password || '';
+            rowData[1] = teamId;
+            rowData[2] = password;
+            sheet.appendRow(rowData);
+            action = 'inserted';
+        }
 
         // Return success with team ID and password
-        const result = { success: true, teamId: teamId, password: data.password };
+        const result = { success: true, teamId: teamId, password: password, action: action };
 
-        // ── SEND REGISTRATION EMAIL ─────────────────────────────────────────
-        try {
-            const emails = [data.leadEmail, data.m1Email, data.m2Email]
-                .filter(e => e && e.trim() !== ''); // Filter out blanks
-            if (emails.length > 0) {
-                sendRegistrationEmail(emails.join(','), data.teamName, teamId, data.password, data.leadName);
+        // ── SEND REGISTRATION EMAIL (only for NEW registrations) ──
+        if (action === 'inserted') {
+            try {
+                const emails = [data.leadEmail, data.m1Email, data.m2Email]
+                    .filter(e => e && e.trim() !== '');
+                if (emails.length > 0) {
+                    sendRegistrationEmail(emails.join(','), data.teamName, teamId, password, data.leadName);
+                }
+            } catch (mailErr) {
+                result.mailStatus = 'Failed: ' + mailErr.message;
             }
-        } catch (mailErr) {
-            // Send success anyway even if email fails
-            result.mailStatus = 'Failed: ' + mailErr.message;
         }
 
         return ContentService
