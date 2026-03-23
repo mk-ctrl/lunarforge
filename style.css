@@ -32,7 +32,8 @@ html {
 
 /* ── TOKENS ────────────────────────────────── */
 :root {
-  --bg: black;/*#0b0b0f;*/
+  --bg: black;
+  /*#0b0b0f;*/
   --text: #ffffff;
   --text-dim: rgba(255, 255, 255, 0.5);
   --text-muted: rgba(255, 255, 255, 0.25);
@@ -74,8 +75,8 @@ a {
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  
-    
+
+
 }
 
 /* ── FULL-PAGE SPLINE 3D BACKGROUND ────────── */
@@ -1229,7 +1230,7 @@ canvas+div>a {
     padding: 16px 20px;
   }
 
-  #navbar > div {
+  #navbar>div {
     gap: 10px;
   }
 
@@ -1284,17 +1285,21 @@ canvas+div>a {
     gap: 4px;
     margin-top: 32px;
   }
+
   .countdown-unit {
     min-width: 50px;
     padding: 10px 8px;
   }
+
   .countdown-number {
     font-size: 1.25rem;
   }
+
   .countdown-label {
     font-size: 0.45rem;
     letter-spacing: 0.25em;
   }
+
   .countdown-sep {
     font-size: 1.25rem;
     padding-bottom: 12px;
