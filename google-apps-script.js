@@ -117,12 +117,30 @@ function doGet(e) {
                         const sessionData = {
                             teamId: data[i][teamIdIndex],
                             password: data[i][passwordIndex],
+                            'team-name': data[i][headers.indexOf('Team Name')] || '',
                             teamName: data[i][headers.indexOf('Team Name')] || '',
-                            teamSize: data[i][headers.indexOf('Team Size')] || '',
+                            teamSize: String(data[i][headers.indexOf('Team Size')] || '1'),
+                            'lead-name': data[i][headers.indexOf('Lead Name')] || '',
                             leadName: data[i][headers.indexOf('Lead Name')] || '',
+                            'lead-batch': data[i][headers.indexOf('Lead Batch')] || '',
+                            leadBatch: data[i][headers.indexOf('Lead Batch')] || '',
+                            'lead-phone': data[i][headers.indexOf('Lead Phone')] || '',
+                            leadPhone: data[i][headers.indexOf('Lead Phone')] || '',
+                            'm1-name': data[i][headers.indexOf('Member 1 Name')] || '',
+                            m1Name: data[i][headers.indexOf('Member 1 Name')] || '',
+                            'm1-batch': data[i][headers.indexOf('Member 1 Batch')] || '',
+                            m1Batch: data[i][headers.indexOf('Member 1 Batch')] || '',
+                            'm1-phone': data[i][headers.indexOf('Member 1 Phone')] || '',
+                            m1Phone: data[i][headers.indexOf('Member 1 Phone')] || '',
+                            'm2-name': data[i][headers.indexOf('Member 2 Name')] || '',
+                            m2Name: data[i][headers.indexOf('Member 2 Name')] || '',
+                            'm2-batch': data[i][headers.indexOf('Member 2 Batch')] || '',
+                            m2Batch: data[i][headers.indexOf('Member 2 Batch')] || '',
+                            'm2-phone': data[i][headers.indexOf('Member 2 Phone')] || '',
+                            m2Phone: data[i][headers.indexOf('Member 2 Phone')] || '',
                             domain: data[i][headers.indexOf('Domain')] || '',
+                            'problem-statement': data[i][headers.indexOf('Problem Statement')] || '',
                             problemStatement: data[i][headers.indexOf('Problem Statement')] || ''
-                            // Add more fields if the dashboard needs them
                         };
                         return ContentService.createTextOutput(JSON.stringify({ 
                             success: true, 
