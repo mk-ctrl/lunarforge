@@ -84,9 +84,12 @@ function doPost(e) {
             action = 'updated';
         } else {
             // INSERT new row — generate new Team ID
-            const lastRow = sheet.getLastRow();
-            const teamNumber = lastRow;
-            teamId = TEAM_ID_PREFIX + String(teamNumber).padStart(2, '0');
+            // Generate proper sequential ID
+const allData = sheet.getDataRange().getValues();
+const totalEntries = allData.length - 1; // exclude header
+const nextNumber = totalEntries + 1;
+
+teamId = TEAM_ID_PREFIX + String(nextNumber).padStart(2, '0');
             password = data.password || '';
             rowData[1] = teamId;
             rowData[2] = password;
