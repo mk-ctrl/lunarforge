@@ -210,7 +210,7 @@
     } else {
       // Logged out state: LOGIN & REGISTER
       navAction1.innerHTML = `<a href="login.html" class="nav-cta" style="border-color:rgba(255,255,255,0.2);color:var(--text);background:transparent;">LOGIN</a>`;
-      navAction2.innerHTML = `<a href="register.html" class="nav-cta">REGISTER</a>`;
+      navAction2.innerHTML = `<a href="register.html" class="nav-cta" style="opacity:0.5;pointer-events:none;">CLOSED</a>`;
     }
   }
 
