@@ -23,7 +23,7 @@
 
     const WHATSAPP_LINK = 'https://chat.whatsapp.com/BOVOzMeJVxmFUtDsMeDH2e?mode=hq1tcla';
     const TARGET_DATE = new Date(Date.UTC(2026, 2, 30, 13, 30, 0)); // March 30, 2026, 7:00 PM IST
-    const SUBMISSION_DEADLINE = new Date(Date.UTC(2026, 2, 31, 7, 30, 0)); // March 31, 2026, 1:00 PM IST
+    const SUBMISSION_DEADLINE = new Date(Date.UTC(2026, 2, 31, 9, 0, 0)); // March 31, 2026, 2:30 PM IST
     const PPT_DEADLINE = new Date(Date.UTC(2026, 2, 28, 14, 30, 0)); // March 28, 2026, 8:00 PM IST
 
     // ══════════════════════════════════════════════
